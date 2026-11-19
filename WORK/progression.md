@@ -16,7 +16,7 @@ Remaining work is in `WORK/tasks.md`.
 - **Work style:** one task per session. Finish the task, update the WORK files, run checks, commit, then remind the user to open a new session for the next task.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
 - **Current phase:** Phase 0 - Stabilize And Clean.
-- **Current task:** Task #12 - Add a 404 route/page instead of a blank screen.
+- **Current task:** Task #13 - Replace "Electro" in Navbar, Footer, About, index.html title/favicon, announcements (Phase 1).
 - **A session can use the same AI agent or a different one.** These files must carry all context so any agent can continue.
 - **Pending business decisions:** currency, payment method, delivery fee, hosting, image storage.
 
@@ -132,6 +132,7 @@ Audit results:
 - [x] 2026-11-19 - Task #9: Deleted `products_data.json` (unused legacy duplicate of the seed data). Archived it to `C:\Users\mawar\AppData\Local\Temp\opencode\jabour-archive\products_data.json_2026-11-19` (outside the repo). No code, README, or config references it anymore. Files changed: `products_data.json` (deleted), `WORK/tasks.md`, `WORK/progression.md`.
 - [x] 2026-11-19 - Task #10: Made seeding safe. Replaced destructive `deleteMany` seed with a non-destructive no-op safe seed (`prisma/seed.ts`), moved the 15 demo products and 4 demo categories into a new guarded seed (`prisma/demo-seed.ts`) that refuses to run when `NODE_ENV=production` and uses `upsert` keyed by `handle`/`slug` so it never deletes products, orders, or order items. Added `prisma:seed:demo` npm script and updated the README setup steps and architecture tree. Files changed: `backend/prisma/seed.ts`, `backend/prisma/demo-seed.ts` (new), `backend/package.json`, `README.md`, `WORK/tasks.md`, `WORK/progression.md`.
 - [x] 2026-11-19 - Task #11: Decided `Category.image` is unused and removed it. Nothing in the backend or frontend read the field: `GET /api/categories` returned it but the storefront never called that endpoint and rendered no category images. Removed `image` from the `Category` model, from the demo category upserts, and from the frontend `Category` type. Category images will come back in Phase 3 together with category CRUD, image upload, and real storefront usage. Files changed: `backend/prisma/schema.prisma`, `backend/prisma/demo-seed.ts`, `frontend/src/types/index.ts`, `WORK/tasks.md`, `WORK/progression.md`.
+- [x] 2026-11-19 - Task #12: Added a 404 page (`frontend/src/pages/NotFound.tsx`) with an error badge, message, and "Back Home" / "Browse Catalog" links, and registered a catch-all `<Route path="*">` in `frontend/src/App.tsx` so unknown URLs render it inside the normal navbar/footer layout instead of a blank screen. Phase 0 is now complete. Files changed: `frontend/src/pages/NotFound.tsx` (new), `frontend/src/App.tsx`, `WORK/tasks.md`, `WORK/progression.md`.
 
 ---
 
@@ -273,3 +274,11 @@ Add one entry here at the end of every session. New agents must read the latest 
 - **Checks run:** `npx prisma validate` -> valid; `npx prisma generate` -> client regenerated (v6.19.3); backend `npx tsc --noEmit` -> passed; explicit `tsc --noEmit` on `prisma/demo-seed.ts` -> passed; frontend `npm run build` -> passed (built in 1.23s).
 - **Decisions:** Removed instead of keeping a dead field. No Prisma migrations exist yet and this environment has no live `electro_db`, so no database change was applied; a fresh `db push`/setup will create the table without the column. Phase 3 explicitly re-adds `image` to `Category` together with category CRUD, image upload, and real storefront usage, so nothing is lost.
 - **Next task:** Task #12 - add a 404 route/page instead of a blank screen.
+
+### 2026-11-19 - Task #12: Add 404 Page (DONE)
+
+- **Done:** Created `frontend/src/pages/NotFound.tsx` (404 badge, message, "Back Home" and "Browse Catalog" links) following the existing About/ProductDetail page style, and added a catch-all `<Route path="*" element={<NotFound />} />` in `frontend/src/App.tsx`. Unknown URLs now render the 404 page inside the regular navbar/footer shell. Phase 0 is complete.
+- **Files changed:** `frontend/src/pages/NotFound.tsx` (new), `frontend/src/App.tsx`, `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** frontend `npm run build` -> passed (`tsc && vite build`, built in 1.27s); backend `npx tsc --noEmit` -> passed (no output).
+- **Decisions:** The wildcard route catches every unmatched path, including nested unknown paths. Product detail already rendered its own "Product Not Found" state for missing handles, so no change was needed there.
+- **Next task:** Task #13 - replace "Electro" in Navbar, Footer, About, `index.html` title/favicon, and announcements (Phase 1 - Rebrand To Jabour Phone).

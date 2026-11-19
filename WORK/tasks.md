@@ -98,7 +98,7 @@ The WORK files must carry enough context for any agent to continue without guess
 - [x] Delete `products_data.json`. **P0**
 - [x] Remove destructive `deleteMany` from seed; move demo data to a guarded demo seed. **P0**
 - [x] Decide whether `Category.image` is used; use it or remove it. **P1**
-- [ ] Add a 404 route/page instead of a blank screen. **P1**
+- [x] Add a 404 route/page instead of a blank screen. **P1**
 
 ---
 
