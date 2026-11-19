@@ -15,8 +15,8 @@ Remaining work is in `WORK/tasks.md`.
 - **Current state:** public demo storefront exists. Admin login, admin panel, CRUD, stock, and order management are not built yet.
 - **Work style:** one task per session. Finish the task, update the WORK files, run checks, commit, then remind the user to open a new session for the next task.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
-- **Current phase:** Phase 0 - Stabilize And Clean.
-- **Current task:** Task #13 - Replace "Electro" in Navbar, Footer, About, index.html title/favicon, announcements (Phase 1).
+- **Current phase:** Phase 1 - Rebrand To Jabour Phone.
+- **Current task:** Task #14 - Replace "Electro" in README, health endpoint name, newsletter success message (Phase 1).
 - **A session can use the same AI agent or a different one.** These files must carry all context so any agent can continue.
 - **Pending business decisions:** currency, payment method, delivery fee, hosting, image storage.
 
@@ -119,7 +119,7 @@ Audit results:
 
 ---
 
-## Phase 6 - Phase 0 Stabilize And Clean (IN PROGRESS)
+## Phase 6 - Phase 0 Stabilize And Clean (DONE)
 
 - [x] 2026-11-19 - Fixed frontend build error: removed unused `ArrowLeft` import in `frontend/src/pages/ProductDetail.tsx:3`. Files changed: `frontend/src/pages/ProductDetail.tsx`.
 - [x] 2026-11-19 - Fixed backend type error: typed the `p` parameter in the `getBrands` map callback in `backend/src/controllers/productController.ts:101`. Files changed: `backend/src/controllers/productController.ts`.
@@ -133,6 +133,12 @@ Audit results:
 - [x] 2026-11-19 - Task #10: Made seeding safe. Replaced destructive `deleteMany` seed with a non-destructive no-op safe seed (`prisma/seed.ts`), moved the 15 demo products and 4 demo categories into a new guarded seed (`prisma/demo-seed.ts`) that refuses to run when `NODE_ENV=production` and uses `upsert` keyed by `handle`/`slug` so it never deletes products, orders, or order items. Added `prisma:seed:demo` npm script and updated the README setup steps and architecture tree. Files changed: `backend/prisma/seed.ts`, `backend/prisma/demo-seed.ts` (new), `backend/package.json`, `README.md`, `WORK/tasks.md`, `WORK/progression.md`.
 - [x] 2026-11-19 - Task #11: Decided `Category.image` is unused and removed it. Nothing in the backend or frontend read the field: `GET /api/categories` returned it but the storefront never called that endpoint and rendered no category images. Removed `image` from the `Category` model, from the demo category upserts, and from the frontend `Category` type. Category images will come back in Phase 3 together with category CRUD, image upload, and real storefront usage. Files changed: `backend/prisma/schema.prisma`, `backend/prisma/demo-seed.ts`, `frontend/src/types/index.ts`, `WORK/tasks.md`, `WORK/progression.md`.
 - [x] 2026-11-19 - Task #12: Added a 404 page (`frontend/src/pages/NotFound.tsx`) with an error badge, message, and "Back Home" / "Browse Catalog" links, and registered a catch-all `<Route path="*">` in `frontend/src/App.tsx` so unknown URLs render it inside the normal navbar/footer layout instead of a blank screen. Phase 0 is now complete. Files changed: `frontend/src/pages/NotFound.tsx` (new), `frontend/src/App.tsx`, `WORK/tasks.md`, `WORK/progression.md`.
+
+---
+
+## Phase 7 - Phase 1 Rebrand To Jabour Phone (IN PROGRESS)
+
+- [x] 2026-11-19 - Task #13: Replaced the remaining "Electro" branding in the storefront shell with "Jabour Phone": Navbar logo, Footer logo/copyright/newsletter success text, About badge and image alt text, and the `index.html` page title plus a new inline smartphone favicon. Also replaced the two leftover "Electro" mentions on Home (workshop image alt text and "why Electro exists" line); announcements had no "Electro" mentions, so they were left unchanged. Files changed: `frontend/index.html`, `frontend/src/components/Navbar.tsx`, `frontend/src/components/Footer.tsx`, `frontend/src/pages/About.tsx`, `frontend/src/pages/Home.tsx`, `WORK/tasks.md`, `WORK/progression.md`.
 
 ---
 
@@ -282,3 +288,11 @@ Add one entry here at the end of every session. New agents must read the latest 
 - **Checks run:** frontend `npm run build` -> passed (`tsc && vite build`, built in 1.27s); backend `npx tsc --noEmit` -> passed (no output).
 - **Decisions:** The wildcard route catches every unmatched path, including nested unknown paths. Product detail already rendered its own "Product Not Found" state for missing handles, so no change was needed there.
 - **Next task:** Task #13 - replace "Electro" in Navbar, Footer, About, `index.html` title/favicon, and announcements (Phase 1 - Rebrand To Jabour Phone).
+
+### 2026-11-19 - Task #13: Rebrand Storefront Shell To Jabour Phone (DONE)
+
+- **Done:** Replaced all remaining "Electro" text in the storefront shell. Navbar and Footer logos now read "Jabour Phone." (Navbar keeps a slightly smaller responsive size so the longer name fits). Footer copyright is now "© 2026 Jabour Phone. All rights reserved." and its newsletter success message says "Jabour Phone updates". About badge now reads "The Jabour Phone Standard" and the workshop image alt text was renamed. `index.html` now has the title "Jabour Phone – Smartphones and Accessories" and a new inline smartphone favicon (red outline phone SVG) replacing the lightning bolt. Two leftover mentions on Home (image alt text and "why Jabour Phone exists") were also replaced; announcements contained no "Electro" mentions.
+- **Files changed:** `frontend/index.html`, `frontend/src/components/Navbar.tsx`, `frontend/src/components/Footer.tsx`, `frontend/src/pages/About.tsx`, `frontend/src/pages/Home.tsx`, `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** frontend `npm run build` -> passed (`tsc && vite build`, built in 1.30s); backend `npx tsc --noEmit` -> passed (no output). Verified with grep that no "Electro" remains in `frontend/src`, `frontend/index.html`, or `frontend/public`.
+- **Decisions:** Did not touch fake business promises ("bench-tested", "Manchester", "two year warranty", shipping) or fake brands/products here; those stay in their own Phase 1 tasks. Also did not rename the `electro-cart` storage key, Tailwind `electro` palette, package names, README, backend health endpoint, or backend newsletter message; those are separate tasks (#14-#16, #21). Left the announcement bar text unchanged because it never contained "Electro".
+- **Next task:** Task #14 - replace "Electro" in README, health endpoint name, and newsletter success message.

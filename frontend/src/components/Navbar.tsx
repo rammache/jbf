@@ -38,8 +38,8 @@ export const Navbar: React.FC = () => {
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
               <Link to="/" className="flex items-center gap-1 group">
-                <span className="text-2xl font-black tracking-tight text-white uppercase font-sans">
-                  Electro<span className="text-[#d10024]">.</span>
+                <span className="text-xl sm:text-2xl font-black tracking-tight text-white uppercase font-sans whitespace-nowrap">
+                  Jabour Phone<span className="text-[#d10024]">.</span>
                 </span>
               </Link>
             </div>

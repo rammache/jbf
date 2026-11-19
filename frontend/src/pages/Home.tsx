@@ -151,7 +151,7 @@ export const Home: React.FC = () => {
           <div className="aspect-[4/3] rounded-xl overflow-hidden shadow-xl border border-gray-800">
             <img
               src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1000&q=80"
-              alt="Electro testing bench"
+              alt="Jabour Phone testing bench"
               className="w-full h-full object-cover"
             />
           </div>
@@ -171,7 +171,7 @@ export const Home: React.FC = () => {
               </p>
               <p>
                 When a manufacturer spec sheet and our bench disagree, the listing clearly says so.
-                That is the cornerstone of why Electro exists.
+                That is the cornerstone of why Jabour Phone exists.
               </p>
             </div>
             <Link

@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
       const data = await res.json();
       if (data.success) {
         setStatus("success");
-        setMessage("Thanks for subscribing to Electro updates.");
+        setMessage("Thanks for subscribing to Jabour Phone updates.");
         setEmail("");
       } else {
         setStatus("error");
@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
           {/* Brand info */}
           <div className="space-y-4">
             <h2 className="text-2xl font-black text-white tracking-tight uppercase">
-              Electro<span className="text-[#d10024]">.</span>
+              Jabour Phone<span className="text-[#d10024]">.</span>
             </h2>
             <p className="text-xs text-gray-400 leading-relaxed">
               Technology, without the markup. We stock what we would buy ourselves,
@@ -141,7 +141,7 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="mt-12 pt-8 border-t border-[#2b2d42] flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
-          <p>© 2026 Electro. Full Stack React + Express + Prisma + PostgreSQL.</p>
+          <p>© 2026 Jabour Phone. All rights reserved.</p>
           <p className="mt-2 sm:mt-0">Bench-tested hardware without markups.</p>
         </div>
       </div>

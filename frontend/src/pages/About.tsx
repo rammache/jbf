@@ -7,7 +7,7 @@ export const About: React.FC = () => {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
       <div className="text-center space-y-4 max-w-2xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-red-200 rounded-full text-xs font-bold text-[#d10024] uppercase tracking-wider">
-          <Cpu className="w-4 h-4" /> The Electro Standard
+          <Cpu className="w-4 h-4" /> The Jabour Phone Standard
         </div>
         <h1 className="text-4xl sm:text-5xl font-black text-[#15161d] tracking-tight">
           We open everything first.
@@ -21,7 +21,7 @@ export const About: React.FC = () => {
       <div className="aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
         <img
           src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1400&q=80"
-          alt="Electro Bench Test facility"
+          alt="Jabour Phone workshop"
           className="w-full h-full object-cover"
         />
       </div>
