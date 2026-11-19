@@ -30,7 +30,7 @@ interface AuthContextValue {
   refresh: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 function isAdminUser(value: unknown): value is AdminUser {
   if (!value || typeof value !== "object") return false;

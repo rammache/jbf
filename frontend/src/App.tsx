@@ -12,6 +12,7 @@ import { About } from "./pages/About";
 import { NotFound } from "./pages/NotFound";
 import { AdminLogin } from "./pages/admin/AdminLogin";
 import { AdminOverview } from "./pages/admin/AdminOverview";
+import { AdminSettings } from "./pages/admin/AdminSettings";
 
 export const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ export const App: React.FC = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminOverview />} />
+              <Route path="settings" element={<AdminSettings />} />
               <Route path="*" element={<Navigate to="/admin" replace />} />
             </Route>
           </Route>

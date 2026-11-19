@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   AlertTriangle,
   LayoutDashboard,
@@ -28,15 +28,20 @@ const navigation: AdminNavItem[] = [
   { label: "Categories", icon: Tags },
   { label: "Products", icon: Package },
   { label: "Orders", icon: ShoppingCart },
-  { label: "Settings", icon: Settings }
+  { label: "Settings", icon: Settings, to: "/admin/settings" }
 ];
 
 export const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { admin, forbiddenError, clearForbiddenError, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState("");
+
+  const pageTitle = location.pathname.startsWith("/admin/settings")
+    ? "Settings"
+    : "Overview";
 
   const handleLogout = async () => {
     if (loggingOut) return;
@@ -66,9 +71,8 @@ export const AdminLayout: React.FC = () => {
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-[#15161d] text-white transition-transform duration-200 lg:static lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-[#15161d] text-white transition-transform duration-200 lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="flex h-20 items-center justify-between border-b border-white/10 px-5">
           <Link
@@ -122,10 +126,9 @@ export const AdminLayout: React.FC = () => {
                 end
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded px-3 py-2.5 text-xs font-bold uppercase tracking-wider transition ${
-                    isActive
-                      ? "bg-[#d10024] text-white"
-                      : "text-gray-300 hover:bg-white/5 hover:text-white"
+                  `flex items-center gap-3 rounded px-3 py-2.5 text-xs font-bold uppercase tracking-wider transition ${isActive
+                    ? "bg-[#d10024] text-white"
+                    : "text-gray-300 hover:bg-white/5 hover:text-white"
                   }`
                 }
               >
@@ -136,7 +139,12 @@ export const AdminLayout: React.FC = () => {
         </nav>
 
         <div className="border-t border-white/10 p-4">
-          <div className="flex items-center gap-3 rounded bg-white/5 px-3 py-3">
+          <Link
+            to="/admin/settings"
+            onClick={() => setSidebarOpen(false)}
+            className="flex items-center gap-3 rounded bg-white/5 px-3 py-3 transition hover:bg-white/10"
+            title="Admin settings & security"
+          >
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d10024]/15 text-[#ff5c75]">
               <ShieldCheck className="h-4 w-4" />
             </div>
@@ -148,7 +156,7 @@ export const AdminLayout: React.FC = () => {
                 {admin?.email ?? "Admin access"}
               </p>
             </div>
-          </div>
+          </Link>
         </div>
       </aside>
 
@@ -168,7 +176,7 @@ export const AdminLayout: React.FC = () => {
               Admin panel
             </p>
             <h1 className="truncate text-sm font-black uppercase tracking-wide text-[#15161d]">
-              Overview
+              {pageTitle}
             </h1>
           </div>
 

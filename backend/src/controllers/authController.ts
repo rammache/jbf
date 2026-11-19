@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { prisma } from "../prisma.js";
 import { ADMIN_AUTH_COOKIE_NAME, getAdminCookieOptions } from "../utils/authCookie.js";
 import { signAdminToken, verifyAdminToken } from "../utils/jwt.js";
-import { verifyPassword } from "../utils/password.js";
+import { hashPassword, verifyPassword } from "../utils/password.js";
 
 const DEFAULT_TOKEN_TTL_SECONDS = 8 * 60 * 60;
 
@@ -97,4 +97,88 @@ export const me = async (req: Request, res: Response) => {
 export const logout = (_req: Request, res: Response) => {
   res.clearCookie(ADMIN_AUTH_COOKIE_NAME, getAdminCookieOptions());
   res.json({ success: true, data: { message: "Signed out." } });
+};
+
+export const changePassword = async (req: Request, res: Response) => {
+  const adminId = req.admin?.id;
+
+  if (!adminId || !Number.isInteger(adminId) || adminId <= 0) {
+    res.status(401).json({ success: false, error: "You are not signed in." });
+    return;
+  }
+
+  const currentPassword =
+    typeof req.body?.currentPassword === "string" ? req.body.currentPassword : "";
+  const newPassword =
+    typeof req.body?.newPassword === "string" ? req.body.newPassword : "";
+  const confirmPassword =
+    typeof req.body?.confirmPassword === "string" ? req.body.confirmPassword : "";
+
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    res.status(400).json({
+      success: false,
+      error: "Current password, new password, and confirmation are required."
+    });
+    return;
+  }
+
+  if (newPassword.length < 12) {
+    res.status(400).json({
+      success: false,
+      error: "New password must be at least 12 characters long."
+    });
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    res.status(400).json({
+      success: false,
+      error: "New password and confirmation do not match."
+    });
+    return;
+  }
+
+  if (currentPassword === newPassword) {
+    res.status(400).json({
+      success: false,
+      error: "New password must be different from your current password."
+    });
+    return;
+  }
+
+  try {
+    const admin = await prisma.adminUser.findUnique({
+      where: { id: adminId }
+    });
+
+    if (!admin) {
+      res.status(401).json({ success: false, error: "Admin account not found." });
+      return;
+    }
+
+    const isValidCurrent = await verifyPassword(currentPassword, admin.passwordHash);
+    if (!isValidCurrent) {
+      res.status(400).json({
+        success: false,
+        error: "The current password you entered is incorrect."
+      });
+      return;
+    }
+
+    const passwordHash = await hashPassword(newPassword);
+    await prisma.adminUser.update({
+      where: { id: admin.id },
+      data: { passwordHash }
+    });
+
+    res.json({
+      success: true,
+      data: { message: "Password updated successfully." }
+    });
+  } catch {
+    res.status(500).json({
+      success: false,
+      error: "Unable to update password right now."
+    });
+  }
 };

@@ -51,7 +51,8 @@ A high-performance modern e-commerce web application for **Jabour Phone**, built
 │   │   ├── pages/
 │   │   │   ├── admin/
 │   │   │   │   ├── AdminLogin.tsx    # Admin sign-in form connected to /api/auth/login
-│   │   │   │   └── AdminOverview.tsx # Admin landing page with upcoming management sections
+│   │   │   │   ├── AdminOverview.tsx # Admin landing page with upcoming management sections
+│   │   │   │   └── AdminSettings.tsx # Admin profile overview and change password form
 │   │   │   ├── Home.tsx              # Hero banner, department tabs, highest rated, bench story
 │   │   │   ├── Shop.tsx              # Faceted catalog (categories, brand, price slider & sorting)
 │   │   │   ├── ProductDetail.tsx     # Gallery thumbnails, finish picker, bench specs & related items
@@ -142,5 +143,6 @@ The admin sign-in screen is available at `http://localhost:5173/admin/login`. Cr
 | `POST` | `/api/auth/login` | Sign in an admin; sets an httpOnly JWT cookie |
 | `GET` | `/api/auth/me` | Return the currently signed-in admin |
 | `POST` | `/api/auth/logout` | Clear the admin auth cookie |
+| `POST` | `/api/admin/change-password` | Update administrator password (protected by `requireAdmin`) |
 
 All routes under `/api/admin` are protected by the `requireAdmin` middleware: a valid admin session cookie is required, the admin is reloaded from the database on every request, and `401` / `403` JSON errors are returned for unauthenticated or non-admin users.
