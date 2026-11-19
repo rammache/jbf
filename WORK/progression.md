@@ -13,7 +13,7 @@ Remaining work is in `WORK/tasks.md`.
 - **Main goal:** Jabour must be able to log in and manage categories, products, photos, stock, orders, and site content without a developer.
 - **Stack:** React + Vite + TypeScript + Tailwind (frontend), Express + TypeScript + Prisma + PostgreSQL (backend).
 - **Current state:** public demo storefront exists. Admin login, admin panel, CRUD, stock, and order management are not built yet.
-- **Work style:** continuous, task by task, using the WORK files. The user granted standing permission to start the next task automatically after each finished task; stop only for business decisions, missing real data/credentials, or blockers.
+- **Work style:** one task per session. Finish the task, update the WORK files, run checks, commit, then remind the user to open a new session for the next task.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
 - **Current phase:** Phase 0 - Stabilize And Clean.
 - **Current task:** Task #11 - Decide whether `Category.image` is used; use it or remove it.
@@ -22,20 +22,20 @@ Remaining work is in `WORK/tasks.md`.
 
 ## Session Rules
 
-- Work continuously, task by task. After finishing a task and recording it, start the next unchecked task automatically.
-- The user has given standing permission to proceed without asking after each task. Continuity comes from these files, not from a specific agent.
+- One task per session, then stop. Do not start the next task in the same session.
+- A new session may use the same AI agent or a different AI agent. Continuity comes from these files, not from a specific agent.
 - Start of session: read this file and `WORK/tasks.md`, then state the current task before coding.
 - Only implement the current task. Do not make unrelated changes.
-- After each task, treat the next task as a fresh session: re-read the current task and the latest notes before coding.
-- "New session" means resetting context from the WORK files. The agent cannot literally open a new chat thread.
 - When a task is finished:
   1. Mark it `[x]` in `WORK/tasks.md`.
   2. Add it to this file with the date and files changed.
   3. Run the relevant checks (build, typecheck, tests) and record the result.
   4. Write a session note in the Session Log below: done, tested, decisions, next task.
-  5. Continue with the next unchecked task.
-- Stop only when a task needs Jabour's business decision, real data, or credentials; when a check cannot be fixed; or when the user asks to stop. Never invent business data.
-- If a task is not finished, still write a progress note and say exactly what remains.
+  5. Commit the finished task with a clear message. Do not commit secrets, incomplete work, or failing checks.
+  6. Tell the user: "Task finished. Please open a new session to do the next task."
+- Never continue to another task after finishing one.
+- If a task is not finished, still write a progress note and say exactly what remains. Do not commit incomplete work.
+- Stop and ask for missing business decisions or real data. Never invent business data.
 
 ---
 
@@ -256,3 +256,11 @@ Add one entry here at the end of every session. New agents must read the latest 
 - **Checks run:** `npm run prisma:seed` -> printed guidance, exit 0; `NODE_ENV=production npx tsx prisma/demo-seed.ts` -> refused with exit 1 before touching the DB; explicit `tsc --noEmit` on both seed scripts -> passed; backend `npx tsc --noEmit` -> passed; `npx prisma validate` -> schema valid; frontend `npm run build` -> passed (built in 1.24s). `npx prisma generate` was run first because the local client had never been generated (v6.19.3).
 - **Decisions:** The demo guard is a hard `NODE_ENV=production` refusal placed before the Prisma client is created. Upserts update demo records but never remove or deactivate anything, so re-running the demo seed cannot erase orders/customers. No live DB test was possible because this project's `electro_postgres` container does not exist and host port 5432 is held by an unrelated `samsung_store_postgres` container (recorded in Task #7).
 - **Next task:** Task #11 - decide whether `Category.image` is used; use it or remove it.
+
+### 2026-11-19 - Workflow Update: Commit After Each Task (DONE)
+
+- **Done:** Per the user's request, returned to one task per session and added two requirements: commit every finished task and remind the user to open a new session for the next one. Committed the completed Phase 0 work (tasks #6-#10) as `82330d2` ("chore: complete Phase 0 cleanup tasks 6-10") before changing the rules.
+- **Files changed:** `WORK/tasks.md` (Session Workflow), `WORK/progression.md` (Project Context work style, Session Rules, this note).
+- **Checks run:** `git log --oneline -1` -> `82330d2`; `git status --short` after the rules edit -> only `WORK/tasks.md` and `WORK/progression.md` modified before this rules commit.
+- **Decisions:** Commit only finished tasks with passing checks and no secrets. This supersedes the continuous-progress rule recorded in the Task #9 note.
+- **Next task:** Task #11 - decide whether `Category.image` is used; use it or remove it. It must be done in a new session.

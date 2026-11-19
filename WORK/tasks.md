@@ -19,25 +19,23 @@ Legend: **P0** = must have before launch, **P1** = should have, **P2** = later /
 
 ## Session Workflow (IMPORTANT - READ FIRST)
 
-This project is worked on continuously, task by task. A session may use the same AI agent or a different one.
+This project is worked on one task per session. A session may use the same AI agent or a different one.
 The WORK files must carry enough context for any agent to continue without guessing.
 
-- The user has granted **standing permission** to proceed through tasks without asking after each one. Finish a task, record it, then start the next unchecked task automatically.
+- Do **ONE task per session**, then stop. Do not start the next task in the same session.
 - At the start of a session: read `WORK/progression.md` and this file, then state the current task before coding.
-- No confirmation is needed between tasks.
-- After each finished task, treat the next one as a fresh session: re-read the current task and the latest WORK notes, then implement only that task.
+- Before coding: confirm the exact task with the user and do not implement anything else.
 - When a task is finished:
   1. Mark it `[x]` in this file.
   2. Move it to `WORK/progression.md` with the date and files changed.
   3. Run the relevant checks (build/typecheck/tests) and record the result.
   4. Add a session note at the bottom of `progression.md`: what was done, what was tested, what is next.
-  5. Continue immediately with the next unchecked task in the same run.
-- The agent cannot literally open a new chat thread. "New session" here means resetting context per task from the WORK files before starting it.
-- Stop only when:
-  - a task needs Jabour's business decision, real business data, or credentials that are not available (currency, delivery fee, real catalog, hosting, accounts);
-  - a check is failing and cannot be fixed within the task;
-  - the user asks to stop or redirect.
-- Never skip a task silently and never invent business data. If a task is blocked, note why in `progression.md` and tell the user exactly what is needed.
+  5. **Commit the finished task** with a clear message, including only that task's files. Never commit secrets.
+  6. Tell the user exactly:
+     **"Task finished. Please open a new session to do the next task."**
+- Never continue to another task after finishing one, even if the next task looks small.
+- Do not commit incomplete work or failing checks.
+- If a task is blocked by missing business decisions or real data, stop and tell the user exactly what is needed. Never invent business data.
 
 ---
 
