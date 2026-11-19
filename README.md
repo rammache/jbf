@@ -41,7 +41,13 @@ A high-performance modern e-commerce web application for **Jabour Phone**, built
 │   │   │   ├── SearchModal.tsx       # Live predictive search modal matching the template index
 │   │   │   ├── CheckoutModal.tsx     # Order checkout form connected to PostgreSQL via Prisma
 │   │   │   └── Footer.tsx            # Brand footer with newsletter subscription API integration
+│   │   ├── layouts/
+│   │   │   ├── StorefrontLayout.tsx  # Storefront chrome: announcements, navbar, footer, cart/search/checkout
+│   │   │   └── AdminLayout.tsx       # Admin sidebar, header, and sign-out
 │   │   ├── pages/
+│   │   │   ├── admin/
+│   │   │   │   ├── AdminLogin.tsx    # Admin sign-in form connected to /api/auth/login
+│   │   │   │   └── AdminOverview.tsx # Admin landing page with upcoming management sections
 │   │   │   ├── Home.tsx              # Hero banner, department tabs, highest rated, bench story
 │   │   │   ├── Shop.tsx              # Faceted catalog (categories, brand, price slider & sorting)
 │   │   │   ├── ProductDetail.tsx     # Gallery thumbnails, finish picker, bench specs & related items
@@ -112,6 +118,8 @@ npm run dev
 ```
 
 The Vite dev server will run on `http://localhost:5173`.
+
+The admin sign-in screen is available at `http://localhost:5173/admin/login`. Create an admin account first with `npm run admin:create` in `backend/`.
 
 ---
 

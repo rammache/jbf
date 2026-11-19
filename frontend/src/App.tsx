@@ -1,45 +1,34 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { CartProvider } from "./context/CartContext";
-import { AnnouncementBar } from "./components/AnnouncementBar";
-import { Navbar } from "./components/Navbar";
-import { Footer } from "./components/Footer";
-import { CartDrawer } from "./components/CartDrawer";
-import { SearchModal } from "./components/SearchModal";
-import { CheckoutModal } from "./components/CheckoutModal";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { StorefrontLayout } from "./layouts/StorefrontLayout";
+import { AdminLayout } from "./layouts/AdminLayout";
 
 import { Home } from "./pages/Home";
 import { Shop } from "./pages/Shop";
 import { ProductDetail } from "./pages/ProductDetail";
 import { About } from "./pages/About";
 import { NotFound } from "./pages/NotFound";
+import { AdminLogin } from "./pages/admin/AdminLogin";
+import { AdminOverview } from "./pages/admin/AdminOverview";
 
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <CartProvider>
-        <div className="min-h-screen flex flex-col justify-between bg-[#fbfbfb]">
-          <div>
-            <AnnouncementBar />
-            <Navbar />
-            <main>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/product/:handle" element={<ProductDetail />} />
-                <Route path="/about" element={<About />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-          </div>
-          <Footer />
+      <Routes>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminOverview />} />
+          <Route path="*" element={<Navigate to="/admin" replace />} />
+        </Route>
 
-          {/* Overlays / Drawers */}
-          <CartDrawer />
-          <SearchModal />
-          <CheckoutModal />
-        </div>
-      </CartProvider>
+        <Route element={<StorefrontLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/product/:handle" element={<ProductDetail />} />
+          <Route path="/about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 };
