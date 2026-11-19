@@ -86,8 +86,8 @@ export const Home: React.FC = () => {
                 {heroProduct.condition && heroProduct.condition !== "NEW"
                   ? `${heroProduct.condition} Hardware`
                   : heroProduct.isFeatured || heroProduct.featured
-                  ? "Featured Hardware"
-                  : "Bench Tested Hardware"}
+                    ? "Featured Hardware"
+                    : "Bench Tested Hardware"}
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
@@ -285,8 +285,8 @@ export const Home: React.FC = () => {
                     type="button"
                     onClick={() => setSelectedCategory(cat.slug || cat.name)}
                     className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition ${isSelected
-                        ? "bg-[#15161d] text-white shadow"
-                        : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                      ? "bg-[#15161d] text-white shadow"
+                      : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
                       }`}
                   >
                     {cat.name}

@@ -15,6 +15,9 @@ interface CartContextType {
   setIsCheckoutOpen: (open: boolean) => void;
   cartCount: number;
   cartTotal: number;
+  shippingFee: number;
+  freeShippingThreshold: number;
+  grandTotal: number;
 }
 
 const STORAGE_KEY = "jabour-cart";
@@ -93,6 +96,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
   const cartTotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const freeShippingThreshold = 50;
+  const shippingFee = items.length === 0 ? 0 : cartTotal >= freeShippingThreshold ? 0 : 5;
+  const grandTotal = cartTotal + shippingFee;
 
   return (
     <CartContext.Provider
@@ -109,7 +115,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isCheckoutOpen,
         setIsCheckoutOpen,
         cartCount,
-        cartTotal
+        cartTotal,
+        shippingFee,
+        freeShippingThreshold,
+        grandTotal
       }}
     >
       {children}

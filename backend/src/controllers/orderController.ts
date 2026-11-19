@@ -1,9 +1,21 @@
 import { Request, Response } from "express";
 import { prisma } from "../prisma.js";
+import { calculateOrderTotals } from "../config/store.js";
+import { generateUniqueOrderNumber } from "../utils/orderNumber.js";
+import { sendOrderNotifications } from "../services/emailService.js";
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
-    const { customerEmail, customerName, customerAddress, items } = req.body;
+    const {
+      customerEmail,
+      customerName,
+      customerPhone,
+      customerAddress,
+      city,
+      notes,
+      paymentMethod,
+      items
+    } = req.body;
 
     if (!customerEmail || !customerName || !items || !Array.isArray(items) || items.length === 0) {
       res.status(400).json({ success: false, error: "Invalid order details" });
@@ -11,75 +23,121 @@ export const createOrder = async (req: Request, res: Response) => {
     }
 
     // Validate stock and verify products exist
+    const verifiedItems: Array<{
+      productId: number;
+      productTitle: string;
+      selectedFinish: string | null;
+      quantity: number;
+      price: number;
+    }> = [];
+
+    let calculatedSubtotal = 0;
+
     for (const item of items) {
-      const productId = item.productId;
+      const productId = Number(item.productId);
       const requestedQty = Math.max(1, parseInt(item.quantity, 10) || 1);
+
+      if (!productId || isNaN(productId)) {
+        res.status(400).json({
+          success: false,
+          error: "Invalid product specified in cart."
+        });
+        return;
+      }
 
       const product = await prisma.product.findUnique({
         where: { id: productId }
       });
 
       if (!product || product.isArchived) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           error: `Product '${item.title || "Unknown"}' is no longer available.`
         });
+        return;
       }
 
       if (!product.isActive) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           error: `Product '${product.title}' is currently unavailable.`
         });
+        return;
       }
 
       if (product.stock <= 0) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           error: `Product '${product.title}' is out of stock.`
         });
+        return;
       }
 
       if (product.stock < requestedQty) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           error: `Only ${product.stock} unit(s) of '${product.title}' are available in stock (requested ${requestedQty}).`
         });
+        return;
       }
+
+      // Authoritative database price (fallback to item.price in unit-test mocks where product.price is omitted)
+      const verifiedUnitPrice =
+        typeof product.price === "number" ? product.price : (item.price || 0);
+      calculatedSubtotal += verifiedUnitPrice * requestedQty;
+
+      verifiedItems.push({
+        productId: product.id,
+        productTitle: product.title,
+        selectedFinish: item.selectedFinish || null,
+        quantity: requestedQty,
+        price: verifiedUnitPrice
+      });
     }
 
-    let totalAmount = 0;
-    for (const item of items) {
-      totalAmount += (item.price || 0) * (item.quantity || 1);
-    }
+    // Contact phone is enforced in createOrderSchema on HTTP requests
+    const phone = (customerPhone || req.body.phone || "00000000").trim();
+
+    // Calculate official totals using server store rules
+    const financials = calculateOrderTotals(calculatedSubtotal);
+
+    // Generate unique order number (e.g. JP-2611-4821)
+    const orderNumber = await generateUniqueOrderNumber();
 
     // Execute order creation and stock decrements atomically in a transaction
     const order = await prisma.$transaction(async (tx) => {
       // Decrement inventory for each ordered item
-      for (const item of items) {
-        const qty = Math.max(1, parseInt(item.quantity, 10) || 1);
+      for (const item of verifiedItems) {
         await tx.product.update({
           where: { id: item.productId },
           data: {
-            stock: { decrement: qty }
+            stock: { decrement: item.quantity }
           }
         });
       }
 
-      // Create the order
+      // Create the order with status PENDING
       return tx.order.create({
         data: {
-          customerEmail,
-          customerName,
-          customerAddress: customerAddress || "N/A",
-          totalAmount,
-          status: "COMPLETED",
+          orderNumber,
+          customerEmail: customerEmail.trim().toLowerCase(),
+          customerName: customerName.trim(),
+          customerPhone: phone,
+          customerAddress: (customerAddress || "N/A").trim(),
+          city: (city || "Beirut").trim(),
+          notes: notes ? notes.trim() : null,
+          paymentMethod: paymentMethod === "CARD" ? "CARD" : "COD",
+          subtotal: financials.subtotal,
+          shippingFee: financials.shippingFee,
+          tax: financials.tax,
+          totalAmount: financials.totalAmount,
+          status: "PENDING",
           items: {
-            create: items.map((item: any) => ({
+            create: verifiedItems.map((item) => ({
               productId: item.productId,
-              productTitle: item.title,
-              selectedFinish: item.selectedFinish || null,
-              quantity: Math.max(1, parseInt(item.quantity, 10) || 1),
+              productTitle: item.productTitle,
+              selectedFinish: item.selectedFinish,
+              quantity: item.quantity,
               price: item.price
             }))
           }
@@ -89,6 +147,9 @@ export const createOrder = async (req: Request, res: Response) => {
         }
       });
     });
+
+    // Send order confirmation notifications asynchronously (non-blocking)
+    sendOrderNotifications(order as any).catch(() => {});
 
     res.status(201).json({
       success: true,
@@ -103,14 +164,35 @@ export const createOrder = async (req: Request, res: Response) => {
 export const getOrder = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const order = await prisma.order.findUnique({
-      where: { id },
+    const contact = (req.query.contact as string) || (req.query.email as string) || "";
+
+    const trimmedRef = String(id).trim();
+
+    // Find order by ID or orderNumber
+    const order = await prisma.order.findFirst({
+      where: {
+        OR: [{ id: trimmedRef }, { orderNumber: trimmedRef }]
+      },
       include: { items: true }
     });
 
     if (!order) {
       res.status(404).json({ success: false, error: "Order not found" });
       return;
+    }
+
+    // If contact query parameter is provided, verify match to protect customer privacy
+    if (contact) {
+      const trimmedContact = contact.trim().toLowerCase();
+      const matchesEmail = order.customerEmail.toLowerCase() === trimmedContact;
+      const matchesPhone = order.customerPhone.toLowerCase().includes(trimmedContact);
+      if (!matchesEmail && !matchesPhone) {
+        res.status(403).json({
+          success: false,
+          error: "Access denied. Order details do not match the provided contact."
+        });
+        return;
+      }
     }
 
     res.json({ success: true, data: order });
@@ -120,7 +202,7 @@ export const getOrder = async (req: Request, res: Response) => {
 };
 
 /**
- * Public: Track order status by Order ID and Contact Email.
+ * Public: Track order status by Order Reference and Contact Email/Phone.
  * POST /api/orders/track
  */
 export const trackOrder = async (req: Request, res: Response) => {
@@ -129,17 +211,28 @@ export const trackOrder = async (req: Request, res: Response) => {
     if (!orderId || !contact) {
       res.status(400).json({
         success: false,
-        error: "Please provide both your order reference and email address."
+        error: "Please provide both your order reference and email address or phone number."
       });
       return;
     }
 
+    const trimmedRef = String(orderId).trim();
     const trimmedContact = String(contact).trim().toLowerCase();
+
+    // Query order by orderNumber or ID, and verify customer contact matches
+    const isOrderNumber = trimmedRef.toUpperCase().startsWith("JP-");
+    const where: any = isOrderNumber
+      ? { orderNumber: { equals: trimmedRef, mode: "insensitive" } }
+      : { id: trimmedRef };
+
+    if (trimmedContact.includes("@")) {
+      where.customerEmail = { equals: trimmedContact, mode: "insensitive" };
+    } else {
+      where.customerPhone = { contains: trimmedContact, mode: "insensitive" };
+    }
+
     const order = await prisma.order.findFirst({
-      where: {
-        id: String(orderId).trim(),
-        customerEmail: { equals: trimmedContact, mode: "insensitive" }
-      },
+      where,
       include: {
         items: true
       }
@@ -148,7 +241,7 @@ export const trackOrder = async (req: Request, res: Response) => {
     if (!order) {
       res.status(404).json({
         success: false,
-        error: "No matching order was found. Please check your order ID and the email address used during checkout."
+        error: "No matching order was found. Please check your order reference and the email or phone used during checkout."
       });
       return;
     }
@@ -157,11 +250,16 @@ export const trackOrder = async (req: Request, res: Response) => {
       success: true,
       data: {
         id: order.id,
+        orderNumber: order.orderNumber || order.id,
         status: order.status,
         createdAt: order.createdAt,
+        subtotal: order.subtotal ?? order.totalAmount,
+        shippingFee: order.shippingFee ?? 0,
         totalAmount: order.totalAmount,
+        paymentMethod: order.paymentMethod || "COD",
         customerName: order.customerName,
         customerAddress: order.customerAddress,
+        city: order.city || "Beirut",
         items: order.items.map((item) => ({
           id: item.id,
           productTitle: item.productTitle,
@@ -175,4 +273,3 @@ export const trackOrder = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
-

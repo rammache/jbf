@@ -64,3 +64,47 @@ export function createLoginRateLimiter(overrides?: Partial<Options>) {
 }
 
 export const loginRateLimiter = createLoginRateLimiter();
+
+/**
+ * Rate limiter for checkout order placement (prevent abuse/spam)
+ * Default: 10 order attempts per 15 minutes per IP.
+ */
+export function createOrderRateLimiter(overrides?: Partial<Options>) {
+  return rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 10,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    handler: (_req: Request, res: Response, _next: NextFunction, options) => {
+      res.status(options.statusCode).json({
+        success: false,
+        error: "Too many order requests from your network. Please wait a few minutes before trying again."
+      });
+    },
+    ...overrides
+  });
+}
+
+export const orderRateLimiter = createOrderRateLimiter();
+
+/**
+ * Rate limiter for newsletter subscription
+ * Default: 5 attempts per 15 minutes per IP.
+ */
+export function createNewsletterRateLimiter(overrides?: Partial<Options>) {
+  return rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 5,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    handler: (_req: Request, res: Response, _next: NextFunction, options) => {
+      res.status(options.statusCode).json({
+        success: false,
+        error: "Too many newsletter subscription attempts. Please try again later."
+      });
+    },
+    ...overrides
+  });
+}
+
+export const newsletterRateLimiter = createNewsletterRateLimiter();

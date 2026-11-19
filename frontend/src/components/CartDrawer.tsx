@@ -11,6 +11,9 @@ export const CartDrawer: React.FC = () => {
     updateQuantity,
     removeFromCart,
     cartTotal,
+    shippingFee,
+    freeShippingThreshold,
+    grandTotal,
     setIsCheckoutOpen
   } = useCart();
 
@@ -156,17 +159,31 @@ export const CartDrawer: React.FC = () => {
 
           {/* Footer / Checkout */}
           {items.length > 0 && (
-            <div className="p-5 border-t border-gray-200 bg-gray-50 space-y-4">
-              <div className="flex justify-between items-center text-base">
-                <span className="font-semibold text-gray-600">Subtotal</span>
-                <span className="font-extrabold text-xl text-[#15161d]">
-                  ${cartTotal.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-                </span>
+            <div className="p-5 border-t border-gray-200 bg-gray-50 space-y-3">
+              <div className="space-y-1.5 text-xs text-gray-600">
+                <div className="flex justify-between">
+                  <span>Subtotal</span>
+                  <span className="font-bold text-gray-900">${cartTotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Delivery Fee</span>
+                  <span className="font-bold text-green-700">
+                    {shippingFee === 0 ? "FREE" : `$${shippingFee.toFixed(2)}`}
+                  </span>
+                </div>
+                <div className="flex justify-between text-base font-black text-[#15161d] pt-2 border-t">
+                  <span>Total (Cash on Delivery)</span>
+                  <span className="text-[#d10024]">${grandTotal.toFixed(2)}</span>
+                </div>
               </div>
-              <p className="text-xs text-gray-500">
-                Taxes and delivery calculated at checkout. Free shipping over $50.
-              </p>
-              <div className="space-y-2">
+
+              {cartTotal < freeShippingThreshold && (
+                <div className="p-2 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-800 text-center font-medium">
+                  Add <span className="font-bold">${(freeShippingThreshold - cartTotal).toFixed(2)}</span> more to get <span className="font-bold text-green-700">Free Delivery</span>!
+                </div>
+              )}
+
+              <div className="space-y-2 pt-1">
                 <button
                   type="button"
                   onClick={() => {
@@ -180,7 +197,7 @@ export const CartDrawer: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsCartOpen(false)}
-                  className="w-full py-2.5 bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 text-xs font-bold uppercase tracking-wider rounded transition"
+                  className="w-full py-2 bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 text-xs font-bold uppercase tracking-wider rounded transition"
                 >
                   Continue Shopping
                 </button>

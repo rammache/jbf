@@ -6,8 +6,13 @@ import { createOrder, getOrder, trackOrder } from "../controllers/orderControlle
 import { subscribeNewsletter } from "../controllers/newsletterController.js";
 import { getProductReviews, createProductReview } from "../controllers/reviewController.js";
 import { validateBody } from "../middleware/validate.js";
-import { loginRateLimiter } from "../middleware/rateLimit.js";
+import {
+  loginRateLimiter,
+  orderRateLimiter,
+  newsletterRateLimiter
+} from "../middleware/rateLimit.js";
 import { loginSchema } from "../schemas/auth.js";
+import { createOrderSchema, trackOrderSchema } from "../schemas/order.js";
 import adminRoutes from "./admin.js";
 
 const router = Router();
@@ -32,11 +37,11 @@ router.post("/products/:id/reviews", createProductReview);
 router.get("/categories", getCategories);
 
 // Orders & Checkout
-router.post("/orders", createOrder);
-router.post("/orders/track", trackOrder);
+router.post("/orders", orderRateLimiter, validateBody(createOrderSchema), createOrder);
+router.post("/orders/track", validateBody(trackOrderSchema), trackOrder);
 router.get("/orders/:id", getOrder);
 
 // Newsletter
-router.post("/newsletter", subscribeNewsletter);
+router.post("/newsletter", newsletterRateLimiter, subscribeNewsletter);
 
 export default router;

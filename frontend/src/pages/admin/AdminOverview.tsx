@@ -1,21 +1,25 @@
 import React from "react";
-import { Package, ShoppingCart, Tags } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Package, ShoppingCart, Tags, ArrowRight } from "lucide-react";
 
-const upcomingSections = [
+const activeSections = [
   {
     name: "Categories",
-    description: "Create and organize the departments shoppers browse.",
-    icon: Tags
+    description: "Create, reorder, and organize the departments shoppers browse.",
+    icon: Tags,
+    to: "/admin/categories"
   },
   {
     name: "Products",
-    description: "Add phones, photos, specifications, and stock levels.",
-    icon: Package
+    description: "Add phones, photos, specifications, pricing, and stock levels.",
+    icon: Package,
+    to: "/admin/products"
   },
   {
     name: "Orders",
-    description: "Review, confirm, and fulfil customer orders.",
-    icon: ShoppingCart
+    description: "Review, confirm, track, and fulfill customer Cash on Delivery orders.",
+    icon: ShoppingCart,
+    to: "/admin/orders"
   }
 ];
 
@@ -36,29 +40,31 @@ export const AdminOverview: React.FC = () => {
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {upcomingSections.map((section) => {
+        {activeSections.map((section) => {
           const Icon = section.icon;
 
           return (
-            <div
+            <Link
               key={section.name}
-              className="rounded-xl border border-gray-200 bg-white p-5"
+              to={section.to}
+              className="group rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:border-[#d10024] hover:shadow-md block"
             >
               <div className="flex items-center justify-between">
-                <div className="flex h-10 w-10 items-center justify-center rounded bg-[#f4f5f7] text-[#15161d]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#f4f5f7] text-[#15161d] group-hover:bg-red-50 group-hover:text-[#d10024] transition">
                   <Icon className="h-5 w-5" />
                 </div>
-                <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                  Coming soon
+                <span className="rounded-full bg-green-50 border border-green-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-700">
+                  Active
                 </span>
               </div>
-              <h3 className="mt-4 text-sm font-black uppercase tracking-wide text-[#15161d]">
-                {section.name}
+              <h3 className="mt-4 text-sm font-black uppercase tracking-wide text-[#15161d] group-hover:text-[#d10024] transition flex items-center justify-between">
+                <span>{section.name}</span>
+                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition" />
               </h3>
               <p className="mt-1 text-xs leading-relaxed text-gray-500">
                 {section.description}
               </p>
-            </div>
+            </Link>
           );
         })}
       </section>

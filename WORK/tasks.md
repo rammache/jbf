@@ -199,21 +199,21 @@ The WORK files must carry enough context for any agent to continue without guess
 
 ## Phase 6 - Orders And Checkout
 
-- [ ] Add `OrderStatus` enum: PENDING, CONFIRMED, PROCESSING, SHIPPED, DELIVERED, CANCELLED, RETURNED. **P0**
-- [ ] Fix status conflict: schema defaults to `PAID`, controller sets `COMPLETED`, UI says "Bench Testing". **P0**
-- [ ] Add order fields: phone, city, address, notes, paymentMethod, subtotal, shippingFee, tax, orderNumber. **P0**
-- [ ] Make phone number required (essential for delivery). **P0**
-- [ ] Recalculate item prices and totals on the server from the database; never trust client prices. **P0**
-- [ ] Validate stock and decrement inside a Prisma transaction. **P0**
-- [ ] Restore stock when an order is cancelled. **P1**
-- [ ] Admin orders API: list with pagination, filters, search, detail, update status, cancel. **P0**
-- [ ] Admin orders UI with status badges, detail modal/page, and action buttons. **P0**
-- [ ] Add order confirmation email to customer and notification to Jabour. **P1**
-- [ ] Add Cash on Delivery as the first payment method. **P0**
-- [ ] If online card payment is required, integrate a gateway and mark PAID only on verified webhook. **P2**
-- [ ] Implement shipping fee rules and free-shipping threshold. **P1**
-- [ ] Rate limit `POST /api/orders` and `POST /api/newsletter`. **P1**
-- [ ] Do not expose orders by raw UUID only; require orderNumber + email/phone. **P1**
+- [x] Add `OrderStatus` enum: PENDING, CONFIRMED, PROCESSING, SHIPPED, DELIVERED, CANCELLED, RETURNED. **P0**
+- [x] Fix status conflict: schema defaults to `PAID`, controller sets `COMPLETED`, UI says "Bench Testing". **P0**
+- [x] Add order fields: phone, city, address, notes, paymentMethod, subtotal, shippingFee, tax, orderNumber. **P0**
+- [x] Make phone number required (essential for delivery). **P0**
+- [x] Recalculate item prices and totals on the server from the database; never trust client prices. **P0**
+- [x] Validate stock and decrement inside a Prisma transaction. **P0**
+- [x] Restore stock when an order is cancelled. **P1**
+- [x] Admin orders API: list with pagination, filters, search, detail, update status, cancel. **P0**
+- [x] Admin orders UI with status badges, detail modal/page, and action buttons. **P0**
+- [x] Add order confirmation email to customer and notification to Jabour. **P1**
+- [x] Add Cash on Delivery as the first payment method. **P0**
+- [x] If online card payment is required, integrate a gateway and mark PAID only on verified webhook. **P2**
+- [x] Implement shipping fee rules and free-shipping threshold. **P1**
+- [x] Rate limit `POST /api/orders` and `POST /api/newsletter`. **P1**
+- [x] Do not expose orders by raw UUID only; require orderNumber + email/phone. **P1**
 
 ---
 

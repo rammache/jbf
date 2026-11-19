@@ -32,6 +32,14 @@ import {
   adminToggleApproveReview,
   adminDeleteReview
 } from "../controllers/reviewController.js";
+import {
+  adminGetOrders,
+  adminGetOrderById,
+  adminUpdateOrderStatus,
+  adminCancelOrder,
+  adminDeleteOrder
+} from "../controllers/adminOrderController.js";
+import { updateOrderStatusSchema } from "../schemas/order.js";
 
 const router = Router();
 
@@ -64,5 +72,12 @@ router.post("/products/:id/duplicate", adminDuplicateProduct);
 router.get("/reviews", adminGetReviews);
 router.put("/reviews/:id/approve", adminToggleApproveReview);
 router.delete("/reviews/:id", adminDeleteReview);
+
+// Order Management
+router.get("/orders", adminGetOrders);
+router.get("/orders/:id", adminGetOrderById);
+router.put("/orders/:id/status", validateBody(updateOrderStatusSchema), adminUpdateOrderStatus);
+router.post("/orders/:id/cancel", adminCancelOrder);
+router.delete("/orders/:id", adminDeleteOrder);
 
 export default router;

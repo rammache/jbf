@@ -357,6 +357,180 @@ async function main() {
   }
 
   console.log(`Demo catalog ready: ${CATEGORIES.length} categories and ${PRODUCTS.length} products.`);
+
+  // Seed sample demo orders for admin order management testing
+  console.log("Seeding demo customer orders...");
+  const sampleProduct = await prisma.product.findFirst({
+    where: { handle: "kestrel-14-ultrabook" }
+  });
+  const sampleProduct2 = await prisma.product.findFirst({
+    where: { handle: "nord-flex-convertible" }
+  });
+
+  if (sampleProduct) {
+    const demoOrders = [
+      {
+        orderNumber: "JP-2611-1001",
+        customerName: "Michel Aoun",
+        customerEmail: "michel.aoun@example.com",
+        customerPhone: "+961 71 234 567",
+        customerAddress: "Sassine Square, Building 14, 3rd Floor",
+        city: "Beirut",
+        notes: "Please call 15 minutes before arrival.",
+        paymentMethod: "COD",
+        subtotal: sampleProduct.price,
+        shippingFee: 0,
+        tax: 0,
+        totalAmount: sampleProduct.price,
+        status: "PENDING" as const,
+        items: [
+          {
+            productId: sampleProduct.id,
+            productTitle: sampleProduct.title,
+            selectedFinish: "Graphite",
+            quantity: 1,
+            price: sampleProduct.price
+          }
+        ]
+      },
+      {
+        orderNumber: "JP-2611-1002",
+        customerName: "Sarah Khoury",
+        customerEmail: "sarah.khoury@example.com",
+        customerPhone: "+961 76 987 654",
+        customerAddress: "Mina Road, Near Port Entrance",
+        city: "Tripoli",
+        notes: "Leave with building concierge if not home.",
+        paymentMethod: "COD",
+        subtotal: sampleProduct2 ? sampleProduct2.price : 899,
+        shippingFee: 0,
+        tax: 0,
+        totalAmount: sampleProduct2 ? sampleProduct2.price : 899,
+        status: "CONFIRMED" as const,
+        items: [
+          {
+            productId: sampleProduct2?.id || sampleProduct.id,
+            productTitle: sampleProduct2?.title || sampleProduct.title,
+            selectedFinish: "Silver",
+            quantity: 1,
+            price: sampleProduct2 ? sampleProduct2.price : 899
+          }
+        ]
+      },
+      {
+        orderNumber: "JP-2611-1003",
+        customerName: "Georges Haddad",
+        customerEmail: "georges.haddad@example.com",
+        customerPhone: "+961 03 456 789",
+        customerAddress: "Old Souk, Sea View Street",
+        city: "Jounieh",
+        paymentMethod: "COD",
+        subtotal: sampleProduct.price,
+        shippingFee: 0,
+        tax: 0,
+        totalAmount: sampleProduct.price,
+        status: "PROCESSING" as const,
+        items: [
+          {
+            productId: sampleProduct.id,
+            productTitle: sampleProduct.title,
+            selectedFinish: "Silver",
+            quantity: 1,
+            price: sampleProduct.price
+          }
+        ]
+      },
+      {
+        orderNumber: "JP-2611-1004",
+        customerName: "Nour Mansour",
+        customerEmail: "nour.mansour@example.com",
+        customerPhone: "+961 70 555 444",
+        customerAddress: "Riad El Solh Boulevard",
+        city: "Saida",
+        paymentMethod: "COD",
+        subtotal: sampleProduct.price,
+        shippingFee: 0,
+        tax: 0,
+        totalAmount: sampleProduct.price,
+        status: "SHIPPED" as const,
+        items: [
+          {
+            productId: sampleProduct.id,
+            productTitle: sampleProduct.title,
+            selectedFinish: "Graphite",
+            quantity: 1,
+            price: sampleProduct.price
+          }
+        ]
+      },
+      {
+        orderNumber: "JP-2611-1005",
+        customerName: "Ziad Rahbani",
+        customerEmail: "ziad.rahbani@example.com",
+        customerPhone: "+961 71 888 999",
+        customerAddress: "Hamra Main Street, Apartment 5B",
+        city: "Beirut",
+        paymentMethod: "COD",
+        subtotal: sampleProduct.price,
+        shippingFee: 0,
+        tax: 0,
+        totalAmount: sampleProduct.price,
+        status: "DELIVERED" as const,
+        items: [
+          {
+            productId: sampleProduct.id,
+            productTitle: sampleProduct.title,
+            selectedFinish: "Graphite",
+            quantity: 1,
+            price: sampleProduct.price
+          }
+        ]
+      },
+      {
+        orderNumber: "JP-2611-1006",
+        customerName: "Elie Saab",
+        customerEmail: "elie.saab@example.com",
+        customerPhone: "+961 03 111 222",
+        customerAddress: "Harbor Road, Villa 3",
+        city: "Byblos",
+        notes: "Customer cancelled prior to dispatch.",
+        paymentMethod: "COD",
+        subtotal: sampleProduct.price,
+        shippingFee: 0,
+        tax: 0,
+        totalAmount: sampleProduct.price,
+        status: "CANCELLED" as const,
+        items: [
+          {
+            productId: sampleProduct.id,
+            productTitle: sampleProduct.title,
+            selectedFinish: "Graphite",
+            quantity: 1,
+            price: sampleProduct.price
+          }
+        ]
+      }
+    ];
+
+    for (const orderData of demoOrders) {
+      const { items, ...orderHeader } = orderData;
+      const existing = await prisma.order.findUnique({
+        where: { orderNumber: orderHeader.orderNumber }
+      });
+
+      if (!existing) {
+        await prisma.order.create({
+          data: {
+            ...orderHeader,
+            items: {
+              create: items
+            }
+          }
+        });
+      }
+    }
+    console.log(`Demo orders ready: ${demoOrders.length} orders across all fulfillment stages.`);
+  }
 }
 
 main()

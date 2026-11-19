@@ -1,15 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { X, CheckCircle, Loader2, ArrowRight } from "lucide-react";
+import { X, CheckCircle, Loader2, ArrowRight, MessageCircle, Truck, ShieldCheck } from "lucide-react";
 import { useCart } from "../context/CartContext";
 
+const CITIES = [
+  "Beirut",
+  "Tripoli",
+  "Saida (Sidon)",
+  "Jounieh",
+  "Byblos (Jbeil)",
+  "Zahle",
+  "Nabatieh",
+  "Batroun",
+  "Aley",
+  "Broummana",
+  "Other Area"
+];
+
 export const CheckoutModal: React.FC = () => {
-  const { items, cartTotal, isCheckoutOpen, setIsCheckoutOpen, clearCart } = useCart();
+  const { items, cartTotal, shippingFee, grandTotal, isCheckoutOpen, setIsCheckoutOpen, clearCart } =
+    useCart();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("Beirut");
   const [address, setAddress] = useState("");
+  const [notes, setNotes] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<"COD" | "CARD">("COD");
+
   const [loading, setLoading] = useState(false);
-  const [orderId, setOrderId] = useState<string | null>(null);
+  const [confirmedOrder, setConfirmedOrder] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Lock body scroll and listen for Escape key
@@ -21,9 +42,7 @@ export const CheckoutModal: React.FC = () => {
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setIsCheckoutOpen(false);
-        setOrderId(null);
-        setError(null);
+        handleClose();
       }
     };
 
@@ -32,14 +51,20 @@ export const CheckoutModal: React.FC = () => {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isCheckoutOpen, setIsCheckoutOpen]);
+  }, [isCheckoutOpen]);
 
   if (!isCheckoutOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !address) {
-      setError("Please fill out all required fields.");
+
+    if (!name.trim() || !email.trim() || !phone.trim() || !address.trim()) {
+      setError("Please fill out all required fields marked with an asterisk (*).");
+      return;
+    }
+
+    if (phone.trim().replace(/\D/g, "").length < 6) {
+      setError("Please provide a valid contact phone number with at least 6 digits.");
       return;
     }
 
@@ -51,13 +76,17 @@ export const CheckoutModal: React.FC = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customerName: name,
-          customerEmail: email,
-          customerAddress: address,
+          customerName: name.trim(),
+          customerEmail: email.trim(),
+          customerPhone: phone.trim(),
+          customerAddress: address.trim(),
+          city: city.trim(),
+          notes: notes.trim() || undefined,
+          paymentMethod,
           items: items.map((i) => ({
             productId: i.productId,
             title: i.title,
-            selectedFinish: i.selectedFinish,
+            selectedFinish: i.selectedFinish || null,
             quantity: i.quantity,
             price: i.price
           }))
@@ -65,14 +94,14 @@ export const CheckoutModal: React.FC = () => {
       });
 
       const data = await response.json();
-      if (data.success) {
-        setOrderId(data.data.id);
+      if (data.success && data.data) {
+        setConfirmedOrder(data.data);
         clearCart();
       } else {
-        setError(data.error || "Failed to place order.");
+        setError(data.error || "Failed to place order. Please review your cart and details.");
       }
     } catch (err: any) {
-      setError(err.message || "Failed to communicate with server.");
+      setError(err.message || "Failed to communicate with checkout service.");
     } finally {
       setLoading(false);
     }
@@ -80,9 +109,16 @@ export const CheckoutModal: React.FC = () => {
 
   const handleClose = () => {
     setIsCheckoutOpen(false);
-    setOrderId(null);
+    setConfirmedOrder(null);
     setError(null);
   };
+
+  // WhatsApp confirmation message link
+  const orderRef = confirmedOrder?.orderNumber || confirmedOrder?.id || "";
+  const whatsappText = encodeURIComponent(
+    `Hello Jabour Phone, I just placed order #${orderRef} for $${(confirmedOrder?.totalAmount || grandTotal).toFixed(2)}. Please confirm receipt and dispatch schedule.`
+  );
+  const whatsappUrl = `https://wa.me/96170123456?text=${whatsappText}`;
 
   return (
     <div
@@ -97,65 +133,120 @@ export const CheckoutModal: React.FC = () => {
         aria-hidden="true"
       />
 
-      <div className="relative bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden z-10 border border-gray-200">
+      <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden z-10 border border-gray-200">
+        {/* Modal Header */}
         <div className="p-5 bg-[#15161d] text-white flex items-center justify-between">
-          <h2 id="checkout-modal-title" className="text-lg font-bold">
-            Express Checkout
-          </h2>
+          <div className="flex items-center gap-2">
+            <Truck className="w-5 h-5 text-[#d10024]" />
+            <h2 id="checkout-modal-title" className="text-base sm:text-lg font-bold">
+              {confirmedOrder ? "Order Confirmation" : "Cash on Delivery Checkout"}
+            </h2>
+          </div>
           <button
             type="button"
             onClick={handleClose}
-            className="text-gray-400 hover:text-white"
+            className="text-gray-400 hover:text-white transition"
             aria-label="Close checkout modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="p-6">
-          {orderId ? (
-            <div className="text-center py-6 space-y-4">
+        <div className="p-6 max-h-[85vh] overflow-y-auto">
+          {confirmedOrder ? (
+            <div className="text-center py-4 space-y-5">
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
-              <h3 className="text-2xl font-black text-gray-900">Order Confirmed!</h3>
-              <p className="text-xs text-gray-500">
-                Thank you for your order. We are preparing your hardware bench verification and dispatch.
-              </p>
-              <div className="bg-gray-50 p-4 rounded-lg border text-left text-xs space-y-1">
-                <p>
-                  <span className="font-semibold text-gray-700">Order ID:</span>{" "}
-                  <code className="font-mono bg-white px-1 py-0.5 border rounded">{orderId}</code>
+              <div>
+                <span className="text-[11px] font-bold text-green-700 bg-green-50 border border-green-200 px-3 py-1 rounded-full uppercase tracking-wider">
+                  Order Successfully Placed
+                </span>
+                <h3 className="text-2xl font-black text-gray-900 mt-2">Thank You, {name}!</h3>
+                <p className="text-xs text-gray-500 mt-1">
+                  Your order is received and queued for bench hardware inspection and courier dispatch.
                 </p>
-                <p><span className="font-semibold text-gray-700">Recipient:</span> {name}</p>
-                <p><span className="font-semibold text-gray-700">Email:</span> {email}</p>
-                <p><span className="font-semibold text-gray-700">Payment:</span> Cash on Delivery (COD)</p>
-                <p><span className="font-semibold text-gray-700">Status:</span> Bench Testing &amp; Packing</p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-2 pt-2">
+              {/* Order Reference Details */}
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 text-left text-xs space-y-2">
+                <div className="flex justify-between items-center pb-2 border-b border-gray-200">
+                  <span className="font-semibold text-gray-600">Order Number:</span>
+                  <code className="font-mono text-sm font-black text-[#d10024] bg-white px-2 py-0.5 border rounded">
+                    {confirmedOrder.orderNumber}
+                  </code>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Recipient:</span>
+                  <span className="font-bold text-gray-800">{confirmedOrder.customerName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Contact Phone:</span>
+                  <span className="font-bold text-gray-800">{confirmedOrder.customerPhone}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Delivery Destination:</span>
+                  <span className="font-bold text-gray-800">
+                    {confirmedOrder.city}, {confirmedOrder.customerAddress}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Payment:</span>
+                  <span className="font-bold text-gray-800">
+                    {confirmedOrder.paymentMethod === "CARD" ? "Card on Delivery" : "Cash on Delivery (COD)"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center pt-2 border-t border-gray-200 text-sm">
+                  <span className="font-bold text-gray-700">Total Due Upon Delivery:</span>
+                  <span className="font-black text-[#d10024]">
+                    ${Number(confirmedOrder.totalAmount).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col gap-2 pt-2">
                 <Link
-                  to="/track"
+                  to={`/track?id=${encodeURIComponent(confirmedOrder.orderNumber)}&email=${encodeURIComponent(confirmedOrder.customerEmail)}`}
                   onClick={handleClose}
-                  className="flex-1 py-3 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded transition flex items-center justify-center gap-1"
+                  className="w-full py-3 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-1.5 shadow"
                 >
-                  Track This Order <ArrowRight className="w-3.5 h-3.5" />
+                  Track Order Status <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
+
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-1.5"
+                >
+                  <MessageCircle className="w-4 h-4" /> Message Jabour on WhatsApp
+                </a>
+
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="flex-1 py-3 bg-[#15161d] hover:bg-[#2a2c38] text-white font-bold text-xs uppercase tracking-wider rounded transition"
+                  className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs uppercase tracking-wider rounded-lg transition"
                 >
-                  Back to Store
+                  Continue Browsing
                 </button>
               </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <div className="p-3 bg-red-50 text-red-700 text-xs rounded border border-red-200">
+                <div className="p-3 bg-red-50 text-red-700 text-xs rounded-lg border border-red-200">
                   {error}
                 </div>
               )}
 
+              {/* Delivery Guarantee Banner */}
+              <div className="flex items-center gap-2 p-2.5 bg-blue-50 border border-blue-100 rounded-lg text-blue-900 text-xs">
+                <ShieldCheck className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                <span>
+                  <strong>Pay Upon Delivery:</strong> Inspect your phone package in front of courier before paying.
+                </span>
+              </div>
+
+              {/* Customer Full Name */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
                   Full Name *
@@ -165,52 +256,172 @@ export const CheckoutModal: React.FC = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Jane Doe"
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-[#d10024] focus:outline-none"
+                  placeholder="e.g. Michel Aoun"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
                 />
               </div>
 
+              {/* Email Address & Contact Phone */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="michel@example.com"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
+                    Contact Phone *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="tel"
+                      required
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+961 70 123 456"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* City Selection */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                  Email Address *
+                  Delivery City / Region *
                 </label>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="jane@example.com"
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-[#d10024] focus:outline-none"
-                />
+                <select
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none bg-white"
+                >
+                  {CITIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
               </div>
 
+              {/* Detailed Street Address */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                  Shipping Address *
+                  Detailed Street Address *
                 </label>
                 <textarea
                   required
                   rows={2}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="7 Chandler Way, Manchester M1 2AB, UK"
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-[#d10024] focus:outline-none"
+                  placeholder="Street name, building, floor, apartment number"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
                 />
               </div>
 
-              <div className="pt-3 border-t border-gray-100 flex justify-between items-center text-sm">
-                <span className="font-semibold text-gray-600">Total Due (with 2yr warranty):</span>
-                <span className="font-black text-lg text-[#d10024]">
-                  ${cartTotal.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-                </span>
+              {/* Delivery Notes */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">
+                  Delivery Notes / Landmark (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="e.g. Near pharmacy, ring bell 3"
+                  className="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
+                />
               </div>
 
+              {/* Payment Method Selector */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+                  Payment Method
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <label
+                    className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs ${
+                      paymentMethod === "COD"
+                        ? "border-[#d10024] bg-red-50/40 text-gray-900 font-bold"
+                        : "border-gray-200 hover:border-gray-300 text-gray-600"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="COD"
+                      checked={paymentMethod === "COD"}
+                      onChange={() => setPaymentMethod("COD")}
+                      className="text-[#d10024] focus:ring-[#d10024]"
+                    />
+                    <div>
+                      <p>Cash on Delivery</p>
+                      <p className="text-[10px] text-gray-500 font-normal">Pay cash to courier</p>
+                    </div>
+                  </label>
+
+                  <label
+                    className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs ${
+                      paymentMethod === "CARD"
+                        ? "border-[#d10024] bg-red-50/40 text-gray-900 font-bold"
+                        : "border-gray-200 hover:border-gray-300 text-gray-600"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="CARD"
+                      checked={paymentMethod === "CARD"}
+                      onChange={() => setPaymentMethod("CARD")}
+                      className="text-[#d10024] focus:ring-[#d10024]"
+                    />
+                    <div>
+                      <p>Card on Delivery</p>
+                      <p className="text-[10px] text-gray-500 font-normal">POS terminal card</p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              {/* Financial Breakdown */}
+              <div className="pt-3 border-t border-gray-200 space-y-1.5 text-xs text-gray-600">
+                <div className="flex justify-between">
+                  <span>Cart Items ({items.length})</span>
+                  <span className="font-bold text-gray-900">${cartTotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Courier Delivery:</span>
+                  <span className="font-bold text-green-700">
+                    {shippingFee === 0 ? "FREE (Orders over $50)" : `$${shippingFee.toFixed(2)}`}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-sm pt-2 border-t font-black text-gray-900">
+                  <span>Total Due Upon Delivery:</span>
+                  <span className="text-lg text-[#d10024]">${grandTotal.toFixed(2)}</span>
+                </div>
+              </div>
+
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-[#d10024] hover:bg-[#a7001d] disabled:bg-gray-400 text-white font-bold text-xs uppercase tracking-wider rounded shadow-md flex items-center justify-center gap-2 transition"
+                className="w-full py-3 bg-[#d10024] hover:bg-[#a7001d] disabled:bg-gray-400 text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-md flex items-center justify-center gap-2 transition"
               >
-                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Place Order Now"}
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" /> Verifying Stock &amp; Ordering...
+                  </>
+                ) : (
+                  <>Place Order Now (Cash on Delivery)</>
+                )}
               </button>
             </form>
           )}

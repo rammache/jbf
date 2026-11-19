@@ -83,11 +83,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <button
               type="button"
               onClick={handleQuickAdd}
-              className={`w-full py-2.5 px-4 rounded font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-colors ${
-                added
+              className={`w-full py-2.5 px-4 rounded font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-colors ${added
                   ? "bg-green-600 text-white"
                   : "bg-[#15161d] hover:bg-[#d10024] text-white"
-              }`}
+                }`}
             >
               {added ? (
                 <>
@@ -125,11 +124,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-3.5 h-3.5 ${
-                        i < Math.floor(product.rating)
+                      className={`w-3.5 h-3.5 ${i < Math.floor(product.rating)
                           ? "fill-current"
                           : "text-gray-300"
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
@@ -167,11 +165,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   type="button"
                   title={finish}
                   onClick={() => setSelectedFinish(finish)}
-                  className={`w-3.5 h-3.5 rounded-full border ${
-                    selectedFinish === finish
+                  className={`w-3.5 h-3.5 rounded-full border ${selectedFinish === finish
                       ? "ring-2 ring-[#d10024] ring-offset-1"
                       : "border-gray-300"
-                  }`}
+                    }`}
                   style={{
                     backgroundColor: SWATCH_COLORS[finish] || "#888"
                   }}

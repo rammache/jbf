@@ -203,9 +203,8 @@ export const ProductDetail: React.FC = () => {
                   key={i}
                   type="button"
                   onClick={() => setActiveImage(img)}
-                  className={`w-20 h-20 rounded-lg overflow-hidden border-2 bg-white transition ${
-                    activeImage === img ? "border-[#d10024] shadow-md" : "border-gray-200 opacity-70 hover:opacity-100"
-                  }`}
+                  className={`w-20 h-20 rounded-lg overflow-hidden border-2 bg-white transition ${activeImage === img ? "border-[#d10024] shadow-md" : "border-gray-200 opacity-70 hover:opacity-100"
+                    }`}
                 >
                   <ImageWithFallback src={img} alt={`Thumbnail ${i}`} className="w-full h-full object-cover" />
                 </button>
@@ -237,9 +236,8 @@ export const ProductDetail: React.FC = () => {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${
-                          i < Math.floor(product.rating) ? "fill-current" : "text-gray-300"
-                        }`}
+                        className={`w-4 h-4 ${i < Math.floor(product.rating) ? "fill-current" : "text-gray-300"
+                          }`}
                       />
                     ))}
                   </div>
@@ -306,11 +304,10 @@ export const ProductDetail: React.FC = () => {
                     key={finish}
                     type="button"
                     onClick={() => setSelectedFinish(finish)}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded border text-xs font-medium transition ${
-                      selectedFinish === finish
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded border text-xs font-medium transition ${selectedFinish === finish
                         ? "border-[#d10024] bg-red-50 text-[#d10024] font-bold"
                         : "border-gray-300 hover:border-gray-400 text-gray-700"
-                    }`}
+                      }`}
                   >
                     <span
                       className="w-3.5 h-3.5 rounded-full border border-gray-300"
@@ -360,11 +357,10 @@ export const ProductDetail: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  className={`flex-1 py-3.5 px-6 rounded font-bold text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 ${
-                    addedSuccess
+                  className={`flex-1 py-3.5 px-6 rounded font-bold text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 ${addedSuccess
                       ? "bg-green-600 text-white"
                       : "bg-[#15161d] hover:bg-[#d10024] text-white"
-                  }`}
+                    }`}
                 >
                   {addedSuccess ? (
                     <>
@@ -382,8 +378,7 @@ export const ProductDetail: React.FC = () => {
               href={`https://wa.me/96170123456?text=${encodeURIComponent(
                 `Hello Jabour Phone! I would like to order "${product.title}" for $${(
                   product.price * quantity
-                ).toFixed(2)}. Finish: ${selectedFinish || "Standard"}, Quantity: ${quantity}. Store Link: ${
-                  typeof window !== "undefined" ? window.location.href : ""
+                ).toFixed(2)}. Finish: ${selectedFinish || "Standard"}, Quantity: ${quantity}. Store Link: ${typeof window !== "undefined" ? window.location.href : ""
                 }`
               )}`}
               target="_blank"
@@ -519,9 +514,8 @@ export const ProductDetail: React.FC = () => {
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-4 h-4 ${
-                    i < Math.floor(product.rating) ? "fill-current" : "text-gray-300"
-                  }`}
+                  className={`w-4 h-4 ${i < Math.floor(product.rating) ? "fill-current" : "text-gray-300"
+                    }`}
                 />
               ))}
             </div>
@@ -600,11 +594,10 @@ export const ProductDetail: React.FC = () => {
                       className="p-1 focus:outline-none"
                     >
                       <Star
-                        className={`w-5 h-5 ${
-                          star <= reviewRating
+                        className={`w-5 h-5 ${star <= reviewRating
                             ? "text-amber-400 fill-current"
                             : "text-gray-300"
-                        }`}
+                          }`}
                       />
                     </button>
                   ))}

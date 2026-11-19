@@ -58,8 +58,8 @@ export const Navbar: React.FC = () => {
                     key={link.name}
                     to={link.path}
                     className={`px-3 py-2 text-sm font-semibold transition-colors duration-200 ${isActive
-                        ? "text-[#d10024]"
-                        : "text-gray-300 hover:text-white"
+                      ? "text-[#d10024]"
+                      : "text-gray-300 hover:text-white"
                       }`}
                   >
                     {link.name}

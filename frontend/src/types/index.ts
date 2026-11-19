@@ -69,3 +69,61 @@ export interface CartItem {
   selectedFinish?: string;
   quantity: number;
 }
+
+export type OrderStatus =
+  | "PENDING"
+  | "CONFIRMED"
+  | "PROCESSING"
+  | "SHIPPED"
+  | "DELIVERED"
+  | "CANCELLED"
+  | "RETURNED";
+
+export interface OrderItem {
+  id: string;
+  orderId?: string;
+  productId: number;
+  productTitle: string;
+  selectedFinish?: string | null;
+  quantity: number;
+  price: number;
+  product?: {
+    id: number;
+    title: string;
+    images: string[];
+    handle: string;
+    sku?: string | null;
+    stock: number;
+  };
+}
+
+export interface Order {
+  id: string;
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  customerAddress: string;
+  city: string;
+  notes?: string | null;
+  paymentMethod: string;
+  subtotal: number;
+  shippingFee: number;
+  tax: number;
+  totalAmount: number;
+  status: OrderStatus;
+  createdAt: string;
+  updatedAt: string;
+  items: OrderItem[];
+}
+
+export interface AdminOrdersResponse {
+  success: boolean;
+  data: Order[];
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+  statusCounts: Record<string, number>;
+  totalRevenue: number;
+}
