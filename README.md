@@ -75,6 +75,8 @@ Or connect your existing PostgreSQL database by setting `DATABASE_URL` in `backe
 DATABASE_URL="postgresql://postgres:password@localhost:5432/electro_db?schema=public"
 ```
 
+Admin auth also requires a `JWT_SECRET` in `backend/.env` (see `backend/.env.example`).
+
 ### 2. Backend Setup & Seeding
 
 ```bash
@@ -119,3 +121,6 @@ The Vite dev server will run on `http://localhost:5173`.
 | `POST` | `/api/orders` | Place a customer order and create order items in PostgreSQL |
 | `GET` | `/api/orders/:id` | Lookup existing order receipt by UUID |
 | `POST` | `/api/newsletter` | Register customer email for restocking updates |
+| `POST` | `/api/auth/login` | Sign in an admin; sets an httpOnly JWT cookie |
+| `GET` | `/api/auth/me` | Return the currently signed-in admin |
+| `POST` | `/api/auth/logout` | Clear the admin auth cookie |

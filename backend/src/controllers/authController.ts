@@ -1,0 +1,109 @@
+import { CookieOptions, Request, Response } from "express";
+import { prisma } from "../prisma.js";
+import { signAdminToken, verifyAdminToken } from "../utils/jwt.js";
+import { verifyPassword } from "../utils/password.js";
+
+const AUTH_COOKIE_NAME = "jabour_admin_token";
+const DEFAULT_TOKEN_TTL_SECONDS = 8 * 60 * 60;
+
+function getTokenTtlSeconds(): number {
+  const configured = Number(process.env.JWT_EXPIRES_IN_SECONDS);
+  return Number.isFinite(configured) && configured > 0
+    ? configured
+    : DEFAULT_TOKEN_TTL_SECONDS;
+}
+
+function getCookieOptions(): CookieOptions {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/"
+  };
+}
+
+function toPublicAdmin(admin: {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}) {
+  return {
+    id: admin.id,
+    name: admin.name,
+    email: admin.email,
+    role: admin.role
+  };
+}
+
+function unauthorized(res: Response) {
+  res.clearCookie(AUTH_COOKIE_NAME, getCookieOptions());
+  res.status(401).json({ success: false, error: "You are not signed in." });
+}
+
+export const login = async (req: Request, res: Response) => {
+  const email =
+    typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
+  const password = typeof req.body?.password === "string" ? req.body.password : "";
+
+  if (!email || !password) {
+    res.status(400).json({ success: false, error: "Email and password are required." });
+    return;
+  }
+
+  try {
+    const admin = await prisma.adminUser.findFirst({
+      where: { email: { equals: email, mode: "insensitive" } }
+    });
+    const passwordValid = admin
+      ? await verifyPassword(password, admin.passwordHash)
+      : false;
+
+    if (!admin || !passwordValid) {
+      res.status(401).json({ success: false, error: "Invalid email or password." });
+      return;
+    }
+
+    const ttlSeconds = getTokenTtlSeconds();
+    const token = signAdminToken({ id: admin.id, role: admin.role }, ttlSeconds);
+
+    res.cookie(AUTH_COOKIE_NAME, token, {
+      ...getCookieOptions(),
+      maxAge: ttlSeconds * 1000
+    });
+    res.setHeader("Cache-Control", "no-store");
+    res.json({ success: true, data: toPublicAdmin(admin) });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: "Unable to sign in right now." });
+  }
+};
+
+export const me = async (req: Request, res: Response) => {
+  const token = req.cookies?.[AUTH_COOKIE_NAME];
+  const payload = typeof token === "string" ? verifyAdminToken(token) : null;
+  const adminId = payload ? Number(payload.sub) : NaN;
+
+  if (!payload || !Number.isInteger(adminId) || adminId <= 0) {
+    unauthorized(res);
+    return;
+  }
+
+  try {
+    const admin = await prisma.adminUser.findUnique({ where: { id: adminId } });
+
+    if (!admin) {
+      unauthorized(res);
+      return;
+    }
+
+    res.setHeader("Cache-Control", "no-store");
+    res.json({ success: true, data: toPublicAdmin(admin) });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: "Unable to load the current admin." });
+  }
+};
+
+export const logout = (_req: Request, res: Response) => {
+  res.clearCookie(AUTH_COOKIE_NAME, getCookieOptions());
+  res.json({ success: true, data: { message: "Signed out." } });
+};

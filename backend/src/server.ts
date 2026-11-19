@@ -1,9 +1,13 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import apiRoutes from "./routes/api.js";
+import { getJwtSecret } from "./utils/jwt.js";
 
 dotenv.config();
+
+getJwtSecret();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -14,6 +18,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 
 // API health check
 app.get("/health", (_req, res) => {
