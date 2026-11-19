@@ -266,10 +266,10 @@ const PRODUCTS = [
 ];
 
 const CATEGORIES = [
-  { name: "Laptops", slug: "laptops", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=900&q=80" },
-  { name: "Audio", slug: "audio", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=80" },
-  { name: "Keyboards & mice", slug: "keyboards-mice", image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=900&q=80" },
-  { name: "Desktops & displays", slug: "desktops-displays", image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=900&q=80" }
+  { name: "Laptops", slug: "laptops" },
+  { name: "Audio", slug: "audio" },
+  { name: "Keyboards & mice", slug: "keyboards-mice" },
+  { name: "Desktops & displays", slug: "desktops-displays" }
 ];
 
 async function main() {
@@ -278,7 +278,7 @@ async function main() {
   for (const category of CATEGORIES) {
     await prisma.category.upsert({
       where: { slug: category.slug },
-      update: { name: category.name, image: category.image },
+      update: { name: category.name },
       create: category
     });
   }
