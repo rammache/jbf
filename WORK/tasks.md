@@ -143,7 +143,7 @@ The WORK files must carry enough context for any agent to continue without guess
 ## Phase 3 - Category Management
 
 - [x] Replace `Product.category` string with a `categoryId` relation to `Category`. **P0**
-- [ ] Extend `Category`: name, slug, description, image, sortOrder, isActive. **P0**
+- [x] Extend `Category`: name, slug, description, image, sortOrder, isActive. **P0**
 - [ ] Auto-generate unique slugs and keep old slugs stable on rename. **P1**
 - [ ] Admin API: `GET/POST/PUT/DELETE /api/admin/categories` plus reorder. **P0**
 - [ ] Admin UI: category table, create/edit form, image upload, active toggle, delete. **P0**

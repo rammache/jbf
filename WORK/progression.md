@@ -12,11 +12,11 @@ Remaining work is in `WORK/tasks.md`.
 - **Owner:** Jabour. The user is helping him build and manage the store.
 - **Main goal:** Jabour must be able to log in and manage categories, products, photos, stock, orders, and site content without a developer.
 - **Stack:** React + Vite + TypeScript + Tailwind (frontend), Express + TypeScript + Prisma + PostgreSQL (backend).
-- **Current state:** public demo storefront, admin auth API, first-admin CLI, admin login page, admin shell, protected admin route guards (with session context and redirects), frontend API layer with centralized 401/403 handling, admin settings with password change, Zod validation for auth payloads, and login rate limiting exist. Product model now links to Category via categoryId relation with cascade safeguards; demo seed and product queries eager-load category relations. Category admin CRUD, stock, and order management are not built yet.
+- **Current state:** public demo storefront, admin auth API, first-admin CLI, admin login page, admin shell, protected admin route guards (with session context and redirects), frontend API layer with centralized 401/403 handling, admin settings with password change, Zod validation for auth payloads, and login rate limiting exist. Product model links to Category via categoryId relation, and Category model is extended with description, image, sortOrder, isActive, and timestamps; demo seed and product queries eager-load category relations. Category admin CRUD, stock, and order management are not built yet.
 - **Work style:** one task per session. Finish the task, update the WORK files, run checks, commit, then remind the user to open a new session for the next task.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
 - **Current phase:** Phase 3 - Category Management.
-- **Current task:** Task #40 - Extend `Category`: name, slug, description, image, sortOrder, isActive (Phase 3, P0).
+- **Current task:** Task #41 - Auto-generate unique slugs and keep old slugs stable on rename (Phase 3, P1).
 - **A session can use the same AI agent or a different one.** These files must carry all context so any agent can continue.
 - **Demo data decision (2026-11-19):** the fake brands and demo catalog stay during development. Jabour will remove all demo products/categories and create the real ones from the admin panel after the project is finished, so no real catalog data is needed now.
 - **Pending business decisions:** currency, payment method, delivery fee, hosting, image storage.
@@ -164,6 +164,13 @@ Audit results:
 
 ---
 
+## Phase 9 - Phase 3 Category Management (IN PROGRESS)
+
+- [x] 2026-11-19 - Task #39: Replaced `Product.category` string with `categoryId` foreign key relation to `Category` in `backend/prisma/schema.prisma`. Updated `Product` model with `categoryId Int` and relation, and added `products Product[]` on `Category`. Generated Prisma Client types. Updated `backend/prisma/demo-seed.ts` with ID mapping. Updated `backend/src/controllers/productController.ts` with eager loading and case-insensitive filtering by category name/slug. Updated frontend types and components. Added automated test suite in `backend/src/tests/productCategoryRelation.test.ts`. Files changed: `backend/prisma/schema.prisma`, `backend/prisma/demo-seed.ts`, `backend/src/controllers/productController.ts`, `backend/src/tests/productCategoryRelation.test.ts` (new), `backend/package.json`, `frontend/src/types/index.ts`, `frontend/src/components/ProductCard.tsx`, `frontend/src/pages/Home.tsx`, `frontend/src/pages/ProductDetail.tsx`, `README.md`, `WORK/tasks.md`, `WORK/progression.md`.
+- [x] 2026-11-19 - Task #40: Extended `Category` model in `backend/prisma/schema.prisma` with `name`, `slug`, `description` (`String?`), `image` (`String?`), `sortOrder` (`Int @default(0)`), `isActive` (`Boolean @default(true)`), `createdAt` (`DateTime @default(now())`), and `updatedAt` (`DateTime @updatedAt`). Regenerated Prisma Client (`npm run prisma:generate`). Updated `backend/prisma/demo-seed.ts` with extended fields and upsert handling, and updated `frontend/src/types/index.ts` to include the extended `Category` properties. Added automated test suite in `backend/src/tests/categoryModelExtension.test.ts`. Files changed: `backend/prisma/schema.prisma`, `backend/prisma/demo-seed.ts`, `backend/src/tests/categoryModelExtension.test.ts` (new), `frontend/src/types/index.ts`, `WORK/tasks.md`, `WORK/progression.md`.
+
+---
+
 ## Completed Features At A Glance
 
 | Area | Status |
@@ -188,8 +195,8 @@ Audit results:
 | Admin settings & change password | Added |
 | Auth payload validation (Zod) | Added |
 | Login rate limiting (`loginRateLimiter`) | Added |
-| Admin dashboard | Not started |
-| Category/Product CRUD | Not started |
+| Category model & relation (foreign key, extended fields) | Done |
+| Category admin CRUD API & UI | Not started |
 | Image uploads | Not started |
 | Stock/inventory | Not started |
 | Order status management | Not started |
@@ -459,3 +466,11 @@ Add one entry here at the end of every session. New agents must read the latest 
 - **Checks run:** backend `npm test` -> passed (4/4 tests passed in 5.65ms, 0 failures); backend `npm run build` -> passed (`tsc`, 0 errors); frontend `npm run build` -> passed (`tsc && vite build`, built in 1.88s, 0 errors); verification scratch script `verify_task39.ts` -> passed (5/5 assertions passed).
 - **Decisions:** Foreign key relation on `Product` leaves `onDelete` at default (`Restrict` / `NoAction`), ensuring products prevent accidental category deletion (aligning with Task #44). Product queries in `productController.ts` eagerly load `category: true` so API responses contain both `categoryId` and full category object data (`id`, `name`, `slug`). Frontend components gracefully handle both `Category` object and legacy `string` representations so UI rendering never encounters object-as-child runtime errors.
 - **Next task:** Task #40 - extend `Category`: name, slug, description, image, sortOrder, isActive (Phase 3, P0). It must be done in a new session.
+
+### 2026-11-19 - Task #40: Extend Category Model (DONE)
+
+- **Done:** Extended `Category` model in `backend/prisma/schema.prisma` with `description` (optional `String?`), `image` (optional `String?`), `sortOrder` (`Int` with `@default(0)`), `isActive` (`Boolean` with `@default(true)`), `createdAt` (`DateTime` with `@default(now())`), and `updatedAt` (`DateTime` with `@updatedAt`). Regenerated Prisma Client (`npm run prisma:generate`). Updated `backend/prisma/demo-seed.ts` to include descriptions, sort orders, and active flags across the demo categories and safely upsert them. Updated `frontend/src/types/index.ts` to extend the `Category` TypeScript interface with `description`, `image`, `sortOrder`, `isActive`, `createdAt`, and `updatedAt`. Added automated test suite `backend/src/tests/categoryModelExtension.test.ts` verifying Prisma scalar enums, type payloads, includes, and controller response compatibility.
+- **Files changed:** `backend/prisma/schema.prisma`, `backend/prisma/demo-seed.ts`, `backend/src/tests/categoryModelExtension.test.ts` (new), `frontend/src/types/index.ts`, `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** backend `npm test` -> passed (8/8 tests passed across 2 suites: Category Model Extension & Product-Category Relation); backend `npm run build` -> passed (`tsc`, 0 errors); frontend `npm run build` -> passed (`tsc && vite build`, built in 1.77s, 0 errors); `npx prisma validate` -> valid schema; demo seed production guard -> confirmed refusal when `NODE_ENV=production`.
+- **Decisions:** Made `description` and `image` nullable/optional so categories can be created with or without visuals and rich text. Set `sortOrder` default to `0` and `isActive` default to `true`. Maintained `createdAt` and `updatedAt` timestamps consistent with `Product` and `AdminUser` models.
+- **Next task:** Task #41 - auto-generate unique slugs and keep old slugs stable on rename (Phase 3, P1). It must be done in a new session.

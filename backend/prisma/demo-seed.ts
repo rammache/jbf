@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV?.trim() === "production") {
   console.error("Refusing to run the demo seed in production (NODE_ENV=production).");
   process.exit(1);
 }
@@ -266,10 +266,38 @@ const PRODUCTS = [
 ];
 
 const CATEGORIES = [
-  { name: "Laptops", slug: "laptops" },
-  { name: "Audio", slug: "audio" },
-  { name: "Keyboards & mice", slug: "keyboards-mice" },
-  { name: "Desktops & displays", slug: "desktops-displays" }
+  {
+    name: "Laptops",
+    slug: "laptops",
+    description: "High-performance laptops and mobile workstations.",
+    image: null,
+    sortOrder: 1,
+    isActive: true
+  },
+  {
+    name: "Audio",
+    slug: "audio",
+    description: "Studio monitors, reference headphones, and sound accessories.",
+    image: null,
+    sortOrder: 2,
+    isActive: true
+  },
+  {
+    name: "Keyboards & mice",
+    slug: "keyboards-mice",
+    description: "Precision mechanical keyboards and ergonomic pointing devices.",
+    image: null,
+    sortOrder: 3,
+    isActive: true
+  },
+  {
+    name: "Desktops & displays",
+    slug: "desktops-displays",
+    description: "Pro desktop towers and calibrated high-resolution displays.",
+    image: null,
+    sortOrder: 4,
+    isActive: true
+  }
 ];
 
 async function main() {
@@ -280,7 +308,13 @@ async function main() {
   for (const category of CATEGORIES) {
     const saved = await prisma.category.upsert({
       where: { slug: category.slug },
-      update: { name: category.name },
+      update: {
+        name: category.name,
+        description: category.description,
+        image: category.image,
+        sortOrder: category.sortOrder,
+        isActive: category.isActive
+      },
       create: category
     });
     categoryMap.set(saved.name, saved.id);
