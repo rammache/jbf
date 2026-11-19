@@ -7,7 +7,7 @@ interface SEOProps {
 
 export const SEO: React.FC<SEOProps> = ({ title, description }) => {
   useEffect(() => {
-    const defaultTitle = "Jabour Phone | Bench-Tested Tech & Smartphones";
+    const defaultTitle = "Jabour Phone | Authentic Smartphones & Tech";
     document.title = title ? `${title} | Jabour Phone` : defaultTitle;
 
     if (description) {

@@ -47,7 +47,7 @@ export const Privacy: React.FC = () => {
           <ul className="list-disc pl-5 space-y-1 text-gray-700">
             <li>Dispatching your order through our authorized courier delivery partners.</li>
             <li>Sending order confirmations, tracking references, and delivery updates.</li>
-            <li>Verifying warranty status should your device require technical bench service.</li>
+            <li>Verifying warranty status should your device require technical inspection or repair service.</li>
             <li>Customer newsletter updates (only if explicitly opted-in).</li>
           </ul>
         </section>

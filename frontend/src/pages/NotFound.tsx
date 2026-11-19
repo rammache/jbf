@@ -11,10 +11,10 @@ export const NotFound: React.FC = () => {
         <Compass className="w-4 h-4" /> Error 404
       </div>
       <h1 className="text-5xl sm:text-6xl font-black text-[#15161d] tracking-tight">
-        Hardware Not Found.
+        Page Not Found.
       </h1>
       <p className="text-sm text-gray-500 leading-relaxed max-w-md mx-auto">
-        The page or product model you are looking for does not exist on our bench records, was moved, or the URL was misspelled.
+        The page or product you are looking for does not exist in our catalog, was moved, or the URL was misspelled.
       </p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
         <Link

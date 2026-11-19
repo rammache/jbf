@@ -8,7 +8,7 @@ export const Returns: React.FC = () => {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <SEO
         title="Returns & Warranty Policy"
-        description="Jabour Phone 30-day return policy and 1-2 year warranty guarantee. Transparent terms, bench diagnostics, and hassle-free replacements."
+        description="Jabour Phone 14-day defect exchange policy and 1-year official warranty guarantee. Transparent terms, technical inspection, and fast turnaround."
       />
 
       {/* Header */}
@@ -20,7 +20,7 @@ export const Returns: React.FC = () => {
           Returns &amp; Warranty Policy
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 max-w-xl mx-auto">
-          We back every piece of hardware we sell with straightforward warranties and a 30-day return window.
+          We back every piece of hardware we sell with authentic warranties and an honest 14-day defect exchange policy.
         </p>
       </div>
 
@@ -30,9 +30,9 @@ export const Returns: React.FC = () => {
           <div className="w-10 h-10 rounded-lg bg-red-50 text-[#d10024] flex items-center justify-center">
             <RotateCcw className="w-5 h-5" />
           </div>
-          <h2 className="text-sm font-black uppercase text-[#15161d]">30-Day Return Window</h2>
+          <h2 className="text-sm font-black uppercase text-[#15161d]">14-Day Defect Exchange</h2>
           <p className="text-xs text-gray-500 leading-relaxed">
-            If your item arrives with any manufacturing flaw or fails during initial bench testing, you have a full 30 days to request an exchange or return.
+            If your device exhibits any manufacturing or hardware flaw out of the box, you have a full 14 days to request an immediate exchange or return.
           </p>
         </div>
 
@@ -40,9 +40,9 @@ export const Returns: React.FC = () => {
           <div className="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center">
             <ShieldCheck className="w-5 h-5" />
           </div>
-          <h2 className="text-sm font-black uppercase text-[#15161d]">1 to 2 Year Hardware Warranty</h2>
+          <h2 className="text-sm font-black uppercase text-[#15161d]">1-Year Official Warranty</h2>
           <p className="text-xs text-gray-500 leading-relaxed">
-            All new smartphones and electronics carry official warranty coverage against defects in motherboard, display, charging, and radios.
+            All new smartphones and hardware carry official warranty coverage against defects in motherboard, display, charging, and cellular radios.
           </p>
         </div>
       </div>
@@ -51,10 +51,10 @@ export const Returns: React.FC = () => {
       <div className="bg-white border border-gray-200 rounded-2xl p-8 space-y-8 shadow-sm">
         <section className="space-y-3">
           <h2 className="text-lg font-black uppercase tracking-tight text-[#15161d] flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-[#d10024]" /> 1. Return Eligibility
+            <CheckCircle2 className="w-5 h-5 text-[#d10024]" /> 1. Return &amp; Exchange Eligibility
           </h2>
           <div className="text-xs text-gray-600 leading-relaxed space-y-2">
-            <p>To qualify for a return or replacement under our 30-day guarantee:</p>
+            <p>To qualify for a return or replacement under our 14-day defect guarantee:</p>
             <ul className="list-disc pl-5 space-y-1 text-gray-700">
               <li>The device must be in original condition without accidental physical damage, drops, or liquid ingress.</li>
               <li>All original accessories (charger, cable, documentation, SIM tray tool) and original packaging must be returned.</li>
@@ -65,10 +65,10 @@ export const Returns: React.FC = () => {
 
         <section className="space-y-3">
           <h2 className="text-lg font-black uppercase tracking-tight text-[#15161d] flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-[#d10024]" /> 2. Diagnostic Bench Verification
+            <CheckCircle2 className="w-5 h-5 text-[#d10024]" /> 2. Technical Inspection &amp; Rapid Turnaround
           </h2>
           <p className="text-xs text-gray-600 leading-relaxed">
-            When a return is received at our facility, our technicians conduct a thorough diagnostic check on our testing bench. Once the issue is confirmed, your replacement or refund is processed within 24 to 48 hours.
+            When a return is received at our facility, our technicians conduct a swift hardware diagnostic check. Once the defect is verified, your replacement or refund is processed within 24 to 48 hours.
           </p>
         </section>
 

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Product } from "../types";
 import { useCart } from "../context/CartContext";
+import { useSettings } from "../context/SettingsContext";
 import { ProductCard } from "../components/ProductCard";
 import { ImageWithFallback } from "../components/ImageWithFallback";
 import { SEO } from "../components/SEO";
@@ -40,6 +41,7 @@ const SWATCH_COLORS: Record<string, string> = {
 export const ProductDetail: React.FC = () => {
   const { handle } = useParams<{ handle: string }>();
   const { addToCart } = useCart();
+  const { settings, formatPrice } = useSettings();
   const [product, setProduct] = useState<Product | null>(null);
   const [related, setRelated] = useState<Product[]>([]);
   const [activeImage, setActiveImage] = useState<string>("");
@@ -147,7 +149,7 @@ export const ProductDetail: React.FC = () => {
     return (
       <div className="max-w-7xl mx-auto px-4 py-20 text-center space-y-4">
         <h2 className="text-2xl font-bold">Product Not Found</h2>
-        <p className="text-gray-500 text-sm">We couldn't locate this hardware model on our bench records.</p>
+        <p className="text-gray-500 text-sm">We couldn't locate this product in our catalog.</p>
         <Link to="/shop" className="inline-block px-5 py-2.5 bg-[#15161d] text-white text-xs font-bold uppercase rounded">
           Browse Catalog
         </Link>
@@ -247,7 +249,7 @@ export const ProductDetail: React.FC = () => {
                 </>
               ) : (
                 <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                  <ShieldCheck className="w-3.5 h-3.5 text-green-600" /> Verified Bench Hardware · No customer reviews yet
+                  <ShieldCheck className="w-3.5 h-3.5 text-green-600" /> 100% Genuine Device · No customer reviews yet
                 </span>
               )}
             </div>
@@ -256,15 +258,15 @@ export const ProductDetail: React.FC = () => {
           {/* Pricing */}
           <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 flex items-baseline gap-3">
             <span className="text-3xl font-black text-[#d10024]">
-              ${product.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              {formatPrice(product.price)}
             </span>
             {product.compare && product.compare > product.price && (
               <>
                 <span className="text-base text-gray-400 line-through">
-                  ${product.compare.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                  {formatPrice(product.compare)}
                 </span>
                 <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">
-                  Save ${(product.compare - product.price).toFixed(2)}
+                  Save {formatPrice(product.compare - product.price)}
                 </span>
               </>
             )}
@@ -367,7 +369,7 @@ export const ProductDetail: React.FC = () => {
                       <CheckCircle className="w-4 h-4" /> Added to Cart
                     </>
                   ) : (
-                    `Add to Cart · $${(product.price * quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+                    `Add to Cart · ${formatPrice(product.price * quantity)}`
                   )}
                 </button>
               )}
@@ -375,10 +377,10 @@ export const ProductDetail: React.FC = () => {
 
             {/* Direct WhatsApp Order Option */}
             <a
-              href={`https://wa.me/96170123456?text=${encodeURIComponent(
-                `Hello Jabour Phone! I would like to order "${product.title}" for $${(
+              href={`https://wa.me/${(settings.whatsapp || "96170123456").replace(/[^\d]/g, "")}?text=${encodeURIComponent(
+                `Hello ${settings.storeName}! I would like to order "${product.title}" for ${formatPrice(
                   product.price * quantity
-                ).toFixed(2)}. Finish: ${selectedFinish || "Standard"}, Quantity: ${quantity}. Store Link: ${typeof window !== "undefined" ? window.location.href : ""
+                )}. Finish: ${selectedFinish || "Standard"}, Quantity: ${quantity}. Store Link: ${typeof window !== "undefined" ? window.location.href : ""
                 }`
               )}`}
               target="_blank"
@@ -397,11 +399,11 @@ export const ProductDetail: React.FC = () => {
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-[#d10024]" />
-              <span>{product.warranty || "1 Year Warranty"}</span>
+              <span>{product.warranty || "1-Year Official Warranty"}</span>
             </div>
             <div className="flex items-center gap-2">
               <RotateCcw className="w-4 h-4 text-[#d10024]" />
-              <span>Guaranteed Authentic</span>
+              <span>14-Day Defect Exchange</span>
             </div>
           </div>
         </div>

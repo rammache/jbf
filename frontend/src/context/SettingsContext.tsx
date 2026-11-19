@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { StoreSettings } from "../types";
+import { formatPrice as formatPriceUtil } from "../utils/currency";
 
 export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   id: 1,
@@ -28,7 +29,7 @@ interface SettingsContextType {
   loading: boolean;
   error: string | null;
   refreshSettings: () => Promise<void>;
-  formatPrice: (amount: number) => string;
+  formatPrice: (amount: number | string | null | undefined) => string;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -63,10 +64,8 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, [fetchSettings]);
 
   const formatPrice = useCallback(
-    (amount: number) => {
-      const symbol = settings.currencySymbol || "$";
-      const safeAmount = Number.isFinite(amount) ? amount : 0;
-      return `${symbol}${safeAmount.toFixed(2)}`;
+    (amount: number | string | null | undefined) => {
+      return formatPriceUtil(amount, settings.currencySymbol || "$");
     },
     [settings.currencySymbol]
   );

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useSettings } from "../context/SettingsContext";
 
 export const AnnouncementBar: React.FC = () => {
-  const { settings } = useSettings();
+  const { settings, formatPrice } = useSettings();
   const [index, setIndex] = useState(0);
 
   const announcements = [
-    settings.announcement || `Free express delivery on orders over $${settings.freeShippingThreshold}`,
-    `Certified authentic devices with official Jabour Phone warranty`,
+    settings.announcement || `Free express delivery on orders over ${formatPrice(settings.freeShippingThreshold)}`,
+    `100% Genuine phones with official Jabour Phone warranty`,
     `Need assistance? WhatsApp us at ${settings.whatsapp}`
   ];
 

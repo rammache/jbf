@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15161d"/>
+      <stop offset="50%" stop-color="#1e1f29"/>
+      <stop offset="100%" stop-color="#0d0e12"/>
+    </linearGradient>
+    <linearGradient id="neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d10024"/>
+      <stop offset="100%" stop-color="#ff4757"/>
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#d10024" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#15161d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#centerGlow)"/>
+
+  <!-- Store showroom grid lines -->
+  <line x1="0" y1="520" x2="1200" y2="520" stroke="#2b2d42" stroke-width="2"/>
+  <path d="M100 520 L0 675" stroke="#2b2d42" stroke-width="1.5" opacity="0.6"/>
+  <path d="M350 520 L250 675" stroke="#2b2d42" stroke-width="1.5" opacity="0.6"/>
+  <path d="M600 520 L600 675" stroke="#2b2d42" stroke-width="1.5" opacity="0.6"/>
+  <path d="M850 520 L950 675" stroke="#2b2d42" stroke-width="1.5" opacity="0.6"/>
+  <path d="M1100 520 L1200 675" stroke="#2b2d42" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- Showcase table -->
+  <polygon points="320,440 880,440 980,520 220,520" fill="#1e1f29" stroke="#3a3d45" stroke-width="2"/>
+  <line x1="220" y1="520" x2="980" y2="520" stroke="url(#neon)" stroke-width="3"/>
+
+  <!-- Flagship Device on Display Stand -->
+  <rect x="555" y="270" width="90" height="155" rx="16" fill="#0d0e12" stroke="#d10024" stroke-width="2"/>
+  <rect x="561" y="278" width="78" height="139" rx="12" fill="#15161d"/>
+  <circle cx="600" cy="335" r="16" fill="#d10024" fill-opacity="0.2"/>
+  <path d="M596 329L606 335L596 341" stroke="#d10024" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Left Supporting Phone -->
+  <rect x="420" y="320" width="70" height="120" rx="12" fill="#0d0e12" stroke="#3a3d45" stroke-width="2"/>
+  <rect x="425" y="326" width="60" height="108" rx="8" fill="#1a1c24"/>
+
+  <!-- Right Supporting Tablet / Phone -->
+  <rect x="710" y="305" width="85" height="135" rx="14" fill="#0d0e12" stroke="#3a3d45" stroke-width="2"/>
+  <rect x="716" y="312" width="73" height="121" rx="10" fill="#1a1c24"/>
+
+  <!-- Brand Typography Header in Showroom -->
+  <text x="600" y="160" font-family="'Montserrat', sans-serif" font-size="34" font-weight="900" text-anchor="middle" fill="#ffffff" letter-spacing="3">
+    JABOUR PHONE
+  </text>
+  <text x="600" y="195" font-family="'Montserrat', sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#d10024" letter-spacing="4">
+    AUTHENTIC SMARTPHONES &amp; OFFICIAL WARRANTIES
+  </text>
+  <line x1="480" y1="215" x2="720" y2="215" stroke="url(#neon)" stroke-width="2"/>
+</svg>

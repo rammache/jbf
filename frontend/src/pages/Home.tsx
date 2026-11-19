@@ -4,11 +4,13 @@ import { ArrowRight, Truck, ShieldCheck, RefreshCw, Cpu, Award, FolderTree, Tag,
 import { Product } from "../types";
 import { ProductCard } from "../components/ProductCard";
 import { useCategories } from "../context/CategoryContext";
+import { useSettings } from "../context/SettingsContext";
 import { ImageWithFallback } from "../components/ImageWithFallback";
 import { SEO } from "../components/SEO";
 
 export const Home: React.FC = () => {
   const { categories, loading: categoriesLoading } = useCategories();
+  const { settings, formatPrice } = useSettings();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -65,8 +67,8 @@ export const Home: React.FC = () => {
   return (
     <div className="space-y-16 pb-16">
       <SEO
-        title="Home - Bench-Tested Hardware & Tech"
-        description="Shop verified smartphones, laptops, audio, and accessories at Jabour Phone with direct manufacturer warranties and cash on delivery."
+        title="Home - Authentic Smartphones & Mobile Gear"
+        description="Shop 100% genuine smartphones, tablets, audio, and mobile accessories with official warranties and cash on delivery."
       />
 
       {/* Hero Banner (Dynamic from API featured hardware) */}
@@ -86,8 +88,8 @@ export const Home: React.FC = () => {
                 {heroProduct.condition && heroProduct.condition !== "NEW"
                   ? `${heroProduct.condition} Hardware`
                   : heroProduct.isFeatured || heroProduct.featured
-                    ? "Featured Hardware"
-                    : "Bench Tested Hardware"}
+                    ? "Featured Arrival"
+                    : "Verified Authentic"}
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
@@ -97,7 +99,7 @@ export const Home: React.FC = () => {
               <p className="text-sm sm:text-base text-gray-300 max-w-xl font-normal leading-relaxed line-clamp-3">
                 {heroProduct.spec ||
                   heroProduct.description ||
-                  "Tested on our own bench and verified with real numbers, sustained thermal thresholds, and authentic warranties."}
+                  "Verified for authenticity and battery health. Ships with official warranty and Cash on Delivery."}
               </p>
 
               <div className="flex flex-wrap gap-4 pt-2">
@@ -105,7 +107,7 @@ export const Home: React.FC = () => {
                   to={`/product/${heroProduct.handle}`}
                   className="px-6 py-3.5 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded shadow-lg transition flex items-center gap-2"
                 >
-                  Inspect Bench Spec <ArrowRight className="w-4 h-4" />
+                  View Product Details <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
                   to="/shop"
@@ -118,13 +120,14 @@ export const Home: React.FC = () => {
           ) : (
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-950/60 border border-[#d10024]/50 rounded-full text-xs font-bold uppercase text-[#d10024] tracking-wider">
-                <Cpu className="w-3.5 h-3.5" /> Direct From The Bench
+                <Cpu className="w-3.5 h-3.5" /> Authentic Tech Boutique
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
                 Technology Without The Markup.
               </h1>
               <p className="text-sm sm:text-base text-gray-300 max-w-xl font-normal leading-relaxed">
-                Jabour Phone supplies bench-verified smartphones, laptops, audio, and accessories without the retail theater.
+                {settings.aboutText ||
+                  "Jabour Phone supplies authentic smartphones, accessories, and certified electronics with official warranties and cash on delivery."}
               </p>
               <div className="flex flex-wrap gap-4 pt-2">
                 <Link
@@ -141,11 +144,11 @@ export const Home: React.FC = () => {
             {loading ? (
               <div className="aspect-video sm:aspect-[4/3] rounded-2xl bg-gray-800 animate-pulse border border-gray-800" />
             ) : heroProduct ? (
-              <div className="relative aspect-video sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
+              <div className="relative aspect-video sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-gray-800 bg-[#1e1f29]">
                 <ImageWithFallback
                   src={
                     heroProduct.images[0] ||
-                    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=80"
+                    "/phone-placeholder.svg"
                   }
                   alt={heroProduct.title}
                   className="w-full h-full object-cover"
@@ -154,14 +157,14 @@ export const Home: React.FC = () => {
                   <div>
                     <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
                       {heroProduct.compare && heroProduct.compare > heroProduct.price
-                        ? "Special Price"
+                        ? "Special Offer"
                         : "Verified Stock"}
                     </span>
                     <p className="text-xl font-bold text-white">
-                      ${heroProduct.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                      {formatPrice(heroProduct.price)}
                       {heroProduct.compare && heroProduct.compare > heroProduct.price && (
                         <span className="text-xs text-gray-400 line-through ml-2">
-                          ${heroProduct.compare.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                          {formatPrice(heroProduct.compare)}
                         </span>
                       )}
                     </p>
@@ -169,9 +172,9 @@ export const Home: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="relative aspect-video sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
+              <div className="relative aspect-video sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-gray-800 bg-[#1e1f29]">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=80"
+                  src="/showroom.svg"
                   alt="Jabour Phone verified devices"
                   className="w-full h-full object-cover"
                 />
@@ -203,9 +206,7 @@ export const Home: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((cat) => {
-              const fallbackImage =
-                "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80";
-              const catImage = cat.image || fallbackImage;
+              const catImage = cat.image || "/phone-placeholder.svg";
               const productCount = cat._count?.products ?? 0;
 
               return (
@@ -261,7 +262,7 @@ export const Home: React.FC = () => {
               Shop by Department
             </h2>
             <p className="text-xs text-gray-500 mt-1">
-              Verified categories with genuine bench specification on every listing.
+              Verified categories with genuine manufacturer specifications on every listing.
             </p>
           </div>
 
@@ -338,40 +339,37 @@ export const Home: React.FC = () => {
         )}
       </section>
 
-      {/* Bench Philosophy Callout */}
+      {/* Quality & Authenticity Guarantee Callout */}
       <section className="bg-[#1e1f29] text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="aspect-[4/3] rounded-xl overflow-hidden shadow-xl border border-gray-800">
+          <div className="aspect-[4/3] rounded-xl overflow-hidden shadow-xl border border-gray-800 bg-[#15161d]">
             <ImageWithFallback
-              src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1000&q=80"
-              alt="Jabour Phone testing bench"
+              src="/showroom.svg"
+              alt="Jabour Phone Showroom & Quality Center"
               className="w-full h-full object-cover"
             />
           </div>
 
           <div className="space-y-6">
             <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
-              Transparency Guarantee
+              Quality &amp; Authenticity Guarantee
             </span>
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
-              We open everything first
+              100% Genuine Devices.
             </h2>
             <div className="space-y-4 text-xs sm:text-sm text-gray-300 leading-relaxed font-normal">
               <p>
-                Every model we list has been out of its box and on our workbench. We measure the things
-                manufacturers round up — real battery life under load, sustained sustained clock speeds,
-                fan decibels, and thermal throttle thresholds.
+                Every device we list is verified for authenticity, battery health, and network carrier compatibility. We source exclusively from authorized distributors so you receive authentic factory serial numbers and official warranties.
               </p>
               <p>
-                When a manufacturer spec sheet and our bench disagree, the listing clearly says so.
-                That is the cornerstone of why Jabour Phone exists.
+                Before any order leaves for delivery, our technicians inspect screen responsiveness, cameras, cellular connectivity, and packaging integrity. That is the cornerstone of why Jabour Phone exists.
               </p>
             </div>
             <Link
               to="/about"
               className="inline-flex items-center gap-2 px-6 py-3 bg-[#d10024] hover:bg-[#a7001d] text-white text-xs font-bold uppercase tracking-wider rounded transition"
             >
-              Learn How We Bench Test
+              Learn About Our Standards
             </Link>
           </div>
         </div>
@@ -410,9 +408,11 @@ export const Home: React.FC = () => {
             <div className="w-12 h-12 rounded-full bg-red-50 text-[#d10024] flex items-center justify-center mx-auto">
               <Truck className="w-6 h-6" />
             </div>
-            <h3 className="font-bold text-base text-[#15161d]">Free next-day over $50</h3>
+            <h3 className="font-bold text-base text-[#15161d]">
+              Free Delivery Over {formatPrice(settings.freeShippingThreshold)}
+            </h3>
             <p className="text-xs text-gray-500 leading-relaxed">
-              Ordered before 6pm, dispatched and on your test bench tomorrow morning.
+              Fast Cash on Delivery nationwide. Inspected before dispatch.
             </p>
           </div>
 
@@ -420,9 +420,9 @@ export const Home: React.FC = () => {
             <div className="w-12 h-12 rounded-full bg-red-50 text-[#d10024] flex items-center justify-center mx-auto">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="font-bold text-base text-[#15161d]">Two year warranty</h3>
+            <h3 className="font-bold text-base text-[#15161d]">1-Year Official Warranty</h3>
             <p className="text-xs text-gray-500 leading-relaxed">
-              On everything we sell, handled directly by our bench team rather than outsourced.
+              Authentic warranty on all devices, backed by direct Jabour Phone support.
             </p>
           </div>
 
@@ -430,9 +430,9 @@ export const Home: React.FC = () => {
             <div className="w-12 h-12 rounded-full bg-red-50 text-[#d10024] flex items-center justify-center mx-auto">
               <RefreshCw className="w-6 h-6" />
             </div>
-            <h3 className="font-bold text-base text-[#15161d]">30 day returns</h3>
+            <h3 className="font-bold text-base text-[#15161d]">14-Day Defect Exchange</h3>
             <p className="text-xs text-gray-500 leading-relaxed">
-              Unopened or tested, if it doesn't fit your workflow or bench standards, return it.
+              Straightforward exchange or refund for any verified manufacturer defects.
             </p>
           </div>
         </div>

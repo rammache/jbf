@@ -57,7 +57,7 @@ export const Terms: React.FC = () => {
             <AlertCircle className="w-4 h-4 text-[#d10024]" /> 4. Warranty &amp; Limitation of Liability
           </h2>
           <p>
-            Warranties cover factory defects under normal operating conditions. Jabour Phone is not liable for data loss stored on devices. Customers are strongly encouraged to maintain independent backups of their contacts, photos, and files prior to submitting any device for warranty bench inspection.
+            Warranties cover factory defects under normal operating conditions. Jabour Phone is not liable for data loss stored on devices. Customers are strongly encouraged to maintain independent backups of their contacts, photos, and files prior to submitting any device for warranty technical inspection.
           </p>
         </section>
       </div>

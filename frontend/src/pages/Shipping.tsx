@@ -2,8 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Truck, Clock, ShieldCheck, CheckCircle2, ArrowRight } from "lucide-react";
 import { SEO } from "../components/SEO";
+import { useSettings } from "../context/SettingsContext";
 
 export const Shipping: React.FC = () => {
+  const { settings, formatPrice } = useSettings();
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <SEO
@@ -20,7 +22,7 @@ export const Shipping: React.FC = () => {
           Shipping &amp; Delivery
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 max-w-xl mx-auto">
-          Fast, insured delivery across all regions with verified bench-inspection before every dispatch.
+          Fast, insured delivery across all regions with comprehensive quality inspection before every dispatch.
         </p>
       </div>
 
@@ -32,7 +34,7 @@ export const Shipping: React.FC = () => {
           </div>
           <h2 className="text-sm font-black uppercase text-[#15161d]">Next-Day Dispatch</h2>
           <p className="text-xs text-gray-500 leading-relaxed">
-            Orders confirmed by 4:00 PM are verified on the diagnostic bench and handed to our courier partners for next-day transit.
+            Orders confirmed by 4:00 PM are inspected, safely packaged, and handed to our courier partners for next-day transit.
           </p>
         </div>
 
@@ -70,7 +72,7 @@ export const Shipping: React.FC = () => {
             <ul className="list-disc pl-5 space-y-1 text-gray-700">
               <li><strong>Central &amp; Major Cities:</strong> 24 to 48 business hours.</li>
               <li><strong>Regional / Outlying Districts:</strong> 2 to 3 business days.</li>
-              <li><strong>Delivery Fee:</strong> Flat rate calculated at checkout based on destination zone. Free shipping offers may apply during promotions.</li>
+              <li><strong>Delivery Fee:</strong> Standard flat rate of {formatPrice(settings.shippingFee)} nationwide. Free delivery automatically applies to all orders of {formatPrice(settings.freeShippingThreshold)} and above!</li>
             </ul>
           </div>
         </section>
@@ -105,7 +107,7 @@ export const Shipping: React.FC = () => {
       <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <h3 className="text-sm font-bold text-[#15161d]">Already have an active order?</h3>
-          <p className="text-xs text-gray-500 mt-0.5">Track your bench verification and shipping status live.</p>
+          <p className="text-xs text-gray-500 mt-0.5">Track your order quality inspection and delivery status live.</p>
         </div>
         <Link
           to="/track"

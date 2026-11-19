@@ -4,11 +4,13 @@ import { Filter, X, SlidersHorizontal } from "lucide-react";
 import { Product } from "../types";
 import { ProductCard } from "../components/ProductCard";
 import { useCategories } from "../context/CategoryContext";
+import { useSettings } from "../context/SettingsContext";
 import { SEO } from "../components/SEO";
 
 export const Shop: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { categories } = useCategories();
+  const { settings } = useSettings();
   const [products, setProducts] = useState<Product[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,7 +127,7 @@ export const Shop: React.FC = () => {
               onChange={(e) => updateFilter("sort", e.target.value)}
               className="bg-white border border-gray-300 rounded px-3 py-2 text-xs font-medium focus:outline-none focus:border-[#d10024]"
             >
-              <option value="featured">Featured Bench</option>
+              <option value="featured">Featured First</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
               <option value="rating-desc">Highest Rated</option>
@@ -232,7 +234,7 @@ export const Shop: React.FC = () => {
           {/* Price Range */}
           <div>
             <h3 className="text-xs font-bold uppercase tracking-wider text-[#15161d] mb-3">
-              Price Range ($)
+              Price Range ({settings.currencySymbol || "$"})
             </h3>
             <div className="flex items-center gap-2">
               <input

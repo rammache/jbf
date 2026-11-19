@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useSettings } from "../context/SettingsContext";
 
 export const CartDrawer: React.FC = () => {
+  const { formatPrice } = useSettings();
   const {
     items,
     isCartOpen,
@@ -87,7 +89,7 @@ export const CartDrawer: React.FC = () => {
                 </div>
                 <h3 className="text-lg font-bold text-gray-800">Your basket is empty</h3>
                 <p className="text-xs text-gray-500 max-w-xs mx-auto">
-                  Nothing here yet. Explore our bench-tested tech catalog to find your gear.
+                  Nothing here yet. Explore our authentic phone and tech catalog to find your gear.
                 </p>
                 <button
                   onClick={() => setIsCartOpen(false)}
@@ -133,7 +135,7 @@ export const CartDrawer: React.FC = () => {
                       )}
 
                       <p className="text-sm font-bold text-[#d10024] mt-1">
-                        ${(item.price * item.quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                        {formatPrice(item.price * item.quantity)}
                       </p>
                     </div>
 
@@ -171,23 +173,23 @@ export const CartDrawer: React.FC = () => {
               <div className="space-y-1.5 text-xs text-gray-600">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-bold text-gray-900">${cartTotal.toFixed(2)}</span>
+                  <span className="font-bold text-gray-900">{formatPrice(cartTotal)}</span>
                 </div>
                 {appliedCoupon && (
                   <div className="flex justify-between text-green-700 font-bold">
                     <span>Discount ({appliedCoupon.code})</span>
-                    <span>-${discountAmount.toFixed(2)}</span>
+                    <span>-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span>Delivery Fee</span>
                   <span className="font-bold text-green-700">
-                    {shippingFee === 0 ? "FREE" : `$${shippingFee.toFixed(2)}`}
+                    {shippingFee === 0 ? "FREE" : formatPrice(shippingFee)}
                   </span>
                 </div>
                 <div className="flex justify-between text-base font-black text-[#15161d] pt-2 border-t">
                   <span>Total (Cash on Delivery)</span>
-                  <span className="text-[#d10024]">${grandTotal.toFixed(2)}</span>
+                  <span className="text-[#d10024]">{formatPrice(grandTotal)}</span>
                 </div>
               </div>
 
@@ -247,7 +249,7 @@ export const CartDrawer: React.FC = () => {
 
               {cartTotal < freeShippingThreshold && (
                 <div className="p-2 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-800 text-center font-medium">
-                  Add <span className="font-bold">${(freeShippingThreshold - cartTotal).toFixed(2)}</span> more to get <span className="font-bold text-green-700">Free Delivery</span>!
+                  Add <span className="font-bold">{formatPrice(freeShippingThreshold - cartTotal)}</span> more to get <span className="font-bold text-green-700">Free Delivery</span>!
                 </div>
               )}
 

@@ -112,14 +112,14 @@ The WORK files must carry enough context for any agent to continue without guess
 - [x] Rename package names from `electro-backend` / `electro-frontend` to `jabour-phone-*`. **P2**
 - [x] Real brands deferred: keep demo brands until admin CRUD lets Jabour replace the catalog. Decision 2026-11-19. **P0**
 - [x] Real catalog deferred: keep demo products/categories until admin CRUD lets Jabour replace them. Decision 2026-11-19. **P0**
-- [ ] Replace "bench tested / Manchester / two year warranty / 30 day returns" with Jabour's real promises. **P0**
-- [ ] Add real business info: phone, WhatsApp, email, city/address, opening hours. **P0**
-- [ ] Choose currency and update every price display (currently USD `$`). **P0**
-- [ ] Set real delivery fee and free-delivery threshold (or remove "free over $50"). **P0**
-- [ ] Replace hardcoded hero with an admin-selected featured product or a real Jabour promo. **P1**
-- [ ] Replace external template images with Jabour-owned photos and logo. **P0**
-- [ ] Verify the Colorlib Electro license/attribution before commercial launch. **P0**
-- [ ] Adjust colors/typography to the Jabour Phone brand. **P1**
+- [x] Replace "bench tested / Manchester / two year warranty / 30 day returns" with Jabour's real promises. **P0**
+- [x] Add real business info: phone, WhatsApp, email, city/address, opening hours. **P0**
+- [x] Choose currency and update every price display (currently USD `$`). **P0**
+- [x] Set real delivery fee and free-delivery threshold (or remove "free over $50"). **P0**
+- [x] Replace hardcoded hero with an admin-selected featured product or a real Jabour promo. **P1**
+- [x] Replace external template images with Jabour-owned photos and logo. **P0**
+- [x] Verify the Colorlib Electro license/attribution before commercial launch. **P0**
+- [x] Adjust colors/typography to the Jabour Phone brand. **P1**
 
 ---
 

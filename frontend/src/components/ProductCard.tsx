@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Star, ShoppingBag, Check, ShieldCheck } from "lucide-react";
 import { Product } from "../types";
 import { useCart } from "../context/CartContext";
+import { useSettings } from "../context/SettingsContext";
 import { ImageWithFallback } from "./ImageWithFallback";
 
 const SWATCH_COLORS: Record<string, string> = {
@@ -21,6 +22,7 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
+  const { formatPrice } = useSettings();
   const [isHovered, setIsHovered] = useState(false);
   const [selectedFinish, setSelectedFinish] = useState(
     product.finishes && product.finishes.length > 0 ? product.finishes[0] : ""
@@ -30,7 +32,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const displayImage =
     isHovered && product.images.length > 1
       ? product.images[1]
-      : product.images[0] || "https://images.unsplash.com/photo-1517336714731-489689fd1ca8";
+      : product.images[0] || "/phone-placeholder.svg";
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -147,11 +149,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
           <div className="flex items-baseline gap-2">
             <span className="text-lg font-extrabold text-[#d10024]">
-              ${product.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              {formatPrice(product.price)}
             </span>
             {product.compare && product.compare > product.price && (
               <span className="text-xs text-gray-400 line-through">
-                ${product.compare.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                {formatPrice(product.compare)}
               </span>
             )}
           </div>

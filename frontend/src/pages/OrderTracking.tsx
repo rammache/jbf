@@ -15,6 +15,7 @@ import {
   ShieldCheck
 } from "lucide-react";
 import { SEO } from "../components/SEO";
+import { useSettings } from "../context/SettingsContext";
 
 interface TrackedOrderItem {
   id: string;
@@ -40,6 +41,7 @@ interface TrackedOrder {
 }
 
 export const OrderTracking: React.FC = () => {
+  const { settings, formatPrice } = useSettings();
   const [searchParams] = useSearchParams();
   const [orderId, setOrderId] = useState(searchParams.get("id") || "");
   const [contact, setContact] = useState(searchParams.get("email") || searchParams.get("phone") || "");
@@ -108,15 +110,16 @@ export const OrderTracking: React.FC = () => {
   const currentStep = order ? getStatusStep(order.status) : 1;
 
   const orderDisplayRef = order?.orderNumber || order?.id || "";
-  const whatsappUrl = `https://wa.me/96170123456?text=${encodeURIComponent(
-    `Hello Jabour Phone, I am inquiring about my order #${orderDisplayRef}.`
+  const cleanWhatsappNumber = (settings.whatsapp || "96170123456").replace(/[^\d]/g, "");
+  const whatsappUrl = `https://wa.me/${cleanWhatsappNumber}?text=${encodeURIComponent(
+    `Hello ${settings.storeName}, I am inquiring about my order #${orderDisplayRef}.`
   )}`;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
       <SEO
         title="Track Your Order"
-        description="Check live progress, bench verification status, and delivery transit of your Jabour Phone order."
+        description="Check live progress, quality inspection status, and delivery transit of your Jabour Phone order."
       />
 
       {/* Header */}
@@ -214,7 +217,7 @@ export const OrderTracking: React.FC = () => {
                 </span>
                 <span>·</span>
                 <span className="font-bold text-[#d10024]">
-                  ${Number(order.totalAmount).toFixed(2)} ({order.paymentMethod === "CARD" ? "Card on Delivery" : "Cash on Delivery"})
+                  {formatPrice(order.totalAmount)} ({order.paymentMethod === "CARD" ? "Card on Delivery" : "Cash on Delivery"})
                 </span>
               </div>
             </div>
@@ -278,8 +281,8 @@ export const OrderTracking: React.FC = () => {
                   >
                     <Clock className="w-4 h-4" />
                   </div>
-                  <p className="text-xs font-bold text-gray-900">Bench Verified</p>
-                  <p className="text-[10px] text-gray-500">Hardware &amp; specs inspected</p>
+                  <p className="text-xs font-bold text-gray-900">Quality Inspected</p>
+                  <p className="text-[10px] text-gray-500">Device &amp; accessories inspected</p>
                 </div>
 
                 <div
@@ -361,9 +364,9 @@ export const OrderTracking: React.FC = () => {
                   </div>
                   <div className="text-right">
                     <p className="font-bold text-gray-900 text-sm">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      {formatPrice(item.price * item.quantity)}
                     </p>
-                    <p className="text-[11px] text-gray-500">${item.price.toFixed(2)} each</p>
+                    <p className="text-[11px] text-gray-500">{formatPrice(item.price)} each</p>
                   </div>
                 </div>
               ))}

@@ -4,13 +4,12 @@ import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useCategories } from "../context/CategoryContext";
 import { useAuth } from "../context/AuthContext";
-import { useSettings } from "../context/SettingsContext";
+import { BrandLogo } from "./BrandLogo";
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { cartCount, setIsCartOpen, setIsSearchOpen } = useCart();
   const { categories } = useCategories();
-  const { settings } = useSettings();
   const { admin } = useAuth();
   const location = useLocation();
 
@@ -44,11 +43,7 @@ export const Navbar: React.FC = () => {
 
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="flex items-center gap-1 group">
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-white uppercase font-sans whitespace-nowrap">
-                  {settings.storeName}<span className="text-[#d10024]">.</span>
-                </span>
-              </Link>
+              <BrandLogo variant="light" size="md" />
             </div>
 
             {/* Desktop Navigation */}

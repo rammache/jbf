@@ -15,8 +15,10 @@ import {
 } from "lucide-react";
 import { api, ApiError } from "../../api";
 import { DashboardMetrics, ProfitReport } from "../../types";
+import { useSettings } from "../../context/SettingsContext";
 
 export const AdminOverview: React.FC = () => {
+  const { formatPrice } = useSettings();
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
   const [profitReport, setProfitReport] = useState<ProfitReport | null>(null);
   const [loading, setLoading] = useState(true);
@@ -127,7 +129,7 @@ export const AdminOverview: React.FC = () => {
             </div>
           </div>
           <p className="mt-2 text-2xl font-black text-[#15161d]">
-            ${(metrics?.revenueToday ?? 0).toFixed(2)}
+            {formatPrice(metrics?.revenueToday ?? 0)}
           </p>
           <p className="mt-1 text-[11px] text-gray-400">
             {metrics?.ordersToday ?? 0} order(s) placed today
@@ -145,7 +147,7 @@ export const AdminOverview: React.FC = () => {
             </div>
           </div>
           <p className="mt-2 text-2xl font-black text-blue-700">
-            ${(metrics?.totalRevenue ?? 0).toFixed(2)}
+            {formatPrice(metrics?.totalRevenue ?? 0)}
           </p>
           <p className="mt-1 text-[11px] text-gray-400">
             Across {metrics?.totalOrders ?? 0} completed orders
@@ -229,13 +231,13 @@ export const AdminOverview: React.FC = () => {
               <div>
                 <p className="text-[10px] uppercase font-bold text-gray-400">Total Sales</p>
                 <p className="text-base font-black text-white mt-0.5">
-                  ${profitReport.totalRevenue.toFixed(2)}
+                  {formatPrice(profitReport.totalRevenue)}
                 </p>
               </div>
               <div>
                 <p className="text-[10px] uppercase font-bold text-gray-400">Gross Profit</p>
                 <p className="text-base font-black text-green-400 mt-0.5">
-                  +${profitReport.grossProfit.toFixed(2)}
+                  +{formatPrice(profitReport.grossProfit)}
                 </p>
               </div>
               <div>
@@ -292,13 +294,13 @@ export const AdminOverview: React.FC = () => {
               return (
                 <div key={day.date} className="flex flex-col items-center gap-2">
                   <span className="text-[11px] font-bold text-gray-700">
-                    ${day.revenue}
+                    {formatPrice(day.revenue)}
                   </span>
                   <div className="w-full bg-gray-100 h-28 rounded-lg flex items-end p-1">
                     <div
                       style={{ height: `${heightPct}%` }}
                       className="w-full bg-[#15161d] hover:bg-[#d10024] transition rounded-md"
-                      title={`${day.date}: $${day.revenue} (${day.orders} orders)`}
+                      title={`${day.date}: ${formatPrice(day.revenue)} (${day.orders} orders)`}
                     />
                   </div>
                   <span className="text-[10px] font-bold text-gray-500 uppercase">
@@ -347,14 +349,14 @@ export const AdminOverview: React.FC = () => {
                       >
                         {p.title}
                       </Link>
-                      <p className="text-[11px] text-gray-400">${p.price.toFixed(2)}</p>
+                      <p className="text-[11px] text-gray-400">{formatPrice(p.price)}</p>
                     </div>
                   </div>
 
                   <div className="text-right">
                     <p className="text-xs font-black text-[#15161d]">{p.unitsSold} sold</p>
                     <p className="text-[11px] text-green-600 font-bold">
-                      ${p.totalRevenue.toFixed(2)}
+                      {formatPrice(p.totalRevenue)}
                     </p>
                   </div>
                 </div>
@@ -457,7 +459,7 @@ export const AdminOverview: React.FC = () => {
                       <p className="text-[11px] text-gray-400">{order.customerEmail}</p>
                     </td>
                     <td className="py-3.5 px-5 font-black text-[#15161d]">
-                      ${order.totalAmount.toFixed(2)}
+                      {formatPrice(order.totalAmount)}
                     </td>
                     <td className="py-3.5 px-5">
                       <span className="font-semibold text-gray-700">{order.paymentMethod}</span>
@@ -513,19 +515,19 @@ export const AdminOverview: React.FC = () => {
                 <div className="rounded-xl border border-gray-200 p-4 bg-gray-50">
                   <p className="text-[10px] uppercase font-bold text-gray-500">Gross Sales</p>
                   <p className="text-xl font-black text-[#15161d] mt-1">
-                    ${profitReport.totalRevenue.toFixed(2)}
+                    {formatPrice(profitReport.totalRevenue)}
                   </p>
                 </div>
                 <div className="rounded-xl border border-gray-200 p-4 bg-gray-50">
                   <p className="text-[10px] uppercase font-bold text-gray-500">Total COGS (Cost)</p>
                   <p className="text-xl font-black text-rose-600 mt-1">
-                    ${profitReport.totalCost.toFixed(2)}
+                    {formatPrice(profitReport.totalCost)}
                   </p>
                 </div>
                 <div className="rounded-xl border border-gray-200 p-4 bg-green-50 border-green-200">
                   <p className="text-[10px] uppercase font-bold text-green-700">Gross Profit</p>
                   <p className="text-xl font-black text-green-700 mt-1">
-                    +${profitReport.grossProfit.toFixed(2)}
+                    +{formatPrice(profitReport.grossProfit)}
                   </p>
                 </div>
                 <div className="rounded-xl border border-gray-200 p-4 bg-blue-50 border-blue-200">
@@ -560,16 +562,16 @@ export const AdminOverview: React.FC = () => {
                             </span>
                           )}
                         </td>
-                        <td className="py-3 px-4 text-gray-600">${item.costPrice.toFixed(2)}</td>
-                        <td className="py-3 px-4 font-semibold">${item.sellingPrice.toFixed(2)}</td>
+                        <td className="py-3 px-4 text-gray-600">{formatPrice(item.costPrice)}</td>
+                        <td className="py-3 px-4 font-semibold">{formatPrice(item.sellingPrice)}</td>
                         <td className="py-3 px-4">
                           <span className="text-green-600 font-bold">
-                            +${item.unitProfit.toFixed(2)} ({item.marginPercent}%)
+                            +{formatPrice(item.unitProfit)} ({item.marginPercent}%)
                           </span>
                         </td>
                         <td className="py-3 px-4 font-bold">{item.unitsSold}</td>
                         <td className="py-3 px-4 text-right font-black text-[#15161d]">
-                          ${item.totalProfit.toFixed(2)}
+                          {formatPrice(item.totalProfit)}
                         </td>
                       </tr>
                     ))}

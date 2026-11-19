@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { X, CheckCircle, Loader2, ArrowRight, MessageCircle, Truck, ShieldCheck } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useSettings } from "../context/SettingsContext";
 
 const CITIES = [
   "Beirut",
@@ -18,6 +19,7 @@ const CITIES = [
 ];
 
 export const CheckoutModal: React.FC = () => {
+  const { settings, formatPrice } = useSettings();
   const {
     items,
     cartTotal,
@@ -126,9 +128,10 @@ export const CheckoutModal: React.FC = () => {
   // WhatsApp confirmation message link
   const orderRef = confirmedOrder?.orderNumber || confirmedOrder?.id || "";
   const whatsappText = encodeURIComponent(
-    `Hello Jabour Phone, I just placed order #${orderRef} for $${(confirmedOrder?.totalAmount || grandTotal).toFixed(2)}. Please confirm receipt and dispatch schedule.`
+    `Hello ${settings.storeName}, I just placed order #${orderRef} for ${formatPrice(confirmedOrder?.totalAmount || grandTotal)}. Please confirm receipt and dispatch schedule.`
   );
-  const whatsappUrl = `https://wa.me/96170123456?text=${whatsappText}`;
+  const cleanWhatsapp = (settings.whatsapp || "96170123456").replace(/[^\d]/g, "");
+  const whatsappUrl = `https://wa.me/${cleanWhatsapp}?text=${whatsappText}`;
 
   return (
     <div
@@ -172,7 +175,7 @@ export const CheckoutModal: React.FC = () => {
                 </span>
                 <h3 className="text-2xl font-black text-gray-900 mt-2">Thank You, {name}!</h3>
                 <p className="text-xs text-gray-500 mt-1">
-                  Your order is received and queued for bench hardware inspection and courier dispatch.
+                  Your order is received and queued for quality check and courier dispatch.
                 </p>
               </div>
 
@@ -207,7 +210,7 @@ export const CheckoutModal: React.FC = () => {
                 <div className="flex justify-between items-center pt-2 border-t border-gray-200 text-sm">
                   <span className="font-bold text-gray-700">Total Due Upon Delivery:</span>
                   <span className="font-black text-[#d10024]">
-                    ${Number(confirmedOrder.totalAmount).toFixed(2)}
+                    {formatPrice(confirmedOrder.totalAmount)}
                   </span>
                 </div>
               </div>
@@ -403,23 +406,23 @@ export const CheckoutModal: React.FC = () => {
               <div className="pt-3 border-t border-gray-200 space-y-1.5 text-xs text-gray-600">
                 <div className="flex justify-between">
                   <span>Cart Items ({items.length})</span>
-                  <span className="font-bold text-gray-900">${cartTotal.toFixed(2)}</span>
+                  <span className="font-bold text-gray-900">{formatPrice(cartTotal)}</span>
                 </div>
                 {appliedCoupon && (
                   <div className="flex justify-between text-green-700 font-bold">
                     <span>Coupon Discount ({appliedCoupon.code}):</span>
-                    <span>-${discountAmount.toFixed(2)}</span>
+                    <span>-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span>Courier Delivery:</span>
                   <span className="font-bold text-green-700">
-                    {shippingFee === 0 ? "FREE (Orders over $50)" : `$${shippingFee.toFixed(2)}`}
+                    {shippingFee === 0 ? `FREE (Orders over ${formatPrice(settings.freeShippingThreshold)})` : formatPrice(shippingFee)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-sm pt-2 border-t font-black text-gray-900">
                   <span>Total Due Upon Delivery:</span>
-                  <span className="text-lg text-[#d10024]">${grandTotal.toFixed(2)}</span>
+                  <span className="text-lg text-[#d10024]">{formatPrice(grandTotal)}</span>
                 </div>
               </div>
 

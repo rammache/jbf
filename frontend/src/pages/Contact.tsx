@@ -27,7 +27,7 @@ export const Contact: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <SEO
         title="Contact Us"
-        description="Get in touch with Jabour Phone. Phone, WhatsApp, direct email, location, and bench testing customer support."
+        description="Get in touch with Jabour Phone. Phone, WhatsApp, direct email, location, and dedicated customer support."
       />
 
       {/* Header */}
@@ -39,7 +39,7 @@ export const Contact: React.FC = () => {
           Speak With Our Team
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
-          Questions about phone specifications, stock availability, bench test results, or custom orders? Reach out directly.
+          Questions about phone specifications, stock availability, warranty details, or custom orders? Reach out directly.
         </p>
       </div>
 
@@ -197,7 +197,7 @@ export const Contact: React.FC = () => {
                   rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="How can our bench team assist you?"
+                  placeholder="How can our team assist you today?"
                   className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
                 />
               </div>
@@ -220,13 +220,13 @@ export const Contact: React.FC = () => {
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-lg font-black uppercase text-[#15161d]">Store Location &amp; Bench</h2>
-                <p className="text-xs text-gray-500">Main Commercial Center, Mount Lebanon</p>
+                <h2 className="text-lg font-black uppercase text-[#15161d]">Store Showroom &amp; Pickup</h2>
+                <p className="text-xs text-gray-500">{settings.address || "Main Street, Lebanon"}</p>
               </div>
             </div>
 
             <p className="text-xs text-gray-600 leading-relaxed">
-              Visit our testing bench to inspect hardware in person before purchase. We keep popular models unboxed for tactile evaluation, display testing, and battery health verification.
+              Visit our showroom to inspect devices in person before purchase. We keep popular smartphone and accessory models on display for tactile evaluation, display inspection, and battery health verification.
             </p>
 
             <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 text-xs space-y-2">

@@ -4,8 +4,7 @@ interface ImageWithFallbackProps extends React.ImgHTMLAttributes<HTMLImageElemen
   fallbackSrc?: string;
 }
 
-const DEFAULT_FALLBACK =
-  "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80";
+const DEFAULT_FALLBACK = "/phone-placeholder.svg";
 
 export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   src,

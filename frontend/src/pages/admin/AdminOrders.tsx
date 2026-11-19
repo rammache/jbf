@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { api } from "../../api";
 import { Order, OrderStatus, AdminOrdersResponse } from "../../types";
+import { useSettings } from "../../context/SettingsContext";
 
 const STATUS_CONFIG: Record<
   OrderStatus,
@@ -44,7 +45,7 @@ const STATUS_CONFIG: Record<
     icon: CheckCircle
   },
   PROCESSING: {
-    label: "Processing / Bench",
+    label: "Processing",
     color: "text-indigo-800",
     bg: "bg-indigo-50",
     border: "border-indigo-200",
@@ -91,6 +92,7 @@ const STATUS_LIST: OrderStatus[] = [
 ];
 
 export const AdminOrders: React.FC = () => {
+  const { formatPrice } = useSettings();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -273,7 +275,7 @@ export const AdminOrders: React.FC = () => {
           <p className="text-2xl font-black text-indigo-700 mt-1">
             {(statusCounts.PROCESSING || 0) + (statusCounts.SHIPPED || 0)}
           </p>
-          <span className="text-[10px] text-gray-500">Bench &amp; In transit</span>
+          <span className="text-[10px] text-gray-500">Processing &amp; In transit</span>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
@@ -294,7 +296,7 @@ export const AdminOrders: React.FC = () => {
             </span>
             <DollarSign className="w-4 h-4 text-[#d10024]" />
           </div>
-          <p className="text-2xl font-black text-[#d10024] mt-1">${totalRevenue.toFixed(2)}</p>
+          <p className="text-2xl font-black text-[#d10024] mt-1">{formatPrice(totalRevenue)}</p>
           <span className="text-[10px] text-gray-500">Active order value</span>
         </div>
       </div>
@@ -457,7 +459,7 @@ export const AdminOrders: React.FC = () => {
                       {/* Financial Total */}
                       <td className="py-3.5 px-4">
                         <p className="font-bold text-gray-900 text-sm">
-                          ${Number(order.totalAmount).toFixed(2)}
+                          {formatPrice(order.totalAmount)}
                         </p>
                         <span className="text-[10px] text-gray-400">
                           {order.paymentMethod === "CARD" ? "Card on Delivery" : "Cash on Delivery"}
@@ -726,9 +728,9 @@ export const AdminOrders: React.FC = () => {
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-gray-900">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          {formatPrice(item.price * item.quantity)}
                         </p>
-                        <p className="text-[10px] text-gray-400">${item.price.toFixed(2)} each</p>
+                        <p className="text-[10px] text-gray-400">{formatPrice(item.price)} each</p>
                       </div>
                     </div>
                   ))}
@@ -740,19 +742,19 @@ export const AdminOrders: React.FC = () => {
                 <div className="flex justify-between">
                   <span>Subtotal</span>
                   <span className="font-bold text-gray-900">
-                    ${Number(selectedOrder.subtotal || selectedOrder.totalAmount).toFixed(2)}
+                    {formatPrice(selectedOrder.subtotal || selectedOrder.totalAmount)}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Courier Delivery Fee:</span>
                   <span className="font-bold text-green-700">
-                    {selectedOrder.shippingFee === 0 ? "FREE" : `$${Number(selectedOrder.shippingFee).toFixed(2)}`}
+                    {selectedOrder.shippingFee === 0 ? "FREE" : formatPrice(selectedOrder.shippingFee)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-sm pt-2 border-t font-black text-gray-900">
                   <span>Total Due (Cash on Delivery):</span>
                   <span className="text-base text-[#d10024]">
-                    ${Number(selectedOrder.totalAmount).toFixed(2)}
+                    {formatPrice(selectedOrder.totalAmount)}
                   </span>
                 </div>
               </div>

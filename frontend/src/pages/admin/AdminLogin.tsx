@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { ApiError, api } from "../../api";
 import { isAdminUser, useAuth } from "../../context/AuthContext";
+import { BrandLogo } from "../../components/BrandLogo";
 
 export const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
@@ -84,12 +85,7 @@ export const AdminLogin: React.FC = () => {
             aria-hidden="true"
           />
 
-          <Link
-            to="/"
-            className="relative text-2xl font-black uppercase tracking-tight"
-          >
-            Jabour Phone<span className="text-[#d10024]">.</span>
-          </Link>
+          <BrandLogo variant="light" size="md" />
 
           <div className="relative space-y-4 py-16">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/15 bg-white/5 text-[11px] font-bold uppercase tracking-wider text-gray-200">
@@ -112,12 +108,7 @@ export const AdminLogin: React.FC = () => {
         {/* Form panel */}
         <div className="p-6 sm:p-10">
           <div className="lg:hidden mb-8">
-            <Link
-              to="/"
-              className="text-xl font-black uppercase tracking-tight text-[#15161d]"
-            >
-              Jabour Phone<span className="text-[#d10024]">.</span>
-            </Link>
+            <BrandLogo variant="dark" size="md" />
           </div>
 
           <div className="space-y-2">

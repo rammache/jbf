@@ -15,8 +15,10 @@ import {
 } from "lucide-react";
 import { api, ApiError } from "../../api";
 import { Coupon } from "../../types";
+import { useSettings } from "../../context/SettingsContext";
 
 export const AdminCoupons: React.FC = () => {
+  const { formatPrice } = useSettings();
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState<"all" | "active" | "inactive">("all");
@@ -388,17 +390,17 @@ export const AdminCoupons: React.FC = () => {
                         <div className="font-bold text-[#15161d]">
                           {coupon.discountType === "PERCENTAGE"
                             ? `${coupon.discountValue}% OFF`
-                            : `$${coupon.discountValue.toFixed(2)} OFF`}
+                            : `${formatPrice(coupon.discountValue)} OFF`}
                         </div>
                         {coupon.maxDiscount && (
                           <span className="text-[10px] text-gray-400">
-                            (Capped at ${coupon.maxDiscount.toFixed(2)})
+                            (Capped at {formatPrice(coupon.maxDiscount)})
                           </span>
                         )}
                       </td>
                       <td className="py-3.5 px-5 text-gray-600">
                         {coupon.minOrderAmount
-                          ? `$${coupon.minOrderAmount.toFixed(2)}`
+                          ? formatPrice(coupon.minOrderAmount)
                           : "No minimum"}
                       </td>
                       <td className="py-3.5 px-5">

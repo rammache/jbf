@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { api } from "../api";
 import { useAuth } from "../context/AuthContext";
+import { BrandLogo } from "../components/BrandLogo";
 
 interface AdminNavItem {
   label: string;
@@ -89,13 +90,7 @@ export const AdminLayout: React.FC = () => {
           }`}
       >
         <div className="flex h-20 items-center justify-between border-b border-white/10 px-5">
-          <Link
-            to="/admin"
-            className="text-xl font-black uppercase tracking-tight"
-            onClick={() => setSidebarOpen(false)}
-          >
-            Jabour Phone<span className="text-[#d10024]">.</span>
-          </Link>
+          <BrandLogo variant="light" size="sm" showLink={false} />
           <button
             type="button"
             className="rounded p-1.5 text-gray-400 hover:bg-white/10 hover:text-white lg:hidden"

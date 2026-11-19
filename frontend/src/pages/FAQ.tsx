@@ -30,9 +30,9 @@ const FAQ_DATA: FAQItem[] = [
   },
   {
     category: "Testing & Quality",
-    question: "What does 'Bench Tested Hardware' mean?",
+    question: "What is the Jabour Phone Quality Guarantee?",
     answer:
-      "Every product line we stock is thoroughly evaluated on our workbench. We test battery endurance under real workloads, confirm true display panel brightness and refresh rates, evaluate thermal throttling, and verify that actual specifications match manufacturer claims."
+      "Every device we sell is thoroughly inspected by our technicians. We verify battery health, display responsiveness, cellular and Wi-Fi connectivity, speaker clarity, and authentic IMEI registration prior to dispatch."
   },
   {
     category: "Testing & Quality",
@@ -56,13 +56,13 @@ const FAQ_DATA: FAQItem[] = [
     category: "Warranty & Returns",
     question: "What warranty is included with my purchase?",
     answer:
-      "Every new smartphone and computer hardware unit includes our direct 1-to-2 year warranty against hardware manufacturer defects, handled directly through our team rather than complex third-party bureaucracy."
+      "Every new smartphone and tablet includes our official 1-year warranty against hardware manufacturer defects, handled directly through our team rather than third-party bureaucracy."
   },
   {
     category: "Warranty & Returns",
     question: "What is your return policy?",
     answer:
-      "We offer a 30-day return policy. If a device has any verified manufacturer fault, we provide immediate repair, replacement, or refund. Items must be returned with all original box accessories and packaging."
+      "We offer a 14-day exchange and return policy for manufacturer defects. If a device has any verified factory fault, we provide immediate exchange, repair, or refund. Items must be returned with all original box accessories and packaging."
   }
 ];
 
@@ -81,7 +81,7 @@ export const FAQ: React.FC = () => {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <SEO
         title="Frequently Asked Questions (FAQ)"
-        description="Find answers to common questions about Jabour Phone orders, Cash on Delivery, bench testing, delivery times, and warranty."
+        description="Find answers to common questions about Jabour Phone orders, Cash on Delivery, device inspection, delivery times, and warranty."
       />
 
       <div className="text-center space-y-3">
@@ -92,7 +92,7 @@ export const FAQ: React.FC = () => {
           Frequently Asked Questions
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 max-w-xl mx-auto">
-          Everything you need to know about purchasing, warranty coverage, bench diagnostics, and delivery.
+          Everything you need to know about purchasing, warranty coverage, quality inspection, and delivery.
         </p>
       </div>
 

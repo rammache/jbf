@@ -23,6 +23,7 @@ import {
 import { api, ApiError } from "../../api";
 import { Product } from "../../types";
 import { useCategories } from "../../context/CategoryContext";
+import { useSettings } from "../../context/SettingsContext";
 
 interface ProductFormData {
   id?: number;
@@ -89,6 +90,7 @@ const INITIAL_FORM: ProductFormData = {
 
 export const AdminProducts: React.FC = () => {
   const { categories, refreshCategories } = useCategories();
+  const { formatPrice } = useSettings();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -892,11 +894,11 @@ export const AdminProducts: React.FC = () => {
                       </td>
 
                       <td className="px-4 py-3">
-                        <div className="font-bold text-gray-900">${product.price.toFixed(2)}</div>
+                        <div className="font-bold text-gray-900">{formatPrice(product.price)}</div>
                         {product.compare && product.compare > product.price && (
                           <div className="flex items-center space-x-1.5 text-[11px]">
                             <span className="text-gray-400 line-through">
-                              ${product.compare.toFixed(2)}
+                              {formatPrice(product.compare)}
                             </span>
                             <span className="font-semibold text-red-600">
                               -{Math.round(((product.compare - product.price) / product.compare) * 100)}%
@@ -1652,11 +1654,11 @@ export const AdminProducts: React.FC = () => {
                         </p>
                         <div className="mt-2 flex items-baseline space-x-2">
                           <span className="text-lg font-black text-gray-900">
-                            ${formData.price ? parseFloat(formData.price).toFixed(2) : "0.00"}
+                            {formatPrice(formData.price || 0)}
                           </span>
                           {formData.compare && parseFloat(formData.compare) > parseFloat(formData.price || "0") && (
                             <span className="text-xs text-gray-400 line-through">
-                              ${parseFloat(formData.compare).toFixed(2)}
+                              {formatPrice(formData.compare)}
                             </span>
                           )}
                         </div>

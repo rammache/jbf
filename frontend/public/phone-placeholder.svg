@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+  <rect width="600" height="600" fill="#f8f9fa"/>
+  <defs>
+    <linearGradient id="phoneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2b2d42"/>
+      <stop offset="100%" stop-color="#15161d"/>
+    </linearGradient>
+    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1f29"/>
+      <stop offset="100%" stop-color="#2a2c3d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#d10024" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#d10024" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Ambient glow -->
+  <circle cx="300" cy="300" r="220" fill="url(#glow)"/>
+
+  <!-- Phone Body -->
+  <rect x="190" y="110" width="220" height="380" rx="36" fill="url(#phoneGrad)" stroke="#e4e7ed" stroke-width="4"/>
+  <!-- Phone Screen -->
+  <rect x="204" y="128" width="192" height="344" rx="26" fill="url(#screenGrad)"/>
+  
+  <!-- Dynamic Island / Camera Notch -->
+  <rect x="270" y="140" width="60" height="14" rx="7" fill="#000000"/>
+  <circle cx="282" cy="147" r="3" fill="#15161d"/>
+
+  <!-- Logo Mark on Screen -->
+  <circle cx="300" cy="270" r="32" fill="#d10024" fill-opacity="0.2"/>
+  <path d="M292 258L308 270L292 282" stroke="#d10024" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <text x="300" y="325" font-family="'Montserrat', sans-serif" font-size="14" font-weight="800" text-anchor="middle" fill="#8d99ae" letter-spacing="1">
+    JABOUR PHONE
+  </text>
+  <text x="300" y="348" font-family="'Montserrat', sans-serif" font-size="11" font-weight="600" text-anchor="middle" fill="#6b7280">
+    GENUINE DEVICE
+  </text>
+
+  <!-- Bottom Home Bar -->
+  <rect x="260" y="455" width="80" height="4" rx="2" fill="#8d99ae" fill-opacity="0.6"/>
+</svg>

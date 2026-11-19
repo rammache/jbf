@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Check, Loader2, Phone, Mail, MapPin } from "lucide-react";
 import { useCategories } from "../context/CategoryContext";
 import { useSettings } from "../context/SettingsContext";
+import { BrandLogo } from "./BrandLogo";
 
 export const Footer: React.FC = () => {
   const { categories } = useCategories();
@@ -43,11 +44,9 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand info */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-black text-white tracking-tight uppercase">
-              {settings.storeName}<span className="text-[#d10024]">.</span>
-            </h2>
+            <BrandLogo variant="light" size="md" />
             <p className="text-xs text-gray-400 leading-relaxed">
-              {settings.aboutText || "Technology, without the markup. Certified smartphones, authentic accessories, and certified electronics in Lebanon."}
+              {settings.aboutText || "Technology without the markup. Certified smartphones, authentic accessories, and guaranteed electronics in Lebanon."}
             </p>
             <div className="space-y-1.5 pt-1 text-xs text-gray-400">
               <div className="flex items-center gap-2">
@@ -116,12 +115,12 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/returns" className="hover:text-[#d10024] transition">
-                  30-Day Returns &amp; Warranty
+                  14-Day Returns &amp; Warranty
                 </Link>
               </li>
               <li>
                 <Link to="/about" className="hover:text-[#d10024] transition">
-                  Bench Testing Protocol
+                  Quality Guarantee
                 </Link>
               </li>
             </ul>
@@ -165,9 +164,14 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-[#2b2d42] flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
-          <p>© 2026 Jabour Phone. All rights reserved.</p>
-          <div className="flex items-center gap-4 mt-2 sm:mt-0">
+        <div className="mt-12 pt-8 border-t border-[#2b2d42] flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 gap-4">
+          <div className="space-y-1 text-center md:text-left">
+            <p>© 2026 Jabour Phone. All rights reserved.</p>
+            <p className="text-[11px] text-gray-500">
+              Theme base inspired by <a href="https://colorlib.com" target="_blank" rel="noopener noreferrer" className="hover:underline text-gray-400">Colorlib</a> (CC BY 3.0). Full-stack platform custom developed for Jabour Phone.
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
             <Link to="/privacy" className="hover:text-gray-300 transition">
               Privacy Policy
             </Link>

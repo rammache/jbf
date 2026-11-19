@@ -57,7 +57,7 @@ A high-performance modern e-commerce web application for **Jabour Phone**, built
 │   │   │   │   ├── AdminLogin.tsx    # Admin sign-in form connected to /api/auth/login
 │   │   │   │   ├── AdminOverview.tsx # Admin landing page with upcoming management sections
 │   │   │   │   └── AdminSettings.tsx # Admin profile overview and change password form
-│   │   │   ├── Home.tsx              # Hero banner, department tabs, highest rated, bench story
+│   │   │   ├── Home.tsx              # Hero banner, department tabs, highest rated, quality & brand story
 │   │   │   ├── Shop.tsx              # Faceted catalog (categories, brand, price slider & sorting)
 │   │   │   ├── ProductDetail.tsx     # Gallery thumbnails, finish picker, bench specs & related items
 │   │   │   └── About.tsx             # Bench test philosophy & transparency statement
@@ -160,3 +160,9 @@ All routes under `/api/admin` are protected by the `requireAdmin` middleware: a 
 Auth endpoints (`/api/auth/login`, `/api/admin/change-password`) validate request payloads using Zod schemas (`loginSchema`, `changePasswordSchema`) through the `validateBody` middleware, returning `400 Bad Request` with structured error details on validation failure.
 
 Login attempts at `/api/auth/login` are protected by rate limiting (`loginRateLimiter` using `express-rate-limit`). By default, failed attempts are capped at 5 per 15-minute window per IP, returning `429 Too Many Requests` with standard `RateLimit-*` and `Retry-After` headers and JSON error details. Successful logins are skipped by default so legitimate admin operations do not exhaust quota. Window duration and max attempts can be customized with `LOGIN_RATE_LIMIT_WINDOW_MS` and `LOGIN_RATE_LIMIT_MAX`.
+
+---
+
+## ⚖️ Legal & Licensing
+
+The storefront interface was initially adapted from Colorlib's **Electro** template under the **Creative Commons Attribution 3.0 (CC BY 3.0)** license. Full-stack APIs, database schema, state management, and administrative dashboards are custom developed for **Jabour Phone**. Complete licensing compliance and commercial launch audit details are documented in [LEGAL.md](file:///C:/Users/mawar/Desktop/jbf%20opencode/LEGAL.md).

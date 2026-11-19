@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search, X, Loader2 } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useSettings } from "../context/SettingsContext";
 import { Product } from "../types";
 
 export const SearchModal: React.FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useCart();
+  const { formatPrice } = useSettings();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
@@ -124,7 +126,7 @@ export const SearchModal: React.FC = () => {
           {results.length > 0 && (
             <div className="space-y-2">
               <p className="text-xs font-bold uppercase text-gray-400 px-2 tracking-wider">
-                Matching Hardware ({results.length})
+                Matching Products ({results.length})
               </p>
               {results.map((product) => (
                 <Link
@@ -134,7 +136,7 @@ export const SearchModal: React.FC = () => {
                   className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition group"
                 >
                   <img
-                    src={product.images[0] || ""}
+                    src={product.images[0] || "/phone-placeholder.svg"}
                     alt={product.title}
                     className="w-12 h-12 object-cover rounded bg-gray-100 flex-shrink-0"
                   />
@@ -146,7 +148,7 @@ export const SearchModal: React.FC = () => {
                   </div>
                   <div className="text-right">
                     <span className="text-sm font-extrabold text-[#d10024]">
-                      ${product.price.toFixed(2)}
+                      {formatPrice(product.price)}
                     </span>
                   </div>
                 </Link>
