@@ -133,7 +133,7 @@ The WORK files must carry enough context for any agent to continue without guess
 - [x] Add first-admin creation command/seed (Jabour's email + strong password). Implemented as `npm run admin:create` (interactive prompts; env-var fallback). **P0**
 - [x] Build `/admin/login` page and an admin layout with sidebar/header/logout. **P0**
 - [x] Add protected admin routes and redirect unauthenticated users. **P0**
-- [ ] Add 401/403 handling in the frontend API layer. **P0**
+- [x] Add 401/403 handling in the frontend API layer. **P0**
 - [ ] Add "change password" for the admin. **P1**
 - [ ] Add zod validation for auth payloads. **P1**
 - [ ] Add rate limiting on login. **P1**

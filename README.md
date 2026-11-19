@@ -33,6 +33,9 @@ A high-performance modern e-commerce web application for **Jabour Phone**, built
 │
 ├── frontend/
 │   ├── src/
+│   │   ├── api/
+│   │   │   ├── client.ts             # Centralized API fetch wrapper, ApiError, and 401/403 handlers
+│   │   │   └── index.ts              # API barrel exports
 │   │   ├── components/
 │   │   │   ├── AnnouncementBar.tsx   # Rotating announcement ticker banner
 │   │   │   ├── Navbar.tsx            # Sticky header with navigation, drawer toggles & cart badge

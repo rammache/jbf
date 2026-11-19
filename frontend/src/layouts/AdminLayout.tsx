@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
+  AlertTriangle,
   LayoutDashboard,
   Loader2,
   LogOut,
@@ -13,6 +14,7 @@ import {
   Tags,
   X
 } from "lucide-react";
+import { api } from "../api";
 import { useAuth } from "../context/AuthContext";
 
 interface AdminNavItem {
@@ -31,7 +33,7 @@ const navigation: AdminNavItem[] = [
 
 export const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
-  const { admin, signOut } = useAuth();
+  const { admin, forbiddenError, clearForbiddenError, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState("");
@@ -43,8 +45,7 @@ export const AdminLayout: React.FC = () => {
     setLogoutError("");
 
     try {
-      const res = await fetch("/api/auth/logout", { method: "POST" });
-      if (!res.ok) throw new Error("Logout failed");
+      await api.post("/api/auth/logout", undefined, { skipAuthHandlers: true });
       signOut();
       navigate("/admin/login", { replace: true });
     } catch {
@@ -202,6 +203,25 @@ export const AdminLayout: React.FC = () => {
         </header>
 
         <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+          {forbiddenError && (
+            <div
+              role="alert"
+              className="mb-6 flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50 p-4 text-xs font-semibold text-amber-900 shadow-sm"
+            >
+              <div className="flex items-center gap-3">
+                <AlertTriangle className="h-5 w-5 flex-shrink-0 text-amber-600" />
+                <p>{forbiddenError}</p>
+              </div>
+              <button
+                type="button"
+                onClick={clearForbiddenError}
+                className="rounded p-1 text-amber-700 hover:bg-amber-100"
+                aria-label="Dismiss alert"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          )}
           <Outlet />
         </main>
       </div>

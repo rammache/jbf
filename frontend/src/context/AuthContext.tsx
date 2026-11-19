@@ -6,6 +6,12 @@ import React, {
   useMemo,
   useState
 } from "react";
+import {
+  ApiError,
+  apiFetch,
+  setForbiddenHandler,
+  setUnauthorizedHandler
+} from "../api";
 import type { AdminUser } from "../types";
 
 export type AuthStatus =
@@ -17,6 +23,8 @@ export type AuthStatus =
 interface AuthContextValue {
   admin: AdminUser | null;
   status: AuthStatus;
+  forbiddenError: string | null;
+  clearForbiddenError: () => void;
   signIn: (admin: AdminUser) => void;
   signOut: () => void;
   refresh: () => Promise<void>;
@@ -42,41 +50,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [admin, setAdmin] = useState<AdminUser | null>(null);
   const [status, setStatus] = useState<AuthStatus>("loading");
+  const [forbiddenError, setForbiddenError] = useState<string | null>(null);
+
+  const clearForbiddenError = useCallback(() => {
+    setForbiddenError(null);
+  }, []);
 
   const signIn = useCallback((nextAdmin: AdminUser) => {
     setAdmin(nextAdmin);
     setStatus("authenticated");
+    setForbiddenError(null);
   }, []);
 
   const signOut = useCallback(() => {
     setAdmin(null);
     setStatus("unauthenticated");
+    setForbiddenError(null);
   }, []);
 
   const refresh = useCallback(async () => {
     setStatus("loading");
 
     try {
-      const res = await fetch("/api/auth/me", {
-        credentials: "same-origin",
-        headers: { Accept: "application/json" }
-      });
-
-      if (res.status === 401 || res.status === 403) {
-        setAdmin(null);
-        setStatus("unauthenticated");
-        return;
-      }
-
-      if (!res.ok) {
-        setStatus("error");
-        return;
-      }
-
-      const body = (await res.json().catch(() => null)) as {
+      const body = await apiFetch<{
         success?: boolean;
         data?: unknown;
-      } | null;
+      }>("/api/auth/me", {
+        skipAuthHandlers: true
+      });
 
       if (body?.success && isAdminUser(body.data)) {
         setAdmin(body.data);
@@ -84,10 +85,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
-      setStatus("error");
-    } catch {
+      setAdmin(null);
+      setStatus("unauthenticated");
+    } catch (err) {
+      if (err instanceof ApiError && (err.status === 401 || err.status === 403)) {
+        setAdmin(null);
+        setStatus("unauthenticated");
+        return;
+      }
+
       setStatus("error");
     }
+  }, []);
+
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      setAdmin(null);
+      setStatus("unauthenticated");
+    });
+
+    setForbiddenHandler((err) => {
+      setForbiddenError(err.message || "Admin access required.");
+    });
+
+    return () => {
+      setUnauthorizedHandler(null);
+      setForbiddenHandler(null);
+    };
   }, []);
 
   useEffect(() => {
@@ -95,8 +119,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [refresh]);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ admin, status, signIn, signOut, refresh }),
-    [admin, status, signIn, signOut, refresh]
+    () => ({
+      admin,
+      status,
+      forbiddenError,
+      clearForbiddenError,
+      signIn,
+      signOut,
+      refresh
+    }),
+    [admin, status, forbiddenError, clearForbiddenError, signIn, signOut, refresh]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

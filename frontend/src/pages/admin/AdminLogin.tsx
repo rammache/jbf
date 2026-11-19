@@ -10,6 +10,7 @@ import {
   Mail,
   ShieldCheck
 } from "lucide-react";
+import { ApiError, api } from "../../api";
 import { isAdminUser, useAuth } from "../../context/AuthContext";
 
 export const AdminLogin: React.FC = () => {
@@ -38,18 +39,17 @@ export const AdminLogin: React.FC = () => {
     setError("");
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), password })
-      });
-      const body = (await res.json().catch(() => null)) as {
+      const body = await api.post<{
         success?: boolean;
         error?: string;
         data?: unknown;
-      } | null;
+      }>(
+        "/api/auth/login",
+        { email: email.trim(), password },
+        { skipAuthHandlers: true }
+      );
 
-      if (res.ok && body?.success && isAdminUser(body.data)) {
+      if (body?.success && isAdminUser(body.data)) {
         setPassword("");
         signIn(body.data);
         navigate(returnTo, { replace: true });
@@ -58,9 +58,15 @@ export const AdminLogin: React.FC = () => {
 
       setStatus("error");
       setError(body?.error || "Unable to sign in. Please try again.");
-    } catch {
+    } catch (err) {
       setStatus("error");
-      setError("Could not reach the server. Check your connection and try again.");
+      if (err instanceof ApiError) {
+        setError(err.message || "Invalid email or password.");
+      } else {
+        setError(
+          "Could not reach the server. Check your connection and try again."
+        );
+      }
     }
   };
 
