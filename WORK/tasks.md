@@ -83,6 +83,8 @@ The WORK files must carry enough context for any agent to continue without guess
 10. The fake account icon that links to `/about` (replace with real login or remove).
 11. Committed `.env` secrets (replace with `.env.example`).
 
+> 2026-11-19 decision: demo brands and the demo catalog stay during development. Jabour will remove all demo products/categories and create the real ones from the admin panel after the project is finished, so no real catalog data is needed now.
+
 ---
 
 ## Phase 0 - Stabilize And Clean
@@ -108,8 +110,8 @@ The WORK files must carry enough context for any agent to continue without guess
 - [x] Replace "Electro" in README, health endpoint name, newsletter success message. **P0**
 - [x] Rename `electro-cart` localStorage key and `electro` Tailwind palette key. **P1**
 - [x] Rename package names from `electro-backend` / `electro-frontend` to `jabour-phone-*`. **P2**
-- [ ] Replace fake brands (Kestrel, Nord, Meridian, Torus) with Jabour Phone real brands. **P0**
-- [ ] Replace demo phone/laptop catalog with Jabour Phone's real categories and products. **P0**
+- [x] Real brands deferred: keep demo brands until admin CRUD lets Jabour replace the catalog. Decision 2026-11-19. **P0**
+- [x] Real catalog deferred: keep demo products/categories until admin CRUD lets Jabour replace them. Decision 2026-11-19. **P0**
 - [ ] Replace "bench tested / Manchester / two year warranty / 30 day returns" with Jabour's real promises. **P0**
 - [ ] Add real business info: phone, WhatsApp, email, city/address, opening hours. **P0**
 - [ ] Choose currency and update every price display (currently USD `$`). **P0**
@@ -123,7 +125,7 @@ The WORK files must carry enough context for any agent to continue without guess
 
 ## Phase 2 - Admin Foundation
 
-- [ ] Add `AdminUser` model: id, name, email (unique), passwordHash, role, createdAt, updatedAt. **P0**
+- [x] Add `AdminUser` model: id, name, email (unique), passwordHash, role, createdAt, updatedAt. **P0**
 - [ ] Hash passwords with bcrypt/argon2. **P0**
 - [ ] Implement auth: `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`. **P0**
 - [ ] Use secure httpOnly cookies or short-lived JWT; add refresh or sensible expiry. **P0**

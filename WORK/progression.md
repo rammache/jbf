@@ -15,9 +15,10 @@ Remaining work is in `WORK/tasks.md`.
 - **Current state:** public demo storefront exists. Admin login, admin panel, CRUD, stock, and order management are not built yet.
 - **Work style:** one task per session. Finish the task, update the WORK files, run checks, commit, then remind the user to open a new session for the next task.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
-- **Current phase:** Phase 1 - Rebrand To Jabour Phone.
-- **Current task:** Task #17 - Replace fake brands (Kestrel, Nord, Meridian, Torus) with Jabour Phone real brands (Phase 1). Blocked until Jabour provides the real brand list.
+- **Current phase:** Phase 2 - Admin Foundation.
+- **Current task:** Task #28 - Hash passwords with bcrypt/argon2 (Phase 2).
 - **A session can use the same AI agent or a different one.** These files must carry all context so any agent can continue.
+- **Demo data decision (2026-11-19):** the fake brands and demo catalog stay during development. Jabour will remove all demo products/categories and create the real ones from the admin panel after the project is finished, so no real catalog data is needed now.
 - **Pending business decisions:** currency, payment method, delivery fee, hosting, image storage.
 
 ## Session Rules
@@ -142,6 +143,13 @@ Audit results:
 - [x] 2026-11-19 - Task #14: Rebranded the README, health endpoint, and newsletter response. README title is now "Jabour Phone E-Commerce Platform" and its intro describes the app as being for Jabour Phone; the About architecture comment no longer says "Electro bench test philosophy". `GET /health` now returns `service: "Jabour Phone API"`, the server startup log says "Jabour Phone Express Server", and the newsletter success message says "Thank you for subscribing to Jabour Phone updates!". Files changed: `README.md`, `backend/src/server.ts`, `backend/src/controllers/newsletterController.ts`, `WORK/tasks.md`, `WORK/progression.md`.
 - [x] 2026-11-19 - Task #15: Renamed the cart localStorage key from `electro-cart` to `jabour-cart` and the Tailwind palette key from `electro` to `jabour`. The palette was unused by any component (the UI uses arbitrary hex classes like `bg-[#15161d]`), so no class names needed updating; the palette stays available for the upcoming brand color task. Files changed: `frontend/src/context/CartContext.tsx`, `frontend/tailwind.config.js`, `WORK/tasks.md`, `WORK/progression.md`.
 - [x] 2026-11-19 - Task #16: Renamed the npm package names from `electro-backend` / `electro-frontend` to `jabour-phone-backend` / `jabour-phone-frontend` in both `package.json` files and the matching `name` fields in both `package-lock.json` files. Also rebranded the backend package `description` from "Electro E-Commerce REST API" to "Jabour Phone E-Commerce REST API". Files changed: `backend/package.json`, `backend/package-lock.json`, `frontend/package.json`, `frontend/package-lock.json`, `WORK/tasks.md`, `WORK/progression.md`.
+- [x] 2026-11-19 - Decision: demo brands and the demo catalog stay for now. Tasks #17 and #18 were closed without real data because Jabour will remove all demo products/categories and create the real ones from the admin panel after the project is finished. Files changed: `WORK/tasks.md`, `WORK/progression.md`.
+
+---
+
+## Phase 8 - Phase 2 Admin Foundation (IN PROGRESS)
+
+- [x] 2026-11-19 - Task #27: Added the `AdminUser` model to `backend/prisma/schema.prisma` with `id`, `name`, unique `email`, `passwordHash`, `role` (default `"ADMIN"`), `createdAt`, and `updatedAt`. Prisma client regenerated; no database table was created because this project has no running database yet and Phase 8 will add migrations. Files changed: `backend/prisma/schema.prisma`, `WORK/tasks.md`, `WORK/progression.md`.
 
 ---
 
@@ -158,6 +166,7 @@ Audit results:
 | Basic checkout -> database order | Done |
 | Newsletter signup -> database | Done |
 | Responsive storefront UI | Done |
+| Admin user schema (`AdminUser`) | Added |
 | Admin login and management panel | Not started |
 | Category/Product CRUD | Not started |
 | Image uploads | Not started |
@@ -323,3 +332,12 @@ Add one entry here at the end of every session. New agents must read the latest 
 - **Checks run:** frontend `npm run build` -> passed (`tsc && vite build`, built in 1.27s, output now says `jabour-phone-frontend@1.0.0`); backend `npx tsc --noEmit` -> passed (no output). Grep confirmed no `electro-backend` / `electro-frontend` remains in the app files; only historical mentions in the WORK docs.
 - **Decisions:** Edited the lock files directly instead of running a full install because only the package name changed and no dependency resolution was affected. Left infrastructure identifiers (`electro_db` and the `electro_postgres` container name) unchanged as they are database/deployment identifiers, not package branding, and are not part of this task.
 - **Next task:** Task #17 - replace fake brands (Kestrel, Nord, Meridian, Torus) with Jabour Phone's real brands (Phase 1, P0). **Blocked:** this needs Jabour's real brand list and, per the following task, the real catalog. Do not invent business data.
+
+### 2026-11-19 - Task #27: Add `AdminUser` Model (DONE)
+
+- **Decision first:** Per the user, demo brands and the demo catalog stay for now. Jabour will remove all demo products/categories and create the real ones from the admin panel after the project is finished. This closed Tasks #17 and #18 without real data; an uncommitted placeholder-brand edit from an earlier attempt was restored so the demo catalog remains as committed.
+- **Done:** Added the `AdminUser` model to `backend/prisma/schema.prisma` with `id`, `name`, unique `email`, `passwordHash`, `role` (default `"ADMIN"`), `createdAt`, and `updatedAt`. This starts Phase 2 (Admin Foundation).
+- **Files changed:** `backend/prisma/schema.prisma`, `backend/prisma/demo-seed.ts` (restored to committed state, no net change), `frontend/src/pages/Home.tsx` (restored to committed state, no net change), `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** `npx prisma validate` -> schema valid; `npx prisma generate` -> client regenerated (v6.19.3); backend `npx tsc --noEmit` -> passed (no output); frontend `npm run build` -> passed (`tsc && vite build`, built in 1.23s).
+- **Decisions:** `role` is a `String` defaulting to `"ADMIN"` for now instead of a one-value enum; role expansion remains a P2 task. No database table was created because this project has no running database yet (documented in Task #7) and Phase 8 adds migrations; the model takes effect on the next `prisma db push` / migration.
+- **Next task:** Task #28 - hash passwords with bcrypt/argon2 (Phase 2).
