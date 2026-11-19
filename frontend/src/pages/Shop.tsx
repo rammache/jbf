@@ -3,9 +3,11 @@ import { useSearchParams } from "react-router-dom";
 import { Filter, X, SlidersHorizontal } from "lucide-react";
 import { Product } from "../types";
 import { ProductCard } from "../components/ProductCard";
+import { useCategories } from "../context/CategoryContext";
 
 export const Shop: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { categories } = useCategories();
   const [products, setProducts] = useState<Product[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -18,13 +20,6 @@ export const Shop: React.FC = () => {
   const currentMin = searchParams.get("minPrice") || "";
   const currentMax = searchParams.get("maxPrice") || "";
   const currentQuery = searchParams.get("q") || "";
-
-  const categories = [
-    "Laptops",
-    "Audio",
-    "Keyboards & mice",
-    "Desktops & displays"
-  ];
 
   useEffect(() => {
     // Fetch brands
@@ -77,13 +72,20 @@ export const Shop: React.FC = () => {
     Boolean(currentMax) ||
     Boolean(currentQuery);
 
+  const activeCategoryObj = categories.find(
+    (c) =>
+      c.slug.toLowerCase() === currentCategory.toLowerCase() ||
+      c.name.toLowerCase() === currentCategory.toLowerCase()
+  );
+  const displayCategoryTitle = activeCategoryObj ? activeCategoryObj.name : currentCategory || "All Hardware";
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Title & mobile filter toggle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-gray-200 gap-4">
         <div>
           <h1 className="text-3xl font-black text-[#15161d] uppercase tracking-tight">
-            {currentCategory || "All Hardware"}
+            {displayCategoryTitle}
           </h1>
           <p className="text-xs text-gray-500 mt-1">
             {products.length} products verified against bench tolerances.
@@ -150,18 +152,33 @@ export const Shop: React.FC = () => {
                 />
                 <span className="text-gray-700 font-medium">All Departments</span>
               </label>
-              {categories.map((cat) => (
-                <label key={cat} className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="cat"
-                    checked={currentCategory.toLowerCase() === cat.toLowerCase()}
-                    onChange={() => updateFilter("category", cat)}
-                    className="accent-[#d10024]"
-                  />
-                  <span className="text-gray-700 font-medium">{cat}</span>
-                </label>
-              ))}
+              {categories.map((cat) => {
+                const isSelected =
+                  currentCategory.toLowerCase() === (cat.slug || "").toLowerCase() ||
+                  currentCategory.toLowerCase() === (cat.name || "").toLowerCase();
+
+                return (
+                  <label key={cat.id} className="flex items-center justify-between cursor-pointer group">
+                    <span className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="cat"
+                        checked={isSelected}
+                        onChange={() => updateFilter("category", cat.slug || cat.name)}
+                        className="accent-[#d10024]"
+                      />
+                      <span className={`font-medium transition-colors ${isSelected ? "text-[#d10024] font-bold" : "text-gray-700 group-hover:text-black"}`}>
+                        {cat.name}
+                      </span>
+                    </span>
+                    {cat._count?.products !== undefined && (
+                      <span className="text-[10px] text-gray-400 font-mono">
+                        {cat._count.products}
+                      </span>
+                    )}
+                  </label>
+                );
+              })}
             </div>
           </div>
 

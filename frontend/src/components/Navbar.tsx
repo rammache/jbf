@@ -2,20 +2,22 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useCategories } from "../context/CategoryContext";
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { cartCount, setIsCartOpen, setIsSearchOpen } = useCart();
+  const { categories } = useCategories();
   const location = useLocation();
 
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Shop All", path: "/shop" },
-    { name: "Laptops", path: "/shop?category=Laptops" },
-    { name: "Audio", path: "/shop?category=Audio" },
-    { name: "Keyboards & mice", path: "/shop?category=Keyboards%20%26%20mice" },
-    { name: "Desktops & displays", path: "/shop?category=Desktops%20%26%20displays" },
-    { name: "About Bench", path: "/about" },
+    ...categories.map((cat) => ({
+      name: cat.name,
+      path: `/shop?category=${encodeURIComponent(cat.slug || cat.name)}`
+    })),
+    { name: "About Bench", path: "/about" }
   ];
 
   return (

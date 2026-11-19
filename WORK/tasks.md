@@ -145,13 +145,13 @@ The WORK files must carry enough context for any agent to continue without guess
 - [x] Replace `Product.category` string with a `categoryId` relation to `Category`. **P0**
 - [x] Extend `Category`: name, slug, description, image, sortOrder, isActive. **P0**
 - [x] Auto-generate unique slugs and keep old slugs stable on rename. **P1**
-- [ ] Admin API: `GET/POST/PUT/DELETE /api/admin/categories` plus reorder. **P0**
-- [ ] Admin UI: category table, create/edit form, image upload, active toggle, delete. **P0**
-- [ ] Block deletion when products still belong to the category (or ask to reassign). **P0**
-- [ ] Public `GET /api/categories` returns only active categories, sorted. **P0**
-- [ ] Use API categories in Navbar, Footer, Home tabs, and Shop filters. **P0**
-- [ ] Remove all hardcoded category arrays from components. **P0**
-- [ ] Add category image usage on the home page (or remove the field). **P2**
+- [x] Admin API: `GET/POST/PUT/DELETE /api/admin/categories` plus reorder. **P0**
+- [x] Admin UI: category table, create/edit form, image upload, active toggle, delete. **P0**
+- [x] Block deletion when products still belong to the category (or ask to reassign). **P0**
+- [x] Public `GET /api/categories` returns only active categories, sorted. **P0**
+- [x] Use API categories in Navbar, Footer, Home tabs, and Shop filters. **P0**
+- [x] Remove all hardcoded category arrays from components. **P0**
+- [x] Add category image usage on the home page (or remove the field). **P2**
 
 ---
 

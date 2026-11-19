@@ -139,7 +139,7 @@ The admin sign-in screen is available at `http://localhost:5173/admin/login`. Cr
 | :--- | :--- | :--- |
 | `GET` | `/api/products` | Query products with `category`, `brand`, `minPrice`, `maxPrice`, `q`, and `sort` |
 | `GET` | `/api/products/:handle` | Fetch single product specification and 4 related department products |
-| `GET` | `/api/categories` | Retrieve all product departments |
+| `GET` | `/api/categories` | Retrieve all active product departments, sorted by display order |
 | `GET` | `/api/brands` | Retrieve distinct hardware manufacturers |
 | `POST` | `/api/orders` | Place a customer order and create order items in PostgreSQL |
 | `GET` | `/api/orders/:id` | Lookup existing order receipt by UUID |
@@ -148,6 +148,12 @@ The admin sign-in screen is available at `http://localhost:5173/admin/login`. Cr
 | `GET` | `/api/auth/me` | Return the currently signed-in admin |
 | `POST` | `/api/auth/logout` | Clear the admin auth cookie |
 | `POST` | `/api/admin/change-password` | Update administrator password (protected by `requireAdmin`) |
+| `GET` | `/api/admin/categories` | List all categories (active and inactive) with product counts |
+| `GET` | `/api/admin/categories/:id` | Fetch category by ID with product count |
+| `POST` | `/api/admin/categories` | Create category with Zod validation and auto-generated unique slug |
+| `PUT` | `/api/admin/categories/reorder` | Batch update category display sort order |
+| `PUT` | `/api/admin/categories/:id` | Update category (enforces slug stability on rename unless explicitly requested) |
+| `DELETE` | `/api/admin/categories/:id` | Delete category (blocks deletion if products belong to it; supports product reassignment) |
 
 All routes under `/api/admin` are protected by the `requireAdmin` middleware: a valid admin session cookie is required, the admin is reloaded from the database on every request, and `401` / `403` JSON errors are returned for unauthenticated or non-admin users.
 

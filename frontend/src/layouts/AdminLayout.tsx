@@ -25,7 +25,7 @@ interface AdminNavItem {
 
 const navigation: AdminNavItem[] = [
   { label: "Overview", icon: LayoutDashboard, to: "/admin" },
-  { label: "Categories", icon: Tags },
+  { label: "Categories", icon: Tags, to: "/admin/categories" },
   { label: "Products", icon: Package },
   { label: "Orders", icon: ShoppingCart },
   { label: "Settings", icon: Settings, to: "/admin/settings" }
@@ -41,6 +41,8 @@ export const AdminLayout: React.FC = () => {
 
   const pageTitle = location.pathname.startsWith("/admin/settings")
     ? "Settings"
+    : location.pathname.startsWith("/admin/categories")
+    ? "Categories"
     : "Overview";
 
   const handleLogout = async () => {

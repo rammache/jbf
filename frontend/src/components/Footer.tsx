@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Check, Loader2 } from "lucide-react";
+import { useCategories } from "../context/CategoryContext";
 
 export const Footer: React.FC = () => {
+  const { categories } = useCategories();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -52,26 +54,24 @@ export const Footer: React.FC = () => {
           <div>
             <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-4">Shop</h3>
             <ul className="space-y-2 text-xs">
-              <li>
-                <Link to="/shop?category=Laptops" className="hover:text-[#d10024] transition">
-                  Laptops
-                </Link>
-              </li>
-              <li>
-                <Link to="/shop?category=Audio" className="hover:text-[#d10024] transition">
-                  Audio &amp; ANC
-                </Link>
-              </li>
-              <li>
-                <Link to="/shop?category=Keyboards%20%26%20mice" className="hover:text-[#d10024] transition">
-                  Keyboards &amp; mice
-                </Link>
-              </li>
-              <li>
-                <Link to="/shop?category=Desktops%20%26%20displays" className="hover:text-[#d10024] transition">
-                  Desktops &amp; displays
-                </Link>
-              </li>
+              {categories.length > 0 ? (
+                categories.map((cat) => (
+                  <li key={cat.id}>
+                    <Link
+                      to={`/shop?category=${encodeURIComponent(cat.slug || cat.name)}`}
+                      className="hover:text-[#d10024] transition"
+                    >
+                      {cat.name}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li>
+                  <Link to="/shop" className="hover:text-[#d10024] transition">
+                    All Products
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
 
