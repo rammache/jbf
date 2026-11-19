@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { X, CheckCircle, Loader2 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { X, CheckCircle, Loader2, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
 
 export const CheckoutModal: React.FC = () => {
@@ -10,6 +11,28 @@ export const CheckoutModal: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Lock body scroll and listen for Escape key
+  useEffect(() => {
+    if (!isCheckoutOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsCheckoutOpen(false);
+        setOrderId(null);
+        setError(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isCheckoutOpen, setIsCheckoutOpen]);
 
   if (!isCheckoutOpen) return null;
 
@@ -62,13 +85,29 @@ export const CheckoutModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-10 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" onClick={handleClose} />
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="checkout-modal-title"
+      className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-10 flex items-center justify-center"
+    >
+      <div
+        className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={handleClose}
+        aria-hidden="true"
+      />
 
       <div className="relative bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden z-10 border border-gray-200">
         <div className="p-5 bg-[#15161d] text-white flex items-center justify-between">
-          <h2 className="text-lg font-bold">Express Checkout</h2>
-          <button onClick={handleClose} className="text-gray-400 hover:text-white">
+          <h2 id="checkout-modal-title" className="text-lg font-bold">
+            Express Checkout
+          </h2>
+          <button
+            type="button"
+            onClick={handleClose}
+            className="text-gray-400 hover:text-white"
+            aria-label="Close checkout modal"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -79,21 +118,35 @@ export const CheckoutModal: React.FC = () => {
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
               <h3 className="text-2xl font-black text-gray-900">Order Confirmed!</h3>
               <p className="text-xs text-gray-500">
-                Thank you for your order. We are preparing your hardware bench verification.
+                Thank you for your order. We are preparing your hardware bench verification and dispatch.
               </p>
               <div className="bg-gray-50 p-4 rounded-lg border text-left text-xs space-y-1">
-                <p><span className="font-semibold text-gray-700">Order ID:</span> {orderId}</p>
+                <p>
+                  <span className="font-semibold text-gray-700">Order ID:</span>{" "}
+                  <code className="font-mono bg-white px-1 py-0.5 border rounded">{orderId}</code>
+                </p>
                 <p><span className="font-semibold text-gray-700">Recipient:</span> {name}</p>
                 <p><span className="font-semibold text-gray-700">Email:</span> {email}</p>
+                <p><span className="font-semibold text-gray-700">Payment:</span> Cash on Delivery (COD)</p>
                 <p><span className="font-semibold text-gray-700">Status:</span> Bench Testing &amp; Packing</p>
               </div>
-              <button
-                type="button"
-                onClick={handleClose}
-                className="w-full py-3 bg-[#15161d] hover:bg-[#d10024] text-white font-bold text-xs uppercase tracking-wider rounded transition"
-              >
-                Back to Store
-              </button>
+
+              <div className="flex flex-col sm:flex-row gap-2 pt-2">
+                <Link
+                  to="/track"
+                  onClick={handleClose}
+                  className="flex-1 py-3 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded transition flex items-center justify-center gap-1"
+                >
+                  Track This Order <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="flex-1 py-3 bg-[#15161d] hover:bg-[#2a2c38] text-white font-bold text-xs uppercase tracking-wider rounded transition"
+                >
+                  Back to Store
+                </button>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">

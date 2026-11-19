@@ -1,10 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Cpu, ShieldAlert, Award, ArrowRight } from "lucide-react";
+import { ImageWithFallback } from "../components/ImageWithFallback";
+import { SEO } from "../components/SEO";
 
 export const About: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
+      <SEO
+        title="About Us - The Jabour Phone Standard"
+        description="Learn about the Jabour Phone standard: transparent bench testing, genuine manufacturer warranties, and tech without the retail markup."
+      />
       <div className="text-center space-y-4 max-w-2xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-red-200 rounded-full text-xs font-bold text-[#d10024] uppercase tracking-wider">
           <Cpu className="w-4 h-4" /> The Jabour Phone Standard
@@ -19,7 +25,7 @@ export const About: React.FC = () => {
       </div>
 
       <div className="aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
-        <img
+        <ImageWithFallback
           src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1400&q=80"
           alt="Jabour Phone workshop"
           className="w-full h-full object-cover"
@@ -40,8 +46,8 @@ export const About: React.FC = () => {
           <ShieldAlert className="w-8 h-8 text-[#d10024]" />
           <h3 className="font-bold text-base text-[#15161d]">2. Repairability Score</h3>
           <p className="text-gray-500 leading-relaxed">
-            A laptop or keyboard you can disassemble outlives two glued-together units.
-            We inspect internal socket access, battery adhesive, and hot-swap switches.
+            A laptop, phone, or keyboard you can service outlives glued-together units.
+            We inspect internal socket access, battery adhesive, and component availability.
           </p>
         </div>
 
@@ -50,7 +56,7 @@ export const About: React.FC = () => {
           <h3 className="font-bold text-base text-[#15161d]">3. 2-Year In-House Warranty</h3>
           <p className="text-gray-500 leading-relaxed">
             If hardware fails within 24 months, our bench technicians handle the repair or replacement
-            directly in Manchester without passing you off to offshore service centers.
+            directly on our workbench without passing you off to offshore service centers.
           </p>
         </div>
       </div>

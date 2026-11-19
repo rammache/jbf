@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Truck, ShieldCheck, RefreshCw, Cpu, Award, FolderTree, Tag } from "lucide-react";
+import { ArrowRight, Truck, ShieldCheck, RefreshCw, Cpu, Award, FolderTree, Tag, Sparkles } from "lucide-react";
 import { Product } from "../types";
 import { ProductCard } from "../components/ProductCard";
 import { useCategories } from "../context/CategoryContext";
+import { ImageWithFallback } from "../components/ImageWithFallback";
+import { SEO } from "../components/SEO";
 
 export const Home: React.FC = () => {
   const { categories, loading: categoriesLoading } = useCategories();
@@ -57,55 +59,124 @@ export const Home: React.FC = () => {
     .sort((a, b) => b.rating - a.rating)
     .slice(0, 4);
 
+  // Dynamic hero product: prioritizes admin-featured product
+  const heroProduct = products.find((p) => p.isFeatured || p.featured) || products[0];
+
   return (
     <div className="space-y-16 pb-16">
-      {/* Hero Banner */}
+      <SEO
+        title="Home - Bench-Tested Hardware & Tech"
+        description="Shop verified smartphones, laptops, audio, and accessories at Jabour Phone with direct manufacturer warranties and cash on delivery."
+      />
+
+      {/* Hero Banner (Dynamic from API featured hardware) */}
       <section className="relative bg-[#15161d] text-white overflow-hidden py-16 md:py-24 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-950/60 border border-[#d10024]/50 rounded-full text-xs font-bold uppercase text-[#d10024] tracking-wider">
-              <Cpu className="w-3.5 h-3.5" /> Bench Tested Hardware
+          {loading ? (
+            <div className="space-y-6 animate-pulse">
+              <div className="h-6 w-36 bg-gray-800 rounded-full" />
+              <div className="h-12 w-3/4 bg-gray-800 rounded" />
+              <div className="h-20 w-full bg-gray-800 rounded" />
+              <div className="h-10 w-48 bg-gray-800 rounded" />
             </div>
+          ) : heroProduct ? (
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-950/60 border border-[#d10024]/50 rounded-full text-xs font-bold uppercase text-[#d10024] tracking-wider">
+                <Sparkles className="w-3.5 h-3.5" />
+                {heroProduct.condition && heroProduct.condition !== "NEW"
+                  ? `${heroProduct.condition} Hardware`
+                  : heroProduct.isFeatured || heroProduct.featured
+                  ? "Featured Hardware"
+                  : "Bench Tested Hardware"}
+              </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
-              Kestrel 14 Ultrabook
-            </h1>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                {heroProduct.title}
+              </h1>
 
-            <p className="text-sm sm:text-base text-gray-300 max-w-xl font-normal leading-relaxed">
-              14in 2.8K OLED · 16GB · 1TB. Tested on our own bench and listed with the real numbers we measured,
-              not the ones on the manufacturer box.
-            </p>
+              <p className="text-sm sm:text-base text-gray-300 max-w-xl font-normal leading-relaxed line-clamp-3">
+                {heroProduct.spec ||
+                  heroProduct.description ||
+                  "Tested on our own bench and verified with real numbers, sustained thermal thresholds, and authentic warranties."}
+              </p>
 
-            <div className="flex flex-wrap gap-4 pt-2">
-              <Link
-                to="/shop"
-                className="px-6 py-3.5 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded shadow-lg transition flex items-center gap-2"
-              >
-                Shop All Products <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/product/kestrel-14-ultrabook"
-                className="px-6 py-3.5 bg-transparent hover:bg-white/10 text-white border border-gray-600 font-bold text-xs uppercase tracking-wider rounded transition"
-              >
-                Inspect Bench Spec
-              </Link>
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="relative aspect-video sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
-              <img
-                src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=80"
-                alt="Kestrel 14 Ultrabook on workbench"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-6">
-                <div>
-                  <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">Sale Deal</span>
-                  <p className="text-xl font-bold text-white">$1,199.00 <span className="text-xs text-gray-400 line-through">$1,399.00</span></p>
-                </div>
+              <div className="flex flex-wrap gap-4 pt-2">
+                <Link
+                  to={`/product/${heroProduct.handle}`}
+                  className="px-6 py-3.5 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded shadow-lg transition flex items-center gap-2"
+                >
+                  Inspect Bench Spec <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  to="/shop"
+                  className="px-6 py-3.5 bg-transparent hover:bg-white/10 text-white border border-gray-600 font-bold text-xs uppercase tracking-wider rounded transition"
+                >
+                  Shop All Products
+                </Link>
               </div>
             </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-950/60 border border-[#d10024]/50 rounded-full text-xs font-bold uppercase text-[#d10024] tracking-wider">
+                <Cpu className="w-3.5 h-3.5" /> Direct From The Bench
+              </div>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                Technology Without The Markup.
+              </h1>
+              <p className="text-sm sm:text-base text-gray-300 max-w-xl font-normal leading-relaxed">
+                Jabour Phone supplies bench-verified smartphones, laptops, audio, and accessories without the retail theater.
+              </p>
+              <div className="flex flex-wrap gap-4 pt-2">
+                <Link
+                  to="/shop"
+                  className="px-6 py-3.5 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded shadow-lg transition flex items-center gap-2"
+                >
+                  Browse Store Catalog <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          )}
+
+          <div className="relative">
+            {loading ? (
+              <div className="aspect-video sm:aspect-[4/3] rounded-2xl bg-gray-800 animate-pulse border border-gray-800" />
+            ) : heroProduct ? (
+              <div className="relative aspect-video sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
+                <ImageWithFallback
+                  src={
+                    heroProduct.images[0] ||
+                    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=80"
+                  }
+                  alt={heroProduct.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-6">
+                  <div>
+                    <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
+                      {heroProduct.compare && heroProduct.compare > heroProduct.price
+                        ? "Special Price"
+                        : "Verified Stock"}
+                    </span>
+                    <p className="text-xl font-bold text-white">
+                      ${heroProduct.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                      {heroProduct.compare && heroProduct.compare > heroProduct.price && (
+                        <span className="text-xs text-gray-400 line-through ml-2">
+                          ${heroProduct.compare.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="relative aspect-video sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
+                <ImageWithFallback
+                  src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=80"
+                  alt="Jabour Phone verified devices"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -144,11 +215,10 @@ export const Home: React.FC = () => {
                   className="group relative flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                 >
                   <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100">
-                    <img
+                    <ImageWithFallback
                       src={catImage}
                       alt={cat.name}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
@@ -272,7 +342,7 @@ export const Home: React.FC = () => {
       <section className="bg-[#1e1f29] text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="aspect-[4/3] rounded-xl overflow-hidden shadow-xl border border-gray-800">
-            <img
+            <ImageWithFallback
               src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1000&q=80"
               alt="Jabour Phone testing bench"
               className="w-full h-full object-cover"

@@ -1,9 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Star, ShieldCheck, Truck, RotateCcw, Plus, Minus, CheckCircle } from "lucide-react";
+import {
+  Star,
+  ShieldCheck,
+  Truck,
+  RotateCcw,
+  Plus,
+  Minus,
+  CheckCircle,
+  MessageCircle,
+  Send,
+  MessageSquareQuote,
+  Loader2
+} from "lucide-react";
 import { Product } from "../types";
 import { useCart } from "../context/CartContext";
 import { ProductCard } from "../components/ProductCard";
+import { ImageWithFallback } from "../components/ImageWithFallback";
+import { SEO } from "../components/SEO";
+
+interface ReviewItem {
+  id: number;
+  rating: number;
+  authorName: string;
+  comment: string;
+  createdAt: string;
+}
 
 const SWATCH_COLORS: Record<string, string> = {
   Graphite: "#3a3d45",
@@ -26,6 +48,31 @@ export const ProductDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [addedSuccess, setAddedSuccess] = useState(false);
 
+  // Reviews state
+  const [reviews, setReviews] = useState<ReviewItem[]>([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [reviewAuthor, setReviewAuthor] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewSuccessMessage, setReviewSuccessMessage] = useState("");
+  const [reviewErrorMessage, setReviewErrorMessage] = useState("");
+
+  const loadReviews = async (productHandle: string) => {
+    try {
+      setReviewsLoading(true);
+      const res = await fetch(`/api/products/${productHandle}/reviews`);
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        setReviews(json.data);
+      }
+    } catch (err) {
+      console.error("Error loading reviews", err);
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!handle) return;
     setLoading(true);
@@ -39,11 +86,54 @@ export const ProductDetail: React.FC = () => {
           if (json.data.finishes && json.data.finishes.length > 0) {
             setSelectedFinish(json.data.finishes[0]);
           }
+          loadReviews(handle);
         }
       })
       .catch((err) => console.error("Error loading product", err))
       .finally(() => setLoading(false));
   }, [handle]);
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!product) return;
+    if (!reviewAuthor.trim() || !reviewComment.trim()) {
+      setReviewErrorMessage("Please enter both your name and review comment.");
+      return;
+    }
+
+    setSubmittingReview(true);
+    setReviewErrorMessage("");
+    setReviewSuccessMessage("");
+
+    try {
+      const res = await fetch(`/api/products/${product.id}/reviews`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rating: reviewRating,
+          authorName: reviewAuthor.trim(),
+          comment: reviewComment.trim()
+        })
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        setReviewSuccessMessage("Thank you! Your verified review has been posted.");
+        setReviewAuthor("");
+        setReviewComment("");
+        setReviewRating(5);
+        if (handle) {
+          loadReviews(handle);
+        }
+      } else {
+        setReviewErrorMessage(json.error || "Failed to submit review.");
+      }
+    } catch {
+      setReviewErrorMessage("Network error while submitting review.");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -78,6 +168,11 @@ export const ProductDetail: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+      <SEO
+        title={product.title}
+        description={product.spec || product.description || `Buy ${product.title} at Jabour Phone with verified hardware specs.`}
+      />
+
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs text-gray-500">
         <Link to="/" className="hover:text-gray-900">Home</Link>
@@ -94,7 +189,7 @@ export const ProductDetail: React.FC = () => {
         {/* Media Gallery */}
         <div className="space-y-4">
           <div className="aspect-square bg-white border border-[#e4e7ed] rounded-xl overflow-hidden shadow-sm">
-            <img
+            <ImageWithFallback
               src={activeImage}
               alt={product.title}
               className="w-full h-full object-cover object-center transition-all duration-300"
@@ -112,7 +207,7 @@ export const ProductDetail: React.FC = () => {
                     activeImage === img ? "border-[#d10024] shadow-md" : "border-gray-200 opacity-70 hover:opacity-100"
                   }`}
                 >
-                  <img src={img} alt={`Thumbnail ${i}`} className="w-full h-full object-cover" />
+                  <ImageWithFallback src={img} alt={`Thumbnail ${i}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -136,19 +231,27 @@ export const ProductDetail: React.FC = () => {
 
             {/* Ratings & reviews */}
             <div className="flex items-center gap-2 mt-3">
-              <div className="flex text-amber-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${
-                      i < Math.floor(product.rating) ? "fill-current" : "text-gray-300"
-                    }`}
-                  />
-                ))}
-              </div>
-              <span className="text-xs font-bold text-gray-700">
-                {product.rating} ({product.reviews} verified reviews)
-              </span>
+              {product.reviews && product.reviews > 0 ? (
+                <>
+                  <div className="flex text-amber-400">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 ${
+                          i < Math.floor(product.rating) ? "fill-current" : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-xs font-bold text-gray-700">
+                    {product.rating} ({product.reviews} verified {product.reviews === 1 ? "review" : "reviews"})
+                  </span>
+                </>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                  <ShieldCheck className="w-3.5 h-3.5 text-green-600" /> Verified Bench Hardware · No customer reviews yet
+                </span>
+              )}
             </div>
           </div>
 
@@ -273,6 +376,22 @@ export const ProductDetail: React.FC = () => {
                 </button>
               )}
             </div>
+
+            {/* Direct WhatsApp Order Option */}
+            <a
+              href={`https://wa.me/96170123456?text=${encodeURIComponent(
+                `Hello Jabour Phone! I would like to order "${product.title}" for $${(
+                  product.price * quantity
+                ).toFixed(2)}. Finish: ${selectedFinish || "Standard"}, Quantity: ${quantity}. Store Link: ${
+                  typeof window !== "undefined" ? window.location.href : ""
+                }`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3.5 px-6 rounded font-bold text-xs uppercase tracking-wider bg-[#25D366] hover:bg-[#128C7E] text-white transition shadow flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <MessageCircle className="w-4 h-4" /> Order via WhatsApp (Direct Message)
+            </a>
           </div>
 
           {/* Value Props list */}
@@ -380,6 +499,162 @@ export const ProductDetail: React.FC = () => {
               <span className="font-bold text-gray-900">{product.warranty}</span>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Customer Reviews & Feedback */}
+      <section className="bg-white border border-[#e4e7ed] rounded-xl p-8 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-gray-200 gap-4">
+          <div>
+            <h2 className="text-xl font-black text-[#15161d] uppercase tracking-tight flex items-center gap-2">
+              <MessageSquareQuote className="w-5 h-5 text-[#d10024]" /> Customer Reviews
+            </h2>
+            <p className="text-xs text-gray-500 mt-1">
+              Verified feedback from customers who received and tested this hardware.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-black text-[#15161d]">{product.rating}</span>
+            <div className="flex text-amber-400">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-4 h-4 ${
+                    i < Math.floor(product.rating) ? "fill-current" : "text-gray-300"
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-xs text-gray-500">
+              ({reviews.length} {reviews.length === 1 ? "review" : "reviews"})
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Reviews list */}
+          <div className="lg:col-span-2 space-y-4">
+            {reviewsLoading ? (
+              <div className="flex items-center justify-center p-8 text-gray-400">
+                <Loader2 className="w-6 h-6 animate-spin mr-2" /> Loading reviews...
+              </div>
+            ) : reviews.length === 0 ? (
+              <div className="p-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200 space-y-2">
+                <p className="text-sm font-bold text-gray-700">No reviews yet for this model</p>
+                <p className="text-xs text-gray-500">
+                  Be the first to share your experience with this device!
+                </p>
+              </div>
+            ) : (
+              reviews.map((rev) => (
+                <div key={rev.id} className="p-4 bg-gray-50 rounded-lg border border-gray-100 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-sm text-[#15161d]">{rev.authorName}</span>
+                    <div className="flex text-amber-400">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-3.5 h-3.5 ${i < rev.rating ? "fill-current" : "text-gray-300"}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-line">{rev.comment}</p>
+                  <p className="text-[10px] text-gray-400">
+                    {new Date(rev.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric"
+                    })}
+                  </p>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Write a Review Form */}
+          <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 space-y-4">
+            <h3 className="text-sm font-black uppercase text-[#15161d]">Leave a Review</h3>
+            {reviewSuccessMessage && (
+              <div className="p-3 bg-green-50 text-green-700 border border-green-200 rounded text-xs flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 flex-shrink-0" /> {reviewSuccessMessage}
+              </div>
+            )}
+            {reviewErrorMessage && (
+              <div className="p-3 bg-red-50 text-red-700 border border-red-200 rounded text-xs">
+                {reviewErrorMessage}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmitReview} className="space-y-3">
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-600 mb-1">
+                  Rating (1 to 5 Stars)
+                </label>
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setReviewRating(star)}
+                      className="p-1 focus:outline-none"
+                    >
+                      <Star
+                        className={`w-5 h-5 ${
+                          star <= reviewRating
+                            ? "text-amber-400 fill-current"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    </button>
+                  ))}
+                  <span className="text-xs font-bold text-gray-700 ml-1">{reviewRating} / 5</span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-600 mb-1">
+                  Your Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={reviewAuthor}
+                  onChange={(e) => setReviewAuthor(e.target.value)}
+                  placeholder="e.g. Alex M."
+                  className="w-full px-3 py-2 text-xs border border-gray-300 rounded bg-white focus:outline-none focus:border-[#d10024]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-600 mb-1">
+                  Your Review
+                </label>
+                <textarea
+                  required
+                  rows={3}
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  placeholder="Share details about performance, build quality, screen, battery..."
+                  className="w-full px-3 py-2 text-xs border border-gray-300 rounded bg-white focus:outline-none focus:border-[#d10024]"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={submittingReview}
+                className="w-full py-2.5 bg-[#15161d] hover:bg-[#d10024] text-white font-bold text-xs uppercase tracking-wider rounded transition flex items-center justify-center gap-2"
+              >
+                {submittingReview ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <Send className="w-3.5 h-3.5" /> Submit Verified Review
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
         </div>
       </section>
 

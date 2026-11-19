@@ -27,6 +27,11 @@ import {
   adminBulkProductActions,
   adminUploadImages
 } from "../controllers/adminProductController.js";
+import {
+  adminGetReviews,
+  adminToggleApproveReview,
+  adminDeleteReview
+} from "../controllers/reviewController.js";
 
 const router = Router();
 
@@ -54,5 +59,10 @@ router.get("/products/:id", adminGetProductById);
 router.put("/products/:id", adminUpdateProduct);
 router.delete("/products/:id", adminDeleteProduct);
 router.post("/products/:id/duplicate", adminDuplicateProduct);
+
+// Customer Review Moderation
+router.get("/reviews", adminGetReviews);
+router.put("/reviews/:id/approve", adminToggleApproveReview);
+router.delete("/reviews/:id", adminDeleteReview);
 
 export default router;

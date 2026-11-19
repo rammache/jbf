@@ -10,6 +10,26 @@ export const SearchModal: React.FC = () => {
   const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
 
+  // Lock body scroll and listen for Escape key
+  useEffect(() => {
+    if (!isSearchOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsSearchOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isSearchOpen, setIsSearchOpen]);
+
   useEffect(() => {
     if (!isSearchOpen) {
       setQuery("");
@@ -45,38 +65,49 @@ export const SearchModal: React.FC = () => {
   if (!isSearchOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-20">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Search Catalog"
+      className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-20"
+    >
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
         onClick={() => setIsSearchOpen(false)}
+        aria-hidden="true"
       />
 
       <div className="relative max-w-2xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden z-10 border border-gray-200">
         {/* Search Input bar */}
         <div className="flex items-center px-4 py-3.5 border-b border-gray-200">
-          <Search className="w-5 h-5 text-gray-400 mr-3" />
+          <Search className="w-5 h-5 text-gray-400 mr-3" aria-hidden="true" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search laptops, audio, keyboards, displays or brands..."
+            placeholder="Search phones, laptops, audio, accessories or brands..."
             className="flex-1 bg-transparent text-sm sm:text-base text-gray-800 placeholder-gray-400 focus:outline-none"
             autoFocus
+            aria-label="Search query"
           />
           {loading ? (
-            <Loader2 className="w-5 h-5 text-gray-400 animate-spin mr-2" />
+            <Loader2 className="w-5 h-5 text-gray-400 animate-spin mr-2" aria-hidden="true" />
           ) : query ? (
             <button
+              type="button"
               onClick={() => setQuery("")}
               className="p-1 text-gray-400 hover:text-gray-600 mr-2"
+              aria-label="Clear query"
             >
               <X className="w-4 h-4" />
             </button>
           ) : null}
           <button
+            type="button"
             onClick={() => setIsSearchOpen(false)}
             className="text-xs font-bold uppercase text-gray-500 hover:text-gray-800 ml-2"
+            aria-label="Close search (Esc)"
           >
             Esc
           </button>

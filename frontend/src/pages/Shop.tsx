@@ -4,6 +4,7 @@ import { Filter, X, SlidersHorizontal } from "lucide-react";
 import { Product } from "../types";
 import { ProductCard } from "../components/ProductCard";
 import { useCategories } from "../context/CategoryContext";
+import { SEO } from "../components/SEO";
 
 export const Shop: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -92,6 +93,10 @@ export const Shop: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <SEO
+        title={displayCategoryTitle}
+        description={`Browse ${displayCategoryTitle} at Jabour Phone with verified specs and manufacturer warranty.`}
+      />
       {/* Title & mobile filter toggle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-gray-200 gap-4">
         <div>

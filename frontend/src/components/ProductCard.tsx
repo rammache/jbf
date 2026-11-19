@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Star, ShoppingBag, Check } from "lucide-react";
+import { Star, ShoppingBag, Check, ShieldCheck } from "lucide-react";
 import { Product } from "../types";
 import { useCart } from "../context/CartContext";
+import { ImageWithFallback } from "./ImageWithFallback";
 
 const SWATCH_COLORS: Record<string, string> = {
   Graphite: "#3a3d45",
@@ -67,11 +68,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         to={`/product/${product.handle}`}
         className="block relative aspect-square overflow-hidden bg-gray-50"
       >
-        <img
+        <ImageWithFallback
           src={displayImage}
           alt={product.title}
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-          loading="lazy"
         />
         {/* Quick Add Overlay on hover */}
         <div className="absolute inset-x-4 bottom-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -117,23 +117,31 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
           <p className="text-xs text-gray-500 mt-1 line-clamp-1">{product.spec}</p>
 
-          {/* Rating */}
+          {/* Rating / Real Reviews */}
           <div className="flex items-center gap-1.5 mt-2">
-            <div className="flex text-amber-400">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-3.5 h-3.5 ${
-                    i < Math.floor(product.rating)
-                      ? "fill-current"
-                      : "text-gray-300"
-                  }`}
-                />
-              ))}
-            </div>
-            <span className="text-xs font-semibold text-gray-600">
-              ({product.reviews})
-            </span>
+            {product.reviews && product.reviews > 0 ? (
+              <>
+                <div className="flex text-amber-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-3.5 h-3.5 ${
+                        i < Math.floor(product.rating)
+                          ? "fill-current"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-xs font-semibold text-gray-600">
+                  ({product.reviews})
+                </span>
+              </>
+            ) : (
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                <ShieldCheck className="w-3 h-3 text-gray-400" /> Verified Stock
+              </span>
+            )}
           </div>
         </div>
 

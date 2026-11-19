@@ -178,22 +178,22 @@ The WORK files must carry enough context for any agent to continue without guess
 
 ## Phase 5 - Storefront Alignment
 
-- [ ] Remove hardcoded Hero product and use featured/admin content. **P0**
-- [ ] Fetch categories and brands from the API everywhere. **P0**
-- [ ] Fix "Featured Bench" sort so it actually sorts featured products first. **P1**
-- [ ] Wire `GET /api/categories` (currently unused) or remove the endpoint. **P0**
-- [ ] Replace fake rating/review counts with real reviews or hide them until implemented. **P0**
-- [ ] Add real reviews model and moderation (optional). **P2**
-- [ ] Add contact page with phone, WhatsApp, email, map, hours. **P0**
-- [ ] Add WhatsApp "Order" button on product pages. **P1**
-- [ ] Add FAQ, Shipping, Returns, Privacy, Terms pages. **P0**
-- [ ] Add order tracking page (order number + phone/email). **P1**
-- [ ] Add 404 page and error boundary. **P1**
-- [ ] Lock page scroll when cart/search/checkout modals are open. **P1**
-- [ ] Add Esc-to-close and focus handling in modals (Search says "Esc" but does not close on Esc). **P1**
-- [ ] Add accessible labels and keyboard navigation. **P1**
-- [ ] Add SEO meta tags, Open Graph, sitemap.xml, robots.txt. **P1**
-- [ ] Add responsive image optimization and lazy loading checks. **P2**
+- [x] Remove hardcoded Hero product and use featured/admin content. **P0**
+- [x] Fetch categories and brands from the API everywhere. **P0**
+- [x] Fix "Featured Bench" sort so it actually sorts featured products first. **P1**
+- [x] Wire `GET /api/categories` (currently unused) or remove the endpoint. **P0**
+- [x] Replace fake rating/review counts with real reviews or hide them until implemented. **P0**
+- [x] Add real reviews model and moderation (optional). **P2**
+- [x] Add contact page with phone, WhatsApp, email, map, hours. **P0**
+- [x] Add WhatsApp "Order" button on product pages. **P1**
+- [x] Add FAQ, Shipping, Returns, Privacy, Terms pages. **P0**
+- [x] Add order tracking page (order number + phone/email). **P1**
+- [x] Add 404 page and error boundary. **P1**
+- [x] Lock page scroll when cart/search/checkout modals are open. **P1**
+- [x] Add Esc-to-close and focus handling in modals (Search says "Esc" but does not close on Esc). **P1**
+- [x] Add accessible labels and keyboard navigation. **P1**
+- [x] Add SEO meta tags, Open Graph, sitemap.xml, robots.txt. **P1**
+- [x] Add responsive image optimization and lazy loading checks. **P2**
 
 ---
 

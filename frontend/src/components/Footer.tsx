@@ -75,28 +75,38 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Help & Policies */}
+          {/* Customer Service & Policies */}
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-4">Why Us</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-4">Customer Care</h3>
             <ul className="space-y-2 text-xs">
+              <li>
+                <Link to="/track" className="hover:text-[#d10024] transition font-semibold text-gray-200">
+                  Track Your Order
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-[#d10024] transition">
+                  Contact Us &amp; Location
+                </Link>
+              </li>
+              <li>
+                <Link to="/faq" className="hover:text-[#d10024] transition">
+                  Frequently Asked Questions
+                </Link>
+              </li>
+              <li>
+                <Link to="/shipping" className="hover:text-[#d10024] transition">
+                  Shipping &amp; Cash on Delivery
+                </Link>
+              </li>
+              <li>
+                <Link to="/returns" className="hover:text-[#d10024] transition">
+                  30-Day Returns &amp; Warranty
+                </Link>
+              </li>
               <li>
                 <Link to="/about" className="hover:text-[#d10024] transition">
                   Bench Testing Protocol
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="hover:text-[#d10024] transition">
-                  Two Year Warranty
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="hover:text-[#d10024] transition">
-                  30 Day Returns
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="hover:text-[#d10024] transition">
-                  Free Next-Day Delivery
                 </Link>
               </li>
             </ul>
@@ -142,7 +152,19 @@ export const Footer: React.FC = () => {
 
         <div className="mt-12 pt-8 border-t border-[#2b2d42] flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
           <p>© 2026 Jabour Phone. All rights reserved.</p>
-          <p className="mt-2 sm:mt-0">Bench-tested hardware without markups.</p>
+          <div className="flex items-center gap-4 mt-2 sm:mt-0">
+            <Link to="/privacy" className="hover:text-gray-300 transition">
+              Privacy Policy
+            </Link>
+            <span>·</span>
+            <Link to="/terms" className="hover:text-gray-300 transition">
+              Terms of Service
+            </Link>
+            <span>·</span>
+            <Link to="/about" className="hover:text-gray-300 transition">
+              About
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

@@ -45,12 +45,12 @@ export const getProducts = async (req: Request, res: Response) => {
       ];
     }
 
-    let orderBy: any = { id: "asc" };
+    let orderBy: any = [{ isFeatured: "desc" }, { featured: "desc" }, { createdAt: "desc" }, { id: "asc" }];
     if (sort === "price-asc") orderBy = { price: "asc" };
     else if (sort === "price-desc") orderBy = { price: "desc" };
-    else if (sort === "rating-desc") orderBy = { rating: "desc" };
+    else if (sort === "rating-desc") orderBy = [{ rating: "desc" }, { reviews: "desc" }];
     else if (sort === "title-asc") orderBy = { title: "asc" };
-    else if (sort === "featured" || sort === "featured-bench") orderBy = [{ isFeatured: "desc" }, { featured: "desc" }, { id: "asc" }];
+    else if (sort === "featured" || sort === "featured-bench") orderBy = [{ isFeatured: "desc" }, { featured: "desc" }, { createdAt: "desc" }, { id: "asc" }];
 
     // Optional pagination
     const pageNum = page ? Math.max(1, parseInt(String(page), 10) || 1) : null;

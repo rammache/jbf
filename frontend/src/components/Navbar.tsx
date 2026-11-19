@@ -3,11 +3,13 @@ import { Link, useLocation } from "react-router-dom";
 import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useCategories } from "../context/CategoryContext";
+import { useAuth } from "../context/AuthContext";
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { cartCount, setIsCartOpen, setIsSearchOpen } = useCart();
   const { categories } = useCategories();
+  const { admin } = useAuth();
   const location = useLocation();
 
   const navLinks = [
@@ -17,7 +19,8 @@ export const Navbar: React.FC = () => {
       name: cat.name,
       path: `/shop?category=${encodeURIComponent(cat.slug || cat.name)}`
     })),
-    { name: "About Bench", path: "/about" }
+    { name: "Track Order", path: "/track" },
+    { name: "Contact", path: "/contact" }
   ];
 
   return (
@@ -77,11 +80,12 @@ export const Navbar: React.FC = () => {
               </button>
 
               <Link
-                to="/about"
+                to={admin ? "/admin" : "/admin/login"}
                 className="p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full transition hidden sm:inline-flex"
-                aria-label="Account or Info"
+                aria-label={admin ? `Admin Dashboard (${admin.name})` : "Admin Login"}
+                title={admin ? `Admin Dashboard (${admin.name})` : "Admin Login"}
               >
-                <User className="h-5 w-5" />
+                <User className={`h-5 w-5 ${admin ? "text-[#d10024]" : ""}`} />
               </Link>
 
               <button

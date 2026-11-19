@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
@@ -14,14 +14,40 @@ export const CartDrawer: React.FC = () => {
     setIsCheckoutOpen
   } = useCart();
 
+  // Lock body scroll and listen for Escape key
+  useEffect(() => {
+    if (!isCartOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsCartOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isCartOpen, setIsCartOpen]);
+
   if (!isCartOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Shopping Cart"
+      className="fixed inset-0 z-50 overflow-hidden"
+    >
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 transition-opacity duration-300"
         onClick={() => setIsCartOpen(false)}
+        aria-hidden="true"
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">

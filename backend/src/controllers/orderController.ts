@@ -118,3 +118,61 @@ export const getOrder = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
+/**
+ * Public: Track order status by Order ID and Contact Email.
+ * POST /api/orders/track
+ */
+export const trackOrder = async (req: Request, res: Response) => {
+  try {
+    const { orderId, contact } = req.body;
+    if (!orderId || !contact) {
+      res.status(400).json({
+        success: false,
+        error: "Please provide both your order reference and email address."
+      });
+      return;
+    }
+
+    const trimmedContact = String(contact).trim().toLowerCase();
+    const order = await prisma.order.findFirst({
+      where: {
+        id: String(orderId).trim(),
+        customerEmail: { equals: trimmedContact, mode: "insensitive" }
+      },
+      include: {
+        items: true
+      }
+    });
+
+    if (!order) {
+      res.status(404).json({
+        success: false,
+        error: "No matching order was found. Please check your order ID and the email address used during checkout."
+      });
+      return;
+    }
+
+    res.json({
+      success: true,
+      data: {
+        id: order.id,
+        status: order.status,
+        createdAt: order.createdAt,
+        totalAmount: order.totalAmount,
+        customerName: order.customerName,
+        customerAddress: order.customerAddress,
+        items: order.items.map((item) => ({
+          id: item.id,
+          productTitle: item.productTitle,
+          selectedFinish: item.selectedFinish,
+          quantity: item.quantity,
+          price: item.price
+        }))
+      }
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
