@@ -124,3 +124,5 @@ The Vite dev server will run on `http://localhost:5173`.
 | `POST` | `/api/auth/login` | Sign in an admin; sets an httpOnly JWT cookie |
 | `GET` | `/api/auth/me` | Return the currently signed-in admin |
 | `POST` | `/api/auth/logout` | Clear the admin auth cookie |
+
+All routes under `/api/admin` are protected by the `requireAdmin` middleware: a valid admin session cookie is required, the admin is reloaded from the database on every request, and `401` / `403` JSON errors are returned for unauthenticated or non-admin users.

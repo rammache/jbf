@@ -1,9 +1,9 @@
-import { CookieOptions, Request, Response } from "express";
+import { Request, Response } from "express";
 import { prisma } from "../prisma.js";
+import { ADMIN_AUTH_COOKIE_NAME, getAdminCookieOptions } from "../utils/authCookie.js";
 import { signAdminToken, verifyAdminToken } from "../utils/jwt.js";
 import { verifyPassword } from "../utils/password.js";
 
-const AUTH_COOKIE_NAME = "jabour_admin_token";
 const DEFAULT_TOKEN_TTL_SECONDS = 8 * 60 * 60;
 
 function getTokenTtlSeconds(): number {
@@ -11,15 +11,6 @@ function getTokenTtlSeconds(): number {
   return Number.isFinite(configured) && configured > 0
     ? configured
     : DEFAULT_TOKEN_TTL_SECONDS;
-}
-
-function getCookieOptions(): CookieOptions {
-  return {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/"
-  };
 }
 
 function toPublicAdmin(admin: {
@@ -37,7 +28,7 @@ function toPublicAdmin(admin: {
 }
 
 function unauthorized(res: Response) {
-  res.clearCookie(AUTH_COOKIE_NAME, getCookieOptions());
+  res.clearCookie(ADMIN_AUTH_COOKIE_NAME, getAdminCookieOptions());
   res.status(401).json({ success: false, error: "You are not signed in." });
 }
 
@@ -67,8 +58,8 @@ export const login = async (req: Request, res: Response) => {
     const ttlSeconds = getTokenTtlSeconds();
     const token = signAdminToken({ id: admin.id, role: admin.role }, ttlSeconds);
 
-    res.cookie(AUTH_COOKIE_NAME, token, {
-      ...getCookieOptions(),
+    res.cookie(ADMIN_AUTH_COOKIE_NAME, token, {
+      ...getAdminCookieOptions(),
       maxAge: ttlSeconds * 1000
     });
     res.setHeader("Cache-Control", "no-store");
@@ -79,7 +70,7 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const me = async (req: Request, res: Response) => {
-  const token = req.cookies?.[AUTH_COOKIE_NAME];
+  const token = req.cookies?.[ADMIN_AUTH_COOKIE_NAME];
   const payload = typeof token === "string" ? verifyAdminToken(token) : null;
   const adminId = payload ? Number(payload.sub) : NaN;
 
@@ -104,6 +95,6 @@ export const me = async (req: Request, res: Response) => {
 };
 
 export const logout = (_req: Request, res: Response) => {
-  res.clearCookie(AUTH_COOKIE_NAME, getCookieOptions());
+  res.clearCookie(ADMIN_AUTH_COOKIE_NAME, getAdminCookieOptions());
   res.json({ success: true, data: { message: "Signed out." } });
 };

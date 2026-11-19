@@ -4,6 +4,7 @@ import { getProducts, getProductByHandle, getBrands } from "../controllers/produ
 import { getCategories } from "../controllers/categoryController.js";
 import { createOrder, getOrder } from "../controllers/orderController.js";
 import { subscribeNewsletter } from "../controllers/newsletterController.js";
+import adminRoutes from "./admin.js";
 
 const router = Router();
 
@@ -11,6 +12,8 @@ const router = Router();
 router.post("/auth/login", login);
 router.get("/auth/me", me);
 router.post("/auth/logout", logout);
+
+router.use("/admin", adminRoutes);
 
 // Products
 router.get("/products", getProducts);
