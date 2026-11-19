@@ -3,6 +3,7 @@ import { prisma } from "../prisma.js";
 import { ADMIN_AUTH_COOKIE_NAME, getAdminCookieOptions } from "../utils/authCookie.js";
 import { signAdminToken, verifyAdminToken } from "../utils/jwt.js";
 import { hashPassword, verifyPassword } from "../utils/password.js";
+import { changePasswordSchema, loginSchema } from "../schemas/auth.js";
 
 const DEFAULT_TOKEN_TTL_SECONDS = 8 * 60 * 60;
 
@@ -33,14 +34,21 @@ function unauthorized(res: Response) {
 }
 
 export const login = async (req: Request, res: Response) => {
-  const email =
-    typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
-  const password = typeof req.body?.password === "string" ? req.body.password : "";
-
-  if (!email || !password) {
-    res.status(400).json({ success: false, error: "Email and password are required." });
+  const parseResult = loginSchema.safeParse(req.body);
+  if (!parseResult.success) {
+    const firstIssue = parseResult.error.issues[0];
+    res.status(400).json({
+      success: false,
+      error: firstIssue?.message || "Email and password are required.",
+      details: parseResult.error.issues.map((issue) => ({
+        field: issue.path.join("."),
+        message: issue.message
+      }))
+    });
     return;
   }
+
+  const { email, password } = parseResult.data;
 
   try {
     const admin = await prisma.adminUser.findFirst({
@@ -107,44 +115,21 @@ export const changePassword = async (req: Request, res: Response) => {
     return;
   }
 
-  const currentPassword =
-    typeof req.body?.currentPassword === "string" ? req.body.currentPassword : "";
-  const newPassword =
-    typeof req.body?.newPassword === "string" ? req.body.newPassword : "";
-  const confirmPassword =
-    typeof req.body?.confirmPassword === "string" ? req.body.confirmPassword : "";
-
-  if (!currentPassword || !newPassword || !confirmPassword) {
+  const parseResult = changePasswordSchema.safeParse(req.body);
+  if (!parseResult.success) {
+    const firstIssue = parseResult.error.issues[0];
     res.status(400).json({
       success: false,
-      error: "Current password, new password, and confirmation are required."
+      error: firstIssue?.message || "Invalid password update data.",
+      details: parseResult.error.issues.map((issue) => ({
+        field: issue.path.join("."),
+        message: issue.message
+      }))
     });
     return;
   }
 
-  if (newPassword.length < 12) {
-    res.status(400).json({
-      success: false,
-      error: "New password must be at least 12 characters long."
-    });
-    return;
-  }
-
-  if (newPassword !== confirmPassword) {
-    res.status(400).json({
-      success: false,
-      error: "New password and confirmation do not match."
-    });
-    return;
-  }
-
-  if (currentPassword === newPassword) {
-    res.status(400).json({
-      success: false,
-      error: "New password must be different from your current password."
-    });
-    return;
-  }
+  const { currentPassword, newPassword } = parseResult.data;
 
   try {
     const admin = await prisma.adminUser.findUnique({

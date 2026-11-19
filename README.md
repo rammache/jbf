@@ -22,8 +22,10 @@ A high-performance modern e-commerce web application for **Jabour Phone**, built
 │   │   ├── seed.ts              # Safe, non-destructive seed (no demo data)
 │   │   └── demo-seed.ts         # Guarded local demo catalog (refuses to run in production)
 │   ├── src/
-│   │   ├── controllers/         # Express controllers (products, categories, orders, newsletter)
+│   │   ├── controllers/         # Express controllers (auth, products, categories, orders, newsletter)
+│   │   ├── middleware/          # requireAdmin and validateBody (Zod) middleware
 │   │   ├── routes/              # Express API route declarations
+│   │   ├── schemas/             # Zod validation schemas and inferred types
 │   │   ├── prisma.ts            # Prisma client singleton
 │   │   └── server.ts            # Main Express app & CORS configuration
 │   ├── docker-compose.yml       # Ready-to-run PostgreSQL 16 container
@@ -146,3 +148,5 @@ The admin sign-in screen is available at `http://localhost:5173/admin/login`. Cr
 | `POST` | `/api/admin/change-password` | Update administrator password (protected by `requireAdmin`) |
 
 All routes under `/api/admin` are protected by the `requireAdmin` middleware: a valid admin session cookie is required, the admin is reloaded from the database on every request, and `401` / `403` JSON errors are returned for unauthenticated or non-admin users.
+
+Auth endpoints (`/api/auth/login`, `/api/admin/change-password`) validate request payloads using Zod schemas (`loginSchema`, `changePasswordSchema`) through the `validateBody` middleware, returning `400 Bad Request` with structured error details on validation failure.

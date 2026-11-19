@@ -4,12 +4,14 @@ import { getProducts, getProductByHandle, getBrands } from "../controllers/produ
 import { getCategories } from "../controllers/categoryController.js";
 import { createOrder, getOrder } from "../controllers/orderController.js";
 import { subscribeNewsletter } from "../controllers/newsletterController.js";
+import { validateBody } from "../middleware/validate.js";
+import { loginSchema } from "../schemas/auth.js";
 import adminRoutes from "./admin.js";
 
 const router = Router();
 
 // Admin auth
-router.post("/auth/login", login);
+router.post("/auth/login", validateBody(loginSchema), login);
 router.get("/auth/me", me);
 router.post("/auth/logout", logout);
 
