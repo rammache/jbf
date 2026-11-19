@@ -88,7 +88,7 @@ The WORK files must carry enough context for any agent to continue without guess
 - [x] Fix backend type error: type the `p` parameter in `productController.ts:101`. **P0**
 - [x] Make `npm run build` (frontend) and `npx tsc --noEmit` (backend) pass. **P0**
 - [x] Add root `.gitignore`: `node_modules`, `dist`, `.env`, `uploads`, logs, `.DS_Store`. **P0**
-- [ ] Initialize git and make a clean first commit. **P0**
+- [x] Initialize git and make a clean first commit. **P0**
 - [ ] Add `backend/.env.example` and `frontend/.env.example`; remove real secrets from tracked files. **P0**
 - [ ] Rotate the PostgreSQL password and update `DATABASE_URL`. **P0**
 - [ ] Delete `rea_exported_scripts/` from the project (archive it outside the repo if needed). **P0**

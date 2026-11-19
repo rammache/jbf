@@ -16,7 +16,7 @@ Remaining work is in `WORK/tasks.md`.
 - **Work style:** one task per session, task by task. No coding until the user explicitly says to start a specific task.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
 - **Current phase:** Phase 0 - Stabilize And Clean.
-- **Current task:** Task #5 - Initialize git and make a clean first commit.
+- **Current task:** Task #6 - Add `backend/.env.example` and `frontend/.env.example`; remove real secrets from tracked files.
 - **A session can use the same AI agent or a different one.** These files must carry all context so any agent can continue.
 - **Pending business decisions:** currency, payment method, delivery fee, hosting, image storage.
 
@@ -123,6 +123,7 @@ Audit results:
 - [x] 2026-11-19 - Fixed backend type error: typed the `p` parameter in the `getBrands` map callback in `backend/src/controllers/productController.ts:101`. Files changed: `backend/src/controllers/productController.ts`.
 - [x] 2026-11-19 - Verified both builds pass together: frontend `npm run build` (tsc && vite build) and backend `npx tsc --noEmit`. No code changes were needed. Files changed: `WORK/tasks.md`, `WORK/progression.md` only.
 - [x] 2026-11-19 - Added root `.gitignore` covering `node_modules/`, `dist/`, `build/`, `.env` files (with `!.env.example` exception), `uploads/`, logs, `.DS_Store`/`Thumbs.db`, and editor folders. Files changed: `.gitignore`, `WORK/tasks.md`, `WORK/progression.md`.
+- [x] 2026-11-19 - Initialized git repository on `main` and made the clean first commit `fafed2d` (46 files, 8444 insertions). Verified `node_modules/`, `frontend/dist/`, and `backend/.env` are ignored and not tracked. Files changed: `.git/` (new repo), `WORK/tasks.md`, `WORK/progression.md`.
 
 ---
 
@@ -197,3 +198,12 @@ Add one entry here at the end of every session. New agents must read the latest 
 - **Checks run:** `Test-Path .gitignore` -> exists; confirmed no other `.gitignore` files exist in the project (depth 1).
 - **Decisions:** Added `!.env.example` exception now so `backend/.env.example` and `frontend/.env.example` (Task #6) can be committed while real `.env` files stay ignored. Also ignored `build/`, `Thumbs.db`, `.vscode/`, `.idea/` as standard practice.
 - **Next task:** Task #5 - initialize git and make a clean first commit.
+
+### 2026-11-19 - Task #5: Initialize Git And First Commit (DONE)
+
+- **Done:** Ran `git init -b main`, staged the project, verified no secrets or dependencies were included, and created root commit `fafed2d` ("Initial commit: Electro storefront baseline (React + Vite + Express + Prisma)") with 46 files / 8444 insertions.
+- **Verified ignored:** `backend/.env` (matched by `.gitignore:9`), `node_modules/`, and `frontend/dist/` remain untracked; `git status` is clean after the build.
+- **Files changed:** `.git/` (new repository), `WORK/tasks.md`, `WORK/progression.md`. No application code touched.
+- **Checks run:** frontend `npm run build` -> passed (built in 1.25s); backend `npx tsc --noEmit` -> passed (no output); `git log --oneline -1` -> `fafed2d`; `git status --short` -> clean.
+- **Decisions:** Commit includes `rea_exported_scripts/` and `products_data.json` for now because their removal is scheduled as separate tasks (#8 and #9); the tracked `backend/.env` secrets will be handled in Task #6. Line-ending warnings (LF -> CRLF) are expected on Windows and harmless.
+- **Next task:** Task #6 - add `backend/.env.example` and `frontend/.env.example`; remove real secrets from tracked files.
