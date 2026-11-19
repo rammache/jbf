@@ -1,6 +1,6 @@
-# Electro E-Commerce Platform
+# Jabour Phone E-Commerce Platform
 
-A high-performance modern e-commerce web application reverse-engineered from Colorlib's **Electro 3.0.0** theme using **REA (Reverse Engineer Anything)**, rebuilt as a full-stack production application.
+A high-performance modern e-commerce web application for **Jabour Phone**, built on Colorlib's **Electro 3.0.0** theme and rebuilt as a full-stack production application.
 
 ---
 
@@ -45,7 +45,7 @@ A high-performance modern e-commerce web application reverse-engineered from Col
 │   │   │   ├── Home.tsx              # Hero banner, department tabs, highest rated, bench story
 │   │   │   ├── Shop.tsx              # Faceted catalog (categories, brand, price slider & sorting)
 │   │   │   ├── ProductDetail.tsx     # Gallery thumbnails, finish picker, bench specs & related items
-│   │   │   └── About.tsx             # Electro bench test philosophy & transparency statement
+│   │   │   └── About.tsx             # Bench test philosophy & transparency statement
 │   │   ├── context/
 │   │   │   └── CartContext.tsx       # LocalStorage shopping cart state management
 │   │   ├── types/

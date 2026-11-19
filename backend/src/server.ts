@@ -17,12 +17,12 @@ app.use(express.json());
 
 // API health check
 app.get("/health", (_req, res) => {
-  res.json({ status: "healthy", service: "Electro API", timestamp: new Date().toISOString() });
+  res.json({ status: "healthy", service: "Jabour Phone API", timestamp: new Date().toISOString() });
 });
 
 // API Routes
 app.use("/api", apiRoutes);
 
 app.listen(PORT, () => {
-  console.log(`⚡ Electro Express Server running on http://localhost:${PORT}`);
+  console.log(`Jabour Phone Express Server running on http://localhost:${PORT}`);
 });

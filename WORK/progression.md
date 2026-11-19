@@ -16,7 +16,7 @@ Remaining work is in `WORK/tasks.md`.
 - **Work style:** one task per session. Finish the task, update the WORK files, run checks, commit, then remind the user to open a new session for the next task.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
 - **Current phase:** Phase 1 - Rebrand To Jabour Phone.
-- **Current task:** Task #14 - Replace "Electro" in README, health endpoint name, newsletter success message (Phase 1).
+- **Current task:** Task #15 - Rename `electro-cart` localStorage key and `electro` Tailwind palette key (Phase 1).
 - **A session can use the same AI agent or a different one.** These files must carry all context so any agent can continue.
 - **Pending business decisions:** currency, payment method, delivery fee, hosting, image storage.
 
@@ -139,6 +139,7 @@ Audit results:
 ## Phase 7 - Phase 1 Rebrand To Jabour Phone (IN PROGRESS)
 
 - [x] 2026-11-19 - Task #13: Replaced the remaining "Electro" branding in the storefront shell with "Jabour Phone": Navbar logo, Footer logo/copyright/newsletter success text, About badge and image alt text, and the `index.html` page title plus a new inline smartphone favicon. Also replaced the two leftover "Electro" mentions on Home (workshop image alt text and "why Electro exists" line); announcements had no "Electro" mentions, so they were left unchanged. Files changed: `frontend/index.html`, `frontend/src/components/Navbar.tsx`, `frontend/src/components/Footer.tsx`, `frontend/src/pages/About.tsx`, `frontend/src/pages/Home.tsx`, `WORK/tasks.md`, `WORK/progression.md`.
+- [x] 2026-11-19 - Task #14: Rebranded the README, health endpoint, and newsletter response. README title is now "Jabour Phone E-Commerce Platform" and its intro describes the app as being for Jabour Phone; the About architecture comment no longer says "Electro bench test philosophy". `GET /health` now returns `service: "Jabour Phone API"`, the server startup log says "Jabour Phone Express Server", and the newsletter success message says "Thank you for subscribing to Jabour Phone updates!". Files changed: `README.md`, `backend/src/server.ts`, `backend/src/controllers/newsletterController.ts`, `WORK/tasks.md`, `WORK/progression.md`.
 
 ---
 
@@ -161,7 +162,7 @@ Audit results:
 | Stock/inventory | Not started |
 | Order status management | Not started |
 | Payments / delivery | Not started |
-| Rebranding to Jabour Phone | Not started |
+| Rebranding to Jabour Phone | In progress |
 | Security hardening + validation | Not started |
 | Tests + deployment | Not started |
 
@@ -296,3 +297,11 @@ Add one entry here at the end of every session. New agents must read the latest 
 - **Checks run:** frontend `npm run build` -> passed (`tsc && vite build`, built in 1.30s); backend `npx tsc --noEmit` -> passed (no output). Verified with grep that no "Electro" remains in `frontend/src`, `frontend/index.html`, or `frontend/public`.
 - **Decisions:** Did not touch fake business promises ("bench-tested", "Manchester", "two year warranty", shipping) or fake brands/products here; those stay in their own Phase 1 tasks. Also did not rename the `electro-cart` storage key, Tailwind `electro` palette, package names, README, backend health endpoint, or backend newsletter message; those are separate tasks (#14-#16, #21). Left the announcement bar text unchanged because it never contained "Electro".
 - **Next task:** Task #14 - replace "Electro" in README, health endpoint name, and newsletter success message.
+
+### 2026-11-19 - Task #14: Rebrand README, Health Endpoint, Newsletter Message (DONE)
+
+- **Done:** README title is now "Jabour Phone E-Commerce Platform"; the intro describes the app as being for Jabour Phone and no longer says it was reverse-engineered with REA; the About architecture comment now reads "Bench test philosophy & transparency statement". The health endpoint returns `service: "Jabour Phone API"`, the startup log says "Jabour Phone Express Server running on ...", and the newsletter API success message says "Thank you for subscribing to Jabour Phone updates!".
+- **Files changed:** `README.md`, `backend/src/server.ts`, `backend/src/controllers/newsletterController.ts`, `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** backend `npx tsc --noEmit` -> passed (no output); frontend `npm run build` -> passed (`tsc && vite build`, built in 1.22s). Grep confirmed no "Electro" branding remains in `backend/src` or the README outside the intentional references listed below.
+- **Decisions:** Kept "Colorlib's **Electro 3.0.0** theme" in the README intro because it is factual template attribution, and the separate license/attribution verification task still applies. Kept the functional database identifiers `electro_db` (README example, `backend/.env`, `backend/.env.example`, `backend/docker-compose.yml`) and `electro_postgres` (container name) unchanged: they are infrastructure identifiers, not storefront branding, and renaming them was not part of this task. The remaining `electro-cart` key, `electro` Tailwind palette, and package names are handled by Tasks #15 and #16.
+- **Next task:** Task #15 - rename the `electro-cart` localStorage key and the `electro` Tailwind palette key.

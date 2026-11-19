@@ -17,7 +17,7 @@ export const subscribeNewsletter = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      message: "Thank you for subscribing to Electro updates!",
+      message: "Thank you for subscribing to Jabour Phone updates!",
       data: subscriber
     });
   } catch (error: any) {
