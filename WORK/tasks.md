@@ -136,7 +136,7 @@ The WORK files must carry enough context for any agent to continue without guess
 - [x] Add 401/403 handling in the frontend API layer. **P0**
 - [x] Add "change password" for the admin. **P1**
 - [x] Add zod validation for auth payloads. **P1**
-- [ ] Add rate limiting on login. **P1**
+- [x] Add rate limiting on login. **P1**
 
 ---
 

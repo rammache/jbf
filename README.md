@@ -23,7 +23,7 @@ A high-performance modern e-commerce web application for **Jabour Phone**, built
 │   │   └── demo-seed.ts         # Guarded local demo catalog (refuses to run in production)
 │   ├── src/
 │   │   ├── controllers/         # Express controllers (auth, products, categories, orders, newsletter)
-│   │   ├── middleware/          # requireAdmin and validateBody (Zod) middleware
+│   │   ├── middleware/          # requireAdmin, validateBody (Zod), and loginRateLimiter middleware
 │   │   ├── routes/              # Express API route declarations
 │   │   ├── schemas/             # Zod validation schemas and inferred types
 │   │   ├── prisma.ts            # Prisma client singleton
@@ -150,3 +150,5 @@ The admin sign-in screen is available at `http://localhost:5173/admin/login`. Cr
 All routes under `/api/admin` are protected by the `requireAdmin` middleware: a valid admin session cookie is required, the admin is reloaded from the database on every request, and `401` / `403` JSON errors are returned for unauthenticated or non-admin users.
 
 Auth endpoints (`/api/auth/login`, `/api/admin/change-password`) validate request payloads using Zod schemas (`loginSchema`, `changePasswordSchema`) through the `validateBody` middleware, returning `400 Bad Request` with structured error details on validation failure.
+
+Login attempts at `/api/auth/login` are protected by rate limiting (`loginRateLimiter` using `express-rate-limit`). By default, failed attempts are capped at 5 per 15-minute window per IP, returning `429 Too Many Requests` with standard `RateLimit-*` and `Retry-After` headers and JSON error details. Successful logins are skipped by default so legitimate admin operations do not exhaust quota. Window duration and max attempts can be customized with `LOGIN_RATE_LIMIT_WINDOW_MS` and `LOGIN_RATE_LIMIT_MAX`.
