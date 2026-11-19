@@ -19,20 +19,25 @@ Legend: **P0** = must have before launch, **P1** = should have, **P2** = later /
 
 ## Session Workflow (IMPORTANT - READ FIRST)
 
-This project is worked on across many sessions. A session may use the same AI agent or a different one.
+This project is worked on continuously, task by task. A session may use the same AI agent or a different one.
 The WORK files must carry enough context for any agent to continue without guessing.
 
-- Do **ONE task per session**, then stop. Do not start the next task in the same session.
-- At the start of a session: read `WORK/progression.md` and this file, then repeat the current task back to the user.
-- Before coding: confirm the exact task with the user and do not implement anything else.
+- The user has granted **standing permission** to proceed through tasks without asking after each one. Finish a task, record it, then start the next unchecked task automatically.
+- At the start of a session: read `WORK/progression.md` and this file, then state the current task before coding.
+- No confirmation is needed between tasks.
+- After each finished task, treat the next one as a fresh session: re-read the current task and the latest WORK notes, then implement only that task.
 - When a task is finished:
   1. Mark it `[x]` in this file.
   2. Move it to `WORK/progression.md` with the date and files changed.
   3. Run the relevant checks (build/typecheck/tests) and record the result.
   4. Add a session note at the bottom of `progression.md`: what was done, what was tested, what is next.
-- Then tell the user exactly:
-  **"Task finished. Please start a new session for the next task so we keep one task per session. You can use the same AI agent or a different one."**
-- Never continue to another task after finishing one, even if the next task looks small.
+  5. Continue immediately with the next unchecked task in the same run.
+- The agent cannot literally open a new chat thread. "New session" here means resetting context per task from the WORK files before starting it.
+- Stop only when:
+  - a task needs Jabour's business decision, real business data, or credentials that are not available (currency, delivery fee, real catalog, hosting, accounts);
+  - a check is failing and cannot be fixed within the task;
+  - the user asks to stop or redirect.
+- Never skip a task silently and never invent business data. If a task is blocked, note why in `progression.md` and tell the user exactly what is needed.
 
 ---
 
@@ -89,11 +94,11 @@ The WORK files must carry enough context for any agent to continue without guess
 - [x] Make `npm run build` (frontend) and `npx tsc --noEmit` (backend) pass. **P0**
 - [x] Add root `.gitignore`: `node_modules`, `dist`, `.env`, `uploads`, logs, `.DS_Store`. **P0**
 - [x] Initialize git and make a clean first commit. **P0**
-- [ ] Add `backend/.env.example` and `frontend/.env.example`; remove real secrets from tracked files. **P0**
-- [ ] Rotate the PostgreSQL password and update `DATABASE_URL`. **P0**
-- [ ] Delete `rea_exported_scripts/` from the project (archive it outside the repo if needed). **P0**
-- [ ] Delete `products_data.json`. **P0**
-- [ ] Remove destructive `deleteMany` from seed; move demo data to a guarded demo seed. **P0**
+- [x] Add `backend/.env.example` and `frontend/.env.example`; remove real secrets from tracked files. **P0**
+- [x] Rotate the PostgreSQL password and update `DATABASE_URL`. **P0**
+- [x] Delete `rea_exported_scripts/` from the project (archive it outside the repo if needed). **P0**
+- [x] Delete `products_data.json`. **P0**
+- [x] Remove destructive `deleteMany` from seed; move demo data to a guarded demo seed. **P0**
 - [ ] Decide whether `Category.image` is used; use it or remove it. **P1**
 - [ ] Add a 404 route/page instead of a blank screen. **P1**
 

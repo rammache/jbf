@@ -19,7 +19,8 @@ A high-performance modern e-commerce web application reverse-engineered from Col
 ├── backend/
 │   ├── prisma/
 │   │   ├── schema.prisma        # Prisma data models (Product, Category, Order, OrderItem, Newsletter)
-│   │   └── seed.ts              # Database seeder pre-loaded with the 15 reverse-engineered products
+│   │   ├── seed.ts              # Safe, non-destructive seed (no demo data)
+│   │   └── demo-seed.ts         # Guarded local demo catalog (refuses to run in production)
 │   ├── src/
 │   │   ├── controllers/         # Express controllers (products, categories, orders, newsletter)
 │   │   ├── routes/              # Express API route declarations
@@ -54,8 +55,6 @@ A high-performance modern e-commerce web application reverse-engineered from Col
 │   ├── package.json
 │   ├── vite.config.ts
 │   └── tailwind.config.js
-│
-└── rea_exported_scripts/             # Verified scripts & manifest extracted via REA
 ```
 
 ---
@@ -85,8 +84,11 @@ npm install
 # Push Prisma schema to your PostgreSQL database
 npm run prisma:push
 
-# Seed the database with the 15 reverse-engineered products & categories
+# Run the safe seed (non-destructive; currently no base data)
 npm run prisma:seed
+
+# Optional, local development only: load the 15 demo products & 4 demo categories
+npm run prisma:seed:demo
 
 # Start the Express API server
 npm run dev

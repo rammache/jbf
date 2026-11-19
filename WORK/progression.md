@@ -13,27 +13,29 @@ Remaining work is in `WORK/tasks.md`.
 - **Main goal:** Jabour must be able to log in and manage categories, products, photos, stock, orders, and site content without a developer.
 - **Stack:** React + Vite + TypeScript + Tailwind (frontend), Express + TypeScript + Prisma + PostgreSQL (backend).
 - **Current state:** public demo storefront exists. Admin login, admin panel, CRUD, stock, and order management are not built yet.
-- **Work style:** one task per session, task by task. No coding until the user explicitly says to start a specific task.
+- **Work style:** continuous, task by task, using the WORK files. The user granted standing permission to start the next task automatically after each finished task; stop only for business decisions, missing real data/credentials, or blockers.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
 - **Current phase:** Phase 0 - Stabilize And Clean.
-- **Current task:** Task #6 - Add `backend/.env.example` and `frontend/.env.example`; remove real secrets from tracked files.
+- **Current task:** Task #11 - Decide whether `Category.image` is used; use it or remove it.
 - **A session can use the same AI agent or a different one.** These files must carry all context so any agent can continue.
 - **Pending business decisions:** currency, payment method, delivery fee, hosting, image storage.
 
 ## Session Rules
 
-- One task per session, then stop. Do not start the next task in the same session.
-- A new session may use the same AI agent or a different AI agent. Continuity comes from these files, not from a specific agent.
-- Start of session: read this file and `WORK/tasks.md`, then repeat the current task back to the user before coding.
+- Work continuously, task by task. After finishing a task and recording it, start the next unchecked task automatically.
+- The user has given standing permission to proceed without asking after each task. Continuity comes from these files, not from a specific agent.
+- Start of session: read this file and `WORK/tasks.md`, then state the current task before coding.
 - Only implement the current task. Do not make unrelated changes.
+- After each task, treat the next task as a fresh session: re-read the current task and the latest notes before coding.
+- "New session" means resetting context from the WORK files. The agent cannot literally open a new chat thread.
 - When a task is finished:
   1. Mark it `[x]` in `WORK/tasks.md`.
   2. Add it to this file with the date and files changed.
   3. Run the relevant checks (build, typecheck, tests) and record the result.
   4. Write a session note in the Session Log below: done, tested, decisions, next task.
-  5. Tell the user: "Task finished. Please start a new session for the next task so we keep one task per session."
+  5. Continue with the next unchecked task.
+- Stop only when a task needs Jabour's business decision, real data, or credentials; when a check cannot be fixed; or when the user asks to stop. Never invent business data.
 - If a task is not finished, still write a progress note and say exactly what remains.
-- Do not implement anything unless the user explicitly asks for a specific task.
 
 ---
 
@@ -124,6 +126,11 @@ Audit results:
 - [x] 2026-11-19 - Verified both builds pass together: frontend `npm run build` (tsc && vite build) and backend `npx tsc --noEmit`. No code changes were needed. Files changed: `WORK/tasks.md`, `WORK/progression.md` only.
 - [x] 2026-11-19 - Added root `.gitignore` covering `node_modules/`, `dist/`, `build/`, `.env` files (with `!.env.example` exception), `uploads/`, logs, `.DS_Store`/`Thumbs.db`, and editor folders. Files changed: `.gitignore`, `WORK/tasks.md`, `WORK/progression.md`.
 - [x] 2026-11-19 - Initialized git repository on `main` and made the clean first commit `fafed2d` (46 files, 8444 insertions). Verified `node_modules/`, `frontend/dist/`, and `backend/.env` are ignored and not tracked. Files changed: `.git/` (new repo), `WORK/tasks.md`, `WORK/progression.md`.
+- [x] 2026-11-19 - Added `backend/.env.example` (PORT, DATABASE_URL with placeholder password, FRONTEND_URL) and `frontend/.env.example` (notes that no frontend env vars are needed yet; API uses the Vite `/api` proxy). Verified no `.env` file is tracked and both examples are unignored by the `!.env.example` rule. Files changed: `backend/.env.example`, `frontend/.env.example`, `WORK/tasks.md`, `WORK/progression.md`.
+- [x] 2026-11-19 - Task #7: Rotated the PostgreSQL password. Generated a 48-character hex secret, stored it only in the git-ignored `backend/.env` as `POSTGRES_PASSWORD`, updated `DATABASE_URL` to use it, switched `backend/docker-compose.yml` to `${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in backend/.env}`, and documented the variable in `backend/.env.example`. No secret is tracked by git. Files changed: `backend/.env` (ignored), `backend/docker-compose.yml`, `backend/.env.example`, `WORK/tasks.md`, `WORK/progression.md`.
+- [x] 2026-11-19 - Task #8: Deleted `rea_exported_scripts/` from the project. Archived the folder first to `C:\Users\mawar\AppData\Local\Temp\opencode\jabour-archive\rea_exported_scripts_2026-11-19` (outside the repo), then removed it from the working tree; git records 5 file deletions (4 isolated scripts + `manifest.json`). Also removed the stale `rea_exported_scripts/` entry from the README architecture tree. Files changed: `rea_exported_scripts/` (deleted), `README.md`, `WORK/tasks.md`, `WORK/progression.md`.
+- [x] 2026-11-19 - Task #9: Deleted `products_data.json` (unused legacy duplicate of the seed data). Archived it to `C:\Users\mawar\AppData\Local\Temp\opencode\jabour-archive\products_data.json_2026-11-19` (outside the repo). No code, README, or config references it anymore. Files changed: `products_data.json` (deleted), `WORK/tasks.md`, `WORK/progression.md`.
+- [x] 2026-11-19 - Task #10: Made seeding safe. Replaced destructive `deleteMany` seed with a non-destructive no-op safe seed (`prisma/seed.ts`), moved the 15 demo products and 4 demo categories into a new guarded seed (`prisma/demo-seed.ts`) that refuses to run when `NODE_ENV=production` and uses `upsert` keyed by `handle`/`slug` so it never deletes products, orders, or order items. Added `prisma:seed:demo` npm script and updated the README setup steps and architecture tree. Files changed: `backend/prisma/seed.ts`, `backend/prisma/demo-seed.ts` (new), `backend/package.json`, `README.md`, `WORK/tasks.md`, `WORK/progression.md`.
 
 ---
 
@@ -207,3 +214,45 @@ Add one entry here at the end of every session. New agents must read the latest 
 - **Checks run:** frontend `npm run build` -> passed (built in 1.25s); backend `npx tsc --noEmit` -> passed (no output); `git log --oneline -1` -> `fafed2d`; `git status --short` -> clean.
 - **Decisions:** Commit includes `rea_exported_scripts/` and `products_data.json` for now because their removal is scheduled as separate tasks (#8 and #9); the tracked `backend/.env` secrets will be handled in Task #6. Line-ending warnings (LF -> CRLF) are expected on Windows and harmless.
 - **Next task:** Task #6 - add `backend/.env.example` and `frontend/.env.example`; remove real secrets from tracked files.
+
+### 2026-11-19 - Task #6: Add `.env.example` Files (DONE)
+
+- **Done:** Created `backend/.env.example` documenting `PORT`, `DATABASE_URL` (placeholder password, same schema/db as docker-compose), and `FRONTEND_URL`. Created `frontend/.env.example` explaining that no frontend env vars are required yet because API calls use relative `/api` URLs through the Vite dev proxy (`vite.config.ts`). Confirmed with `git ls-files` that no `.env` file has ever been tracked; `backend/.env` stays ignored and both examples are re-included by `!.env.example`.
+- **Files changed:** `backend/.env.example`, `frontend/.env.example`, `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** frontend `npm run build` -> passed (built in 1.27s); backend `npx tsc --noEmit` -> passed (no output); `git check-ignore -v` -> `backend/.env` ignored, both `.env.example` files unignored.
+- **Decisions:** Did not add a `VITE_API_URL` variable because no frontend code reads env vars yet; adding an unused variable would be misleading. Left the local dev default `POSTGRES_PASSWORD: password` in `docker-compose.yml` untouched because rotating it is the next task.
+- **Next task:** Task #7 - rotate the PostgreSQL password and update `DATABASE_URL`.
+
+### 2026-11-19 - Task #7: Rotate PostgreSQL Password (DONE)
+
+- **Done:** Generated a strong 48-character hex password; set it in `backend/.env` as `POSTGRES_PASSWORD` and updated `DATABASE_URL` to match; changed `backend/docker-compose.yml` to read `POSTGRES_PASSWORD` from the environment (compose auto-loads `backend/.env`) and fail loudly if it is missing; documented both variables in `backend/.env.example`.
+- **Files changed:** `backend/.env` (git-ignored), `backend/docker-compose.yml`, `backend/.env.example`, `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** `docker compose config -q` -> valid; verified the `.env` password length (48) and that `DATABASE_URL` contains the same password without printing it; `git check-ignore -v backend/.env` -> ignored and never tracked; backend `npx tsc --noEmit` -> passed; frontend `npm run build` -> passed (built in 1.26s).
+- **Environment note:** Docker is available, but port 5432 is currently held by an unrelated container `samsung_store_postgres`. This project's `electro_postgres` container and Postgres volume do not exist on this machine, and the local PostgreSQL 18 Windows service is stopped, so there was no live `electro_db` to `ALTER USER` on. The new password takes effect on the first `docker compose up -d`; the unrelated container must be stopped or the host port changed first.
+- **Decisions:** Kept the secret out of tracked files via `.env` interpolation. Did not stop or modify the unrelated `samsung_store_postgres` container.
+- **Next task:** Task #8 - delete `rea_exported_scripts/` from the project (archive it outside the repo if needed).
+
+### 2026-11-19 - Task #8: Delete `rea_exported_scripts/` (DONE)
+
+- **Done:** Archived the whole `rea_exported_scripts/` folder to `C:\Users\mawar\AppData\Local\Temp\opencode\jabour-archive\rea_exported_scripts_2026-11-19` (outside the repo), then removed it from the project. Git shows the 4 isolated REA scripts and `manifest.json` as deletions. Removed the stale `rea_exported_scripts/` line from the README architecture tree.
+- **Files changed:** `rea_exported_scripts/` (deleted, archive kept outside the repo), `README.md`, `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** frontend `npm run build` -> passed (built in 1.29s); backend `npx tsc --noEmit` -> passed (no output); `git status --short` -> 5 tracked deletions under `rea_exported_scripts/`; no source file references the folder.
+- **Decisions:** Moved instead of copied so the repo deletion is the only copy inside the project; the archive lives outside the repo. The deletions are not committed (repo is committed only on explicit request), so the next commit will include them.
+- **Next task:** Task #9 - delete `products_data.json`.
+
+### 2026-11-19 - Task #9: Delete `products_data.json` (DONE)
+
+- **Done:** Archived `products_data.json` to `C:\Users\mawar\AppData\Local\Temp\opencode\jabour-archive\products_data.json_2026-11-19` (outside the repo) and removed it from the project. Confirmed nothing in `backend/`, `frontend/`, or `README.md` references it.
+- **Files changed:** `products_data.json` (deleted), `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** frontend `npm run build` -> passed (built in 1.25s); backend `npx tsc --noEmit` -> passed (no output); `grep products_data.json` -> only historical mentions in `WORK/` remain.
+- **Rules change (user request):** The session workflow now allows continuous progress. The agent finishes a task, updates the WORK files, then starts the next unchecked task automatically without asking. "New session" means resetting context from the WORK files per task. Stop only for business decisions, missing real data/credentials, impossible checks, or a user stop. Updated `WORK/tasks.md` (Session Workflow) and `WORK/progression.md` (Project Context work style + Session Rules).
+- **Decisions:** No commit made; deletions stay uncommitted until the user asks.
+- **Next task:** Task #10 - remove destructive `deleteMany` from the seed and move demo data to a guarded demo seed.
+
+### 2026-11-19 - Task #10: Safe Seed + Guarded Demo Seed (DONE)
+
+- **Done:** Removed every `deleteMany` from the seed path. `backend/prisma/seed.ts` is now a safe, non-destructive seed (currently seeds nothing because Jabour's real base data does not exist yet). The demo catalog (15 products, 4 categories) moved to `backend/prisma/demo-seed.ts`, which refuses to run when `NODE_ENV=production` and uses `upsert` by `handle`/`slug` instead of delete-and-recreate. Added `npm run prisma:seed:demo`. Updated README setup steps and architecture tree.
+- **Files changed:** `backend/prisma/seed.ts` (rewritten), `backend/prisma/demo-seed.ts` (new), `backend/package.json`, `README.md`, `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** `npm run prisma:seed` -> printed guidance, exit 0; `NODE_ENV=production npx tsx prisma/demo-seed.ts` -> refused with exit 1 before touching the DB; explicit `tsc --noEmit` on both seed scripts -> passed; backend `npx tsc --noEmit` -> passed; `npx prisma validate` -> schema valid; frontend `npm run build` -> passed (built in 1.24s). `npx prisma generate` was run first because the local client had never been generated (v6.19.3).
+- **Decisions:** The demo guard is a hard `NODE_ENV=production` refusal placed before the Prisma client is created. Upserts update demo records but never remove or deactivate anything, so re-running the demo seed cannot erase orders/customers. No live DB test was possible because this project's `electro_postgres` container does not exist and host port 5432 is held by an unrelated `samsung_store_postgres` container (recorded in Task #7).
+- **Next task:** Task #11 - decide whether `Category.image` is used; use it or remove it.
