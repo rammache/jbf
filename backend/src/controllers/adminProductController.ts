@@ -12,6 +12,7 @@ import {
 } from "../utils/slug.js";
 import { toNumber } from "../utils/decimal.js";
 import { createPaginationEnvelope } from "../utils/pagination.js";
+import { persistUploadedFile } from "../middleware/upload.js";
 
 /**
  * GET /api/admin/products
@@ -645,7 +646,7 @@ export async function adminUploadImages(req: Request, res: Response): Promise<vo
       return;
     }
 
-    const urls = uploadedFiles.map((file) => `/uploads/${file.filename}`);
+    const urls = await Promise.all(uploadedFiles.map(persistUploadedFile));
 
     res.json({
       success: true,

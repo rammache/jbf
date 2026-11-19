@@ -55,6 +55,14 @@ export async function getHealthCheck(_req: Request, res: Response): Promise<void
 }
 
 /**
+ * Lightweight Ping Endpoint for uptime monitors (UptimeRobot, BetterStack, Pingdom)
+ * and load balancer health checks. Returns 200 OK without database overhead.
+ */
+export function getPing(_req: Request, res: Response): void {
+  res.status(200).json({ status: "ok", service: "Jabour Phone API", timestamp: new Date().toISOString() });
+}
+
+/**
  * Configures graceful shutdown listeners for SIGTERM and SIGINT
  */
 export function setupGracefulShutdown(server: Server): void {

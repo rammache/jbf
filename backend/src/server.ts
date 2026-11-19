@@ -8,20 +8,24 @@ import apiRoutes from "./routes/api.js";
 import { getJwtSecret } from "./utils/jwt.js";
 import { securityHeaders, getCorsOptions, requestLogger } from "./middleware/security.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
-import { getHealthCheck, setupGracefulShutdown } from "./controllers/healthController.js";
+import { getHealthCheck, getPing, setupGracefulShutdown } from "./controllers/healthController.js";
+import { getUploadsDir } from "./middleware/upload.js";
 
 dotenv.config();
 
 // Ensure JWT secret is valid
 getJwtSecret();
 
-const uploadsDir = path.resolve(__dirname, "../uploads");
+const uploadsDir = getUploadsDir();
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
 export const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Enable trust proxy for reverse proxies (Nginx, Caddy, Cloudflare, Railway, Render)
+app.set("trust proxy", 1);
 
 // Security & Header Policies
 app.use(securityHeaders());
@@ -38,14 +42,42 @@ app.use(cookieParser());
 // Serve uploaded assets statically
 app.use("/uploads", express.static(uploadsDir));
 
-// API Health Check (root and /api mounted)
+// API Health Check & Lightweight Ping (root and /api mounted)
 app.get("/health", getHealthCheck);
 app.get("/api/health", getHealthCheck);
+app.get("/health/ping", getPing);
+app.get("/api/health/ping", getPing);
 
 // API Routes
 app.use("/api", apiRoutes);
 
-// 404 Route Not Found
+// Single-domain unified deployment: serve frontend static build if enabled or present
+const frontendDist = process.env.FRONTEND_DIST_PATH
+  ? path.resolve(process.env.FRONTEND_DIST_PATH)
+  : path.resolve(__dirname, "../../frontend/dist");
+
+const shouldServeFrontend =
+  process.env.SERVE_FRONTEND === "true" ||
+  (process.env.NODE_ENV === "production" && fs.existsSync(frontendDist));
+
+if (shouldServeFrontend && fs.existsSync(frontendDist)) {
+  // Serve static assets from frontend build
+  app.use(express.static(frontendDist));
+
+  // SPA history fallback: serve index.html for browser routes that don't match API
+  app.get("*", (req, res, next) => {
+    if (
+      req.path.startsWith("/api") ||
+      req.path.startsWith("/health") ||
+      req.path.startsWith("/uploads")
+    ) {
+      return next();
+    }
+    res.sendFile(path.join(frontendDist, "index.html"));
+  });
+}
+
+// 404 Route Not Found for unhandled API and resource endpoints
 app.use(notFoundHandler);
 
 // Centralized Error Handling

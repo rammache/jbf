@@ -66,8 +66,13 @@ export async function apiFetch<T = unknown>(
     body = JSON.stringify(body);
   }
 
-  const response = await fetch(endpoint, {
-    credentials: "same-origin",
+  const baseUrl = (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_BASE_URL) || "";
+  const requestUrl = endpoint.startsWith("http://") || endpoint.startsWith("https://")
+    ? endpoint
+    : `${baseUrl}${endpoint}`;
+
+  const response = await fetch(requestUrl, {
+    credentials: baseUrl ? "include" : "same-origin",
     ...fetchOptions,
     headers,
     body

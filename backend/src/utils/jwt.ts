@@ -12,6 +12,16 @@ export function getJwtSecret(): string {
       "JWT_SECRET is not set. Add it to backend/.env (see backend/.env.example)."
     );
   }
+
+  const isProduction = process.env.NODE_ENV === "production";
+  if (isProduction) {
+    if (secret.includes("CHANGE_ME") || secret.length < 32) {
+      throw new Error(
+        "FATAL: Insecure JWT_SECRET detected in production. JWT_SECRET must be at least 32 characters long and not contain placeholder strings."
+      );
+    }
+  }
+
   return secret;
 }
 

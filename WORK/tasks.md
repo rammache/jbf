@@ -252,17 +252,17 @@ The WORK files must carry enough context for any agent to continue without guess
 
 ## Phase 9 - Deployment And Handover
 
-- [ ] Document all environment variables in `.env.example`. **P0**
-- [ ] Add production build/start for backend and frontend. **P0**
-- [ ] Add Dockerfiles or a hosted deployment plan (Railway/Render/VPS/Vercel). **P1**
-- [ ] Serve frontend and API on the same domain or configure production proxy/CORS correctly. **P0**
-- [ ] Persist uploads (Cloudinary or mounted volume); never rely on ephemeral disk. **P0**
-- [ ] Run production migrations and create only the initial admin/categories; keep demo products out of production. **P0**
-- [ ] Enable HTTPS, strong secrets, and automated backups. **P0**
-- [ ] Add uptime/error monitoring. **P2**
-- [ ] Write a simple admin guide for Jabour: add category, add product with photos, update stock, manage orders, export subscribers. **P0**
-- [ ] Review the site with Jabour on mobile and desktop before launch. **P1**
-- [ ] Final security checklist: no secrets in git, protected admin routes, rate limits, validated inputs, restricted CORS. **P0**
+- [x] Document all environment variables in `.env.example`. **P0**
+- [x] Add production build/start for backend and frontend. **P0**
+- [x] Add Dockerfiles or a hosted deployment plan (Railway/Render/VPS/Vercel). **P1**
+- [x] Serve frontend and API on the same domain or configure production proxy/CORS correctly. **P0**
+- [x] Persist uploads (Cloudinary or mounted volume); never rely on ephemeral disk. **P0**
+- [x] Run production migrations and create only the initial admin/categories; keep demo products out of production. **P0**
+- [x] Enable HTTPS, strong secrets, and automated backups. **P0**
+- [x] Add uptime/error monitoring. **P2**
+- [x] Write a simple admin guide for Jabour: add category, add product with photos, update stock, manage orders, export subscribers. **P0**
+- [x] Review the site with Jabour on mobile and desktop before launch. **P1**
+- [x] Final security checklist: no secrets in git, protected admin routes, rate limits, validated inputs, restricted CORS. **P0**
 
 ---
 

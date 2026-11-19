@@ -3,16 +3,25 @@ import path from "path";
 import fs from "fs";
 import crypto from "crypto";
 
-export const UPLOADS_DIR = path.resolve(__dirname, "../uploads");
+export function getUploadsDir(): string {
+  if (process.env.UPLOADS_DIR) {
+    return path.resolve(process.env.UPLOADS_DIR);
+  }
+  // Fallback to project uploads directory
+  const localDefault = path.resolve(process.cwd(), "uploads");
+  return localDefault;
+}
 
-// Ensure uploads directory exists
+export const UPLOADS_DIR = getUploadsDir();
+
+// Ensure persistent uploads directory exists
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    cb(null, UPLOADS_DIR);
+    cb(null, getUploadsDir());
   },
   filename: (_req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
@@ -42,3 +51,59 @@ export const uploadMiddleware = multer({
     }
   }
 });
+
+/**
+ * Persists an uploaded file to storage:
+ * 1. If Cloudinary credentials exist (CLOUDINARY_CLOUD_NAME + CLOUDINARY_API_KEY + CLOUDINARY_API_SECRET or CLOUDINARY_URL),
+ *    uploads to Cloudinary and returns the permanent HTTPS CDN URL.
+ * 2. Otherwise returns the persistent volume URL `/uploads/${file.filename}`.
+ */
+export async function persistUploadedFile(file: Express.Multer.File): Promise<string> {
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+  const apiKey = process.env.CLOUDINARY_API_KEY;
+  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+  if (cloudName && apiKey && apiSecret) {
+    try {
+      const timestamp = Math.floor(Date.now() / 1000);
+      const paramsToSign = `folder=jabour_phone&timestamp=${timestamp}${apiSecret}`;
+      const signature = crypto.createHash("sha1").update(paramsToSign).digest("hex");
+
+      const fileBuffer = fs.readFileSync(file.path);
+      const base64Data = `data:${file.mimetype};base64,${fileBuffer.toString("base64")}`;
+
+      const formData = new URLSearchParams();
+      formData.append("file", base64Data);
+      formData.append("api_key", apiKey);
+      formData.append("timestamp", String(timestamp));
+      formData.append("signature", signature);
+      formData.append("folder", "jabour_phone");
+
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: "POST",
+        body: formData
+      });
+
+      if (response.ok) {
+        const result = (await response.json()) as { secure_url?: string };
+        if (result.secure_url) {
+          // Clean up local temp file once safely uploaded to Cloudinary
+          try {
+            fs.unlinkSync(file.path);
+          } catch {
+            // Ignore unlink errors
+          }
+          return result.secure_url;
+        }
+      } else {
+        const errorText = await response.text();
+        console.warn(`[Cloudinary] Upload failed (${response.status}): ${errorText}. Falling back to persistent disk.`);
+      }
+    } catch (cloudErr) {
+      console.warn("[Cloudinary] Upload error, falling back to local persistent disk:", cloudErr);
+    }
+  }
+
+  // Persistent volume storage URL
+  return `/uploads/${file.filename}`;
+}

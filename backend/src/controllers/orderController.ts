@@ -208,7 +208,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
     });
 
     // Send order confirmation notifications asynchronously (non-blocking)
-    sendOrderNotifications(order).catch(() => {});
+    sendOrderNotifications(order).catch(() => { });
 
     res.status(201).json({
       success: true,
