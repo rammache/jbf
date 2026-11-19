@@ -20,6 +20,13 @@ export interface Category {
   slug: string;
 }
 
+export interface AdminUser {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
+
 export interface CartItem {
   key: string;
   productId: number;

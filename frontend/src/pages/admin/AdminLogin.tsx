@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Eye,
@@ -10,14 +10,25 @@ import {
   Mail,
   ShieldCheck
 } from "lucide-react";
+import { isAdminUser, useAuth } from "../../context/AuthContext";
 
 export const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [error, setError] = useState("");
+
+  const from = (location.state as { from?: unknown } | null)?.from;
+  const returnTo =
+    typeof from === "string" &&
+    from.startsWith("/admin") &&
+    !from.startsWith("/admin/login")
+      ? from
+      : "/admin";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,19 +43,21 @@ export const AdminLogin: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim(), password })
       });
-      const data = (await res.json().catch(() => null)) as {
+      const body = (await res.json().catch(() => null)) as {
         success?: boolean;
         error?: string;
+        data?: unknown;
       } | null;
 
-      if (res.ok && data?.success) {
+      if (res.ok && body?.success && isAdminUser(body.data)) {
         setPassword("");
-        navigate("/admin", { replace: true });
+        signIn(body.data);
+        navigate(returnTo, { replace: true });
         return;
       }
 
       setStatus("error");
-      setError(data?.error || "Unable to sign in. Please try again.");
+      setError(body?.error || "Unable to sign in. Please try again.");
     } catch {
       setStatus("error");
       setError("Could not reach the server. Check your connection and try again.");

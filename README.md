@@ -40,6 +40,7 @@ A high-performance modern e-commerce web application for **Jabour Phone**, built
 │   │   │   ├── CartDrawer.tsx        # Slide-over shopping basket with quantity steppers & totals
 │   │   │   ├── SearchModal.tsx       # Live predictive search modal matching the template index
 │   │   │   ├── CheckoutModal.tsx     # Order checkout form connected to PostgreSQL via Prisma
+│   │   │   ├── RouteGuards.tsx       # ProtectedRoute and GuestOnlyRoute guards
 │   │   │   └── Footer.tsx            # Brand footer with newsletter subscription API integration
 │   │   ├── layouts/
 │   │   │   ├── StorefrontLayout.tsx  # Storefront chrome: announcements, navbar, footer, cart/search/checkout
@@ -53,7 +54,8 @@ A high-performance modern e-commerce web application for **Jabour Phone**, built
 │   │   │   ├── ProductDetail.tsx     # Gallery thumbnails, finish picker, bench specs & related items
 │   │   │   └── About.tsx             # Bench test philosophy & transparency statement
 │   │   ├── context/
-│   │   │   └── CartContext.tsx       # LocalStorage shopping cart state management
+│   │   │   ├── CartContext.tsx       # LocalStorage shopping cart state management
+│   │   │   └── AuthContext.tsx       # Admin authentication session provider and useAuth hook
 │   │   ├── types/
 │   │   │   └── index.ts              # TypeScript interfaces
 │   │   ├── App.tsx                   # Routes and application layout

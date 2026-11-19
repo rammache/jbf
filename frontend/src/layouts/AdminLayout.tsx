@@ -13,6 +13,7 @@ import {
   Tags,
   X
 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 interface AdminNavItem {
   label: string;
@@ -30,6 +31,7 @@ const navigation: AdminNavItem[] = [
 
 export const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
+  const { admin, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState("");
@@ -43,6 +45,7 @@ export const AdminLayout: React.FC = () => {
     try {
       const res = await fetch("/api/auth/logout", { method: "POST" });
       if (!res.ok) throw new Error("Logout failed");
+      signOut();
       navigate("/admin/login", { replace: true });
     } catch {
       setLogoutError("Could not sign out. Please try again.");
@@ -138,10 +141,10 @@ export const AdminLayout: React.FC = () => {
             </div>
             <div className="min-w-0">
               <p className="truncate text-xs font-bold text-white">
-                Administrator
+                {admin?.name ?? "Administrator"}
               </p>
-              <p className="text-[10px] uppercase tracking-wider text-gray-500">
-                Admin access
+              <p className="truncate text-[10px] text-gray-500">
+                {admin?.email ?? "Admin access"}
               </p>
             </div>
           </div>
