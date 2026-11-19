@@ -107,7 +107,7 @@ The WORK files must carry enough context for any agent to continue without guess
 - [x] Replace "Electro" in Navbar, Footer, About, index.html title/favicon, announcements. **P0**
 - [x] Replace "Electro" in README, health endpoint name, newsletter success message. **P0**
 - [x] Rename `electro-cart` localStorage key and `electro` Tailwind palette key. **P1**
-- [ ] Rename package names from `electro-backend` / `electro-frontend` to `jabour-phone-*`. **P2**
+- [x] Rename package names from `electro-backend` / `electro-frontend` to `jabour-phone-*`. **P2**
 - [ ] Replace fake brands (Kestrel, Nord, Meridian, Torus) with Jabour Phone real brands. **P0**
 - [ ] Replace demo phone/laptop catalog with Jabour Phone's real categories and products. **P0**
 - [ ] Replace "bench tested / Manchester / two year warranty / 30 day returns" with Jabour's real promises. **P0**

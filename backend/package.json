@@ -1,7 +1,7 @@
 {
-  "name": "electro-backend",
+  "name": "jabour-phone-backend",
   "version": "1.0.0",
-  "description": "Electro E-Commerce REST API powered by Express, Prisma, and PostgreSQL",
+  "description": "Jabour Phone E-Commerce REST API powered by Express, Prisma, and PostgreSQL",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
