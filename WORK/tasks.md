@@ -130,7 +130,7 @@ The WORK files must carry enough context for any agent to continue without guess
 - [x] Implement auth: `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`. **P0**
 - [x] Use secure httpOnly cookies or short-lived JWT; add refresh or sensible expiry. **P0**
 - [x] Add `requireAdmin` middleware and protect every write route. **P0**
-- [ ] Add first-admin creation command/seed (Jabour's email + strong password). **P0**
+- [x] Add first-admin creation command/seed (Jabour's email + strong password). Implemented as `npm run admin:create` (interactive prompts; env-var fallback). **P0**
 - [ ] Build `/admin/login` page and an admin layout with sidebar/header/logout. **P0**
 - [ ] Add protected admin routes and redirect unauthenticated users. **P0**
 - [ ] Add 401/403 handling in the frontend API layer. **P0**

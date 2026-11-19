@@ -92,11 +92,16 @@ npm run prisma:seed
 # Optional, local development only: load the 15 demo products & 4 demo categories
 npm run prisma:seed:demo
 
+# Create the first admin account (prompts for name, email, and password)
+npm run admin:create
+
 # Start the Express API server
 npm run dev
 ```
 
 The Express API will run on `http://localhost:5000`.
+
+`npm run admin:create` stores an `ADMIN` user with a bcrypt-hashed password and refuses to create a duplicate email. The password must be at least 12 characters, is entered twice without being echoed, and is never written to disk or printed. For non-interactive environments, set `ADMIN_NAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` in the process environment instead of using the prompts. After `npm run build`, the same command can run from the compiled output with `node dist/scripts/createAdmin.js`.
 
 ### 3. Frontend Setup
 
