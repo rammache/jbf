@@ -17,7 +17,7 @@ interface CartContextType {
   cartTotal: number;
 }
 
-const STORAGE_KEY = "electro-cart";
+const STORAGE_KEY = "jabour-cart";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 

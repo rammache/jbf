@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        electro: {
+        jabour: {
           dark: "#15161d",
           navy: "#1e1f29",
           red: "#d10024",
