@@ -126,7 +126,7 @@ The WORK files must carry enough context for any agent to continue without guess
 ## Phase 2 - Admin Foundation
 
 - [x] Add `AdminUser` model: id, name, email (unique), passwordHash, role, createdAt, updatedAt. **P0**
-- [ ] Hash passwords with bcrypt/argon2. **P0**
+- [x] Hash passwords with bcrypt/argon2. **P0**
 - [ ] Implement auth: `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`. **P0**
 - [ ] Use secure httpOnly cookies or short-lived JWT; add refresh or sensible expiry. **P0**
 - [ ] Add `requireAdmin` middleware and protect every write route. **P0**

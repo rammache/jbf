@@ -16,7 +16,7 @@ Remaining work is in `WORK/tasks.md`.
 - **Work style:** one task per session. Finish the task, update the WORK files, run checks, commit, then remind the user to open a new session for the next task.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
 - **Current phase:** Phase 2 - Admin Foundation.
-- **Current task:** Task #28 - Hash passwords with bcrypt/argon2 (Phase 2).
+- **Current task:** Task #29 - Implement auth: `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout` (Phase 2).
 - **A session can use the same AI agent or a different one.** These files must carry all context so any agent can continue.
 - **Demo data decision (2026-11-19):** the fake brands and demo catalog stay during development. Jabour will remove all demo products/categories and create the real ones from the admin panel after the project is finished, so no real catalog data is needed now.
 - **Pending business decisions:** currency, payment method, delivery fee, hosting, image storage.
@@ -150,6 +150,7 @@ Audit results:
 ## Phase 8 - Phase 2 Admin Foundation (IN PROGRESS)
 
 - [x] 2026-11-19 - Task #27: Added the `AdminUser` model to `backend/prisma/schema.prisma` with `id`, `name`, unique `email`, `passwordHash`, `role` (default `"ADMIN"`), `createdAt`, and `updatedAt`. Prisma client regenerated; no database table was created because this project has no running database yet and Phase 8 will add migrations. Files changed: `backend/prisma/schema.prisma`, `WORK/tasks.md`, `WORK/progression.md`.
+- [x] 2026-11-19 - Task #28: Added password hashing with bcrypt. Installed `bcryptjs` 3.0.3 (pure-JS bcrypt, no native build step on Windows; ships its own TypeScript types) and created `backend/src/utils/password.ts` with `hashPassword` (bcrypt cost factor 12) and `verifyPassword` (constant-time bcrypt compare that returns `false` for empty input or a malformed stored hash instead of throwing). No consumer exists yet; the login endpoint (Task #29) and first-admin creation (Task #33) will use these helpers. Files changed: `backend/package.json`, `backend/package-lock.json`, `backend/src/utils/password.ts` (new), `WORK/tasks.md`, `WORK/progression.md`.
 
 ---
 
@@ -167,6 +168,7 @@ Audit results:
 | Newsletter signup -> database | Done |
 | Responsive storefront UI | Done |
 | Admin user schema (`AdminUser`) | Added |
+| Password hashing (`hashPassword` / `verifyPassword`) | Added |
 | Admin login and management panel | Not started |
 | Category/Product CRUD | Not started |
 | Image uploads | Not started |
@@ -341,3 +343,11 @@ Add one entry here at the end of every session. New agents must read the latest 
 - **Checks run:** `npx prisma validate` -> schema valid; `npx prisma generate` -> client regenerated (v6.19.3); backend `npx tsc --noEmit` -> passed (no output); frontend `npm run build` -> passed (`tsc && vite build`, built in 1.23s).
 - **Decisions:** `role` is a `String` defaulting to `"ADMIN"` for now instead of a one-value enum; role expansion remains a P2 task. No database table was created because this project has no running database yet (documented in Task #7) and Phase 8 adds migrations; the model takes effect on the next `prisma db push` / migration.
 - **Next task:** Task #28 - hash passwords with bcrypt/argon2 (Phase 2).
+
+### 2026-11-19 - Task #28: Password Hashing With bcrypt (DONE)
+
+- **Done:** Installed `bcryptjs` 3.0.3 and added `backend/src/utils/password.ts` exporting `hashPassword(password)` (bcrypt, cost factor 12) and `verifyPassword(password, passwordHash)` (async bcrypt compare). `verifyPassword` returns `false` for empty input or a malformed hash instead of throwing, so a broken DB row can never authenticate and cannot crash the future login handler.
+- **Files changed:** `backend/package.json`, `backend/package-lock.json`, `backend/src/utils/password.ts` (new), `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** backend `npx tsc --noEmit` -> passed; backend `npm run build` -> passed; frontend `npm run build` -> passed (built in 1.23s). Round-trip check via `npx tsx`: hash prefix `$2b$12$`, 60-char hash, correct password -> `true`, wrong password -> `false`, empty password -> `false`, invalid hash -> `false`.
+- **Decisions:** Chose `bcryptjs` over native `bcrypt`/`argon2` because it is bcrypt-compatible, has no native build step (important on this Windows dev machine and simple VPS deploys), and ships its own TypeScript types. Cost factor 12 is a current reasonable default and stays compatible with hashes from other bcrypt implementations. The helpers are not wired into any route yet because auth endpoints (Task #29) and first-admin creation (Task #33) are separate tasks. The 3 high-severity npm audit warnings are pre-existing dependency-tree findings, not from `bcryptjs`; audit remediation is not part of this task.
+- **Next task:** Task #29 - implement auth: `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`.
