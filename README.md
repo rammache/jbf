@@ -26,6 +26,7 @@ A high-performance modern e-commerce web application for **Jabour Phone**, built
 │   │   ├── middleware/          # requireAdmin, validateBody (Zod), and loginRateLimiter middleware
 │   │   ├── routes/              # Express API route declarations
 │   │   ├── schemas/             # Zod validation schemas and inferred types
+│   │   ├── tests/               # Automated tests (tsx --test)
 │   │   ├── prisma.ts            # Prisma client singleton
 │   │   └── server.ts            # Main Express app & CORS configuration
 │   ├── docker-compose.yml       # Ready-to-run PostgreSQL 16 container

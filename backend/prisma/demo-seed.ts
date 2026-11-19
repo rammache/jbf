@@ -275,19 +275,34 @@ const CATEGORIES = [
 async function main() {
   console.log("Seeding demo catalog with non-destructive upserts...");
 
+  const categoryMap = new Map<string, number>();
+
   for (const category of CATEGORIES) {
-    await prisma.category.upsert({
+    const saved = await prisma.category.upsert({
       where: { slug: category.slug },
       update: { name: category.name },
       create: category
     });
+    categoryMap.set(saved.name, saved.id);
   }
 
   for (const product of PRODUCTS) {
+    const { category: categoryName, ...rest } = product;
+    const categoryId = categoryMap.get(categoryName);
+    if (!categoryId) {
+      throw new Error(`Category "${categoryName}" not found for product "${product.title}"`);
+    }
+
     await prisma.product.upsert({
       where: { handle: product.handle },
-      update: product,
-      create: product
+      update: {
+        ...rest,
+        categoryId
+      },
+      create: {
+        ...rest,
+        categoryId
+      }
     });
   }
 

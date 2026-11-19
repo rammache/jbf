@@ -71,14 +71,19 @@ export const ProductDetail: React.FC = () => {
     setTimeout(() => setAddedSuccess(false), 2000);
   };
 
+  const categoryName =
+    typeof product.category === "object" && product.category
+      ? product.category.name
+      : product.category || "";
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs text-gray-500">
         <Link to="/" className="hover:text-gray-900">Home</Link>
         <span>/</span>
-        <Link to={`/shop?category=${encodeURIComponent(product.category)}`} className="hover:text-gray-900">
-          {product.category}
+        <Link to={`/shop?category=${encodeURIComponent(categoryName)}`} className="hover:text-gray-900">
+          {categoryName}
         </Link>
         <span>/</span>
         <span className="text-gray-900 font-medium truncate">{product.title}</span>
@@ -120,7 +125,7 @@ export const ProductDetail: React.FC = () => {
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#d10024] mb-2">
               <span>{product.brand}</span>
               <span>·</span>
-              <span>{product.category}</span>
+              <span>{categoryName}</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-black text-[#15161d] tracking-tight">
@@ -266,7 +271,7 @@ export const ProductDetail: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-4 bg-gray-50 rounded border flex justify-between">
             <span className="font-semibold text-gray-500">Department</span>
-            <span className="font-bold text-gray-900">{product.category}</span>
+            <span className="font-bold text-gray-900">{categoryName}</span>
           </div>
           <div className="p-4 bg-gray-50 rounded border flex justify-between">
             <span className="font-semibold text-gray-500">Hardware Brand</span>
@@ -290,8 +295,8 @@ export const ProductDetail: React.FC = () => {
             <h2 className="text-xl font-black text-[#15161d] uppercase tracking-tight">
               Related Hardware
             </h2>
-            <Link to={`/shop?category=${encodeURIComponent(product.category)}`} className="text-xs font-bold uppercase text-[#d10024]">
-              See all in {product.category}
+            <Link to={`/shop?category=${encodeURIComponent(categoryName)}`} className="text-xs font-bold uppercase text-[#d10024]">
+              See all in {categoryName}
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

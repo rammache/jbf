@@ -9,8 +9,10 @@ export const getProducts = async (req: Request, res: Response) => {
 
     if (category && typeof category === "string") {
       where.category = {
-        equals: category,
-        mode: "insensitive"
+        OR: [
+          { name: { equals: category, mode: "insensitive" } },
+          { slug: { equals: category, mode: "insensitive" } }
+        ]
       };
     }
 
@@ -36,7 +38,7 @@ export const getProducts = async (req: Request, res: Response) => {
         { title: { contains: q, mode: "insensitive" } },
         { brand: { contains: q, mode: "insensitive" } },
         { spec: { contains: q, mode: "insensitive" } },
-        { category: { contains: q, mode: "insensitive" } }
+        { category: { name: { contains: q, mode: "insensitive" } } }
       ];
     }
 
@@ -48,7 +50,10 @@ export const getProducts = async (req: Request, res: Response) => {
 
     const products = await prisma.product.findMany({
       where,
-      orderBy
+      orderBy,
+      include: {
+        category: true
+      }
     });
 
     res.json({
@@ -65,7 +70,10 @@ export const getProductByHandle = async (req: Request, res: Response) => {
   try {
     const { handle } = req.params;
     const product = await prisma.product.findUnique({
-      where: { handle }
+      where: { handle },
+      include: {
+        category: true
+      }
     });
 
     if (!product) {
@@ -76,8 +84,11 @@ export const getProductByHandle = async (req: Request, res: Response) => {
     // Also fetch 4 related products in the same category
     const related = await prisma.product.findMany({
       where: {
-        category: product.category,
+        categoryId: product.categoryId,
         handle: { not: handle }
+      },
+      include: {
+        category: true
       },
       take: 4
     });

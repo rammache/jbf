@@ -13,7 +13,8 @@ model Product {
   title       String
   price       Float
   compare     Float?
-  category    String
+  categoryId  Int
+  category    Category    @relation(fields: [categoryId], references: [id])
   brand       String
   spec        String
   rating      Float       @default(5.0)
@@ -30,6 +31,7 @@ model Category {
   id          Int         @id @default(autoincrement())
   name        String      @unique
   slug        String      @unique
+  products    Product[]
 }
 
 model Order {

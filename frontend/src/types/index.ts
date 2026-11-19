@@ -4,7 +4,8 @@ export interface Product {
   title: string;
   price: number;
   compare: number | null;
-  category: string;
+  categoryId?: number;
+  category: string | Category;
   brand: string;
   spec: string;
   rating: number;

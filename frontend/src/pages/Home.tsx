@@ -28,9 +28,10 @@ export const Home: React.FC = () => {
 
   const categories = ["Laptops", "Audio", "Keyboards & mice", "Desktops & displays"];
 
-  const filteredProducts = products.filter(
-    (p) => p.category.toLowerCase() === selectedCategory.toLowerCase()
-  );
+  const filteredProducts = products.filter((p) => {
+    const catName = typeof p.category === "object" && p.category ? p.category.name : p.category;
+    return (catName || "").toLowerCase() === selectedCategory.toLowerCase();
+  });
 
   const highestRated = [...products]
     .sort((a, b) => b.rating - a.rating)

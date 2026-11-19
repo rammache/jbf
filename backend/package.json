@@ -13,7 +13,8 @@
     "prisma:seed": "tsx prisma/seed.ts",
     "prisma:seed:demo": "tsx prisma/demo-seed.ts",
     "prisma:studio": "prisma studio",
-    "admin:create": "tsx src/scripts/createAdmin.ts"
+    "admin:create": "tsx src/scripts/createAdmin.ts",
+    "test": "tsx --test src/tests/*.test.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",

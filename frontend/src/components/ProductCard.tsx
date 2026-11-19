@@ -93,7 +93,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div>
           <div className="flex items-center justify-between text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">
             <span>{product.brand}</span>
-            <span>{product.category}</span>
+            <span>{typeof product.category === "object" && product.category ? product.category.name : product.category}</span>
           </div>
 
           <h3 className="font-bold text-base text-[#15161d] group-hover:text-[#d10024] transition-colors line-clamp-1">
