@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma.js";
 
 export const subscribeNewsletter = async (req: Request, res: Response) => {
@@ -22,8 +23,9 @@ export const subscribeNewsletter = async (req: Request, res: Response) => {
       message: "Thank you for subscribing to Jabour Phone updates!",
       data: subscriber
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to subscribe";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -34,7 +36,7 @@ export const adminGetNewsletterSubscribers = async (req: Request, res: Response)
     const pageSize = Math.min(100, Math.max(1, parseInt(req.query.pageSize as string, 10) || 20));
     const skip = (page - 1) * pageSize;
 
-    const where: any = {};
+    const where: Prisma.NewsletterSubscriberWhereInput = {};
     if (q) {
       where.email = { contains: q, mode: "insensitive" };
     }

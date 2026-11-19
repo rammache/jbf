@@ -362,8 +362,8 @@ export const CheckoutModal: React.FC = () => {
                 <div className="grid grid-cols-2 gap-2">
                   <label
                     className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs ${paymentMethod === "COD"
-                        ? "border-[#d10024] bg-red-50/40 text-gray-900 font-bold"
-                        : "border-gray-200 hover:border-gray-300 text-gray-600"
+                      ? "border-[#d10024] bg-red-50/40 text-gray-900 font-bold"
+                      : "border-gray-200 hover:border-gray-300 text-gray-600"
                       }`}
                   >
                     <input
@@ -382,8 +382,8 @@ export const CheckoutModal: React.FC = () => {
 
                   <label
                     className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs ${paymentMethod === "CARD"
-                        ? "border-[#d10024] bg-red-50/40 text-gray-900 font-bold"
-                        : "border-gray-200 hover:border-gray-300 text-gray-600"
+                      ? "border-[#d10024] bg-red-50/40 text-gray-900 font-bold"
+                      : "border-gray-200 hover:border-gray-300 text-gray-600"
                       }`}
                   >
                     <input

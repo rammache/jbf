@@ -1,4 +1,8 @@
+import { Prisma } from "@prisma/client";
 import { STORE_CONFIG } from "../config/store.js";
+import { toNumber } from "../utils/decimal.js";
+
+type MoneyValue = Prisma.Decimal | number | string | null | undefined;
 
 export interface OrderNotificationData {
   id: string;
@@ -10,14 +14,14 @@ export interface OrderNotificationData {
   city: string;
   notes?: string | null;
   paymentMethod: string;
-  subtotal: number;
-  shippingFee: number;
-  totalAmount: number;
+  subtotal: MoneyValue;
+  shippingFee: MoneyValue;
+  totalAmount: MoneyValue;
   items: Array<{
     productTitle: string;
     selectedFinish?: string | null;
     quantity: number;
-    price: number;
+    price: MoneyValue;
   }>;
 }
 
@@ -30,14 +34,19 @@ export async function sendOrderNotifications(order: OrderNotificationData): Prom
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
     const trackingUrl = `${frontendUrl}/track?id=${encodeURIComponent(order.orderNumber)}&email=${encodeURIComponent(order.customerEmail)}`;
 
+    const subtotal = toNumber(order.subtotal);
+    const shippingFee = toNumber(order.shippingFee);
+    const totalAmount = toNumber(order.totalAmount);
+
     // Build customer receipt
     const customerSubject = `Jabour Phone - Order Confirmation #${order.orderNumber}`;
     const itemsList = Array.isArray(order.items) ? order.items : [];
     const itemsFormatted = itemsList
-      .map(
-        (item) =>
-          `- ${item.productTitle || "Product"}${item.selectedFinish ? ` (${item.selectedFinish})` : ""} x${item.quantity || 1} @ $${(item.price || 0).toFixed(2)} = $${((item.price || 0) * (item.quantity || 1)).toFixed(2)}`
-      )
+      .map((item) => {
+        const itemPrice = toNumber(item.price);
+        const itemQty = item.quantity || 1;
+        return `- ${item.productTitle || "Product"}${item.selectedFinish ? ` (${item.selectedFinish})` : ""} x${itemQty} @ $${itemPrice.toFixed(2)} = $${(itemPrice * itemQty).toFixed(2)}`;
+      })
       .join("\n");
 
     const customerBody = `
@@ -53,9 +62,9 @@ Payment Method: Cash on Delivery (COD)
 ITEMS:
 ${itemsFormatted}
 
-Subtotal: $${(order.subtotal || 0).toFixed(2)}
-Delivery Fee: ${order.shippingFee === 0 ? "FREE" : `$${(order.shippingFee || 0).toFixed(2)}`}
-Total Due upon delivery: $${(order.totalAmount || 0).toFixed(2)}
+Subtotal: $${subtotal.toFixed(2)}
+Delivery Fee: ${shippingFee === 0 ? "FREE" : `$${shippingFee.toFixed(2)}`}
+Total Due upon delivery: $${totalAmount.toFixed(2)}
 
 Track your hardware verification and delivery status:
 ${trackingUrl}
@@ -65,7 +74,7 @@ Thank you for choosing Jabour Phone.
 `.trim();
 
     // Build store owner notification for Jabour
-    const adminSubject = `🚨 New Order Received: #${order.orderNumber} ($${(order.totalAmount || 0).toFixed(2)})`;
+    const adminSubject = `🚨 New Order Received: #${order.orderNumber} ($${totalAmount.toFixed(2)})`;
     const adminBody = `
 ========================================
 NEW ORDER ALERT - JABOUR PHONE
@@ -75,13 +84,12 @@ Recipient: ${order.customerName}
 Phone: ${order.customerPhone}
 Address: ${order.customerAddress}, ${order.city}
 ${order.notes ? `Customer Notes: ${order.notes}\n` : ""}
-Total: $${(order.totalAmount || 0).toFixed(2)} (Cash on Delivery)
+Total: $${totalAmount.toFixed(2)} (Cash on Delivery)
 Items: ${itemsList.map((i) => `${i.productTitle} (x${i.quantity})`).join(", ")}
 ========================================
 `.trim();
 
-    // If SMTP host is configured, we could dispatch via nodemailer.
-    // Otherwise log clean dispatch events to server console.
+    // Log clean dispatch events
     console.log(`[EMAIL DISPATCH] Sent to Customer (${order.customerEmail}): ${customerSubject}`);
     console.log(`[EMAIL DISPATCH] Sent to Admin (${STORE_CONFIG.adminNotificationEmail}): ${adminSubject}`);
   } catch (error) {

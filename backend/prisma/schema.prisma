@@ -12,8 +12,8 @@ model Product {
   handle            String      @unique
   title             String
   description       String?
-  price             Float
-  compare           Float?
+  price             Decimal     @db.Decimal(10, 2)
+  compare           Decimal?    @db.Decimal(10, 2)
   sku               String?     @unique
   stock             Int         @default(0)
   lowStockThreshold Int         @default(5)
@@ -31,7 +31,7 @@ model Product {
   storage           String?
   ram               String?
   color             String?
-  costPrice         Float?
+  costPrice         Decimal?    @db.Decimal(10, 2)
   supplier          String?
   rating            Float       @default(5.0)
   reviews           Int         @default(0)
@@ -45,6 +45,12 @@ model Product {
   updatedAt         DateTime    @updatedAt
   orderItems        OrderItem[]
   reviewsList       Review[]
+
+  @@index([categoryId])
+  @@index([isActive])
+  @@index([isFeatured])
+  @@index([brand])
+  @@index([createdAt])
 }
 
 model Review {
@@ -56,6 +62,10 @@ model Review {
   comment    String
   isApproved Boolean  @default(false)
   createdAt  DateTime @default(now())
+
+  @@index([productId])
+  @@index([isApproved])
+  @@index([createdAt])
 }
 
 model Category {
@@ -69,6 +79,9 @@ model Category {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   products    Product[]
+
+  @@index([isActive])
+  @@index([sortOrder])
 }
 
 enum OrderStatus {
@@ -92,15 +105,20 @@ model Order {
   notes           String?
   paymentMethod   String       @default("COD")
   couponCode      String?
-  discount        Float        @default(0)
-  subtotal        Float        @default(0)
-  shippingFee     Float        @default(0)
-  tax             Float        @default(0)
-  totalAmount     Float
+  discount        Decimal      @default(0) @db.Decimal(10, 2)
+  subtotal        Decimal      @default(0) @db.Decimal(10, 2)
+  shippingFee     Decimal      @default(0) @db.Decimal(10, 2)
+  tax             Decimal      @default(0) @db.Decimal(10, 2)
+  totalAmount     Decimal      @db.Decimal(10, 2)
   status          OrderStatus  @default(PENDING)
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
   items           OrderItem[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([customerEmail])
+  @@index([customerPhone])
 }
 
 model OrderItem {
@@ -110,9 +128,12 @@ model OrderItem {
   productTitle   String
   selectedFinish String?
   quantity       Int
-  price          Float
+  price          Decimal  @db.Decimal(10, 2)
   order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product        Product  @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
 }
 
 model NewsletterSubscriber {
@@ -143,8 +164,8 @@ model StoreSettings {
   country               String   @default("Lebanon")
   currency              String   @default("USD")
   currencySymbol        String   @default("$")
-  shippingFee           Float    @default(5.0)
-  freeShippingThreshold Float    @default(50.0)
+  shippingFee           Decimal  @default(5.00) @db.Decimal(10, 2)
+  freeShippingThreshold Decimal  @default(50.00) @db.Decimal(10, 2)
   announcement          String   @default("Free express delivery on orders over $50 | 100% Genuine phones guaranteed")
   facebook              String?
   instagram             String?
@@ -160,9 +181,9 @@ model Coupon {
   id             Int       @id @default(autoincrement())
   code           String    @unique
   discountType   String    @default("PERCENTAGE")
-  discountValue  Float
-  minOrderAmount Float?
-  maxDiscount    Float?
+  discountValue  Decimal   @db.Decimal(10, 2)
+  minOrderAmount Decimal?  @db.Decimal(10, 2)
+  maxDiscount    Decimal?  @db.Decimal(10, 2)
   usageLimit     Int?
   usedCount      Int       @default(0)
   isActive       Boolean   @default(true)

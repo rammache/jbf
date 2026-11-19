@@ -18,6 +18,7 @@ export function validateBody<T>(schema: ZodSchema<T>) {
       res.status(400).json({
         success: false,
         error: errorMessage,
+        code: "VALIDATION_ERROR",
         details: issues.map((issue) => ({
           field: issue.path.join("."),
           message: issue.message
@@ -27,6 +28,58 @@ export function validateBody<T>(schema: ZodSchema<T>) {
     }
 
     req.body = result.data;
+    next();
+  };
+}
+
+export function validateQuery<T>(schema: ZodSchema<T>) {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const result = schema.safeParse(req.query);
+
+    if (!result.success) {
+      const issues = result.error.issues;
+      const firstIssue = issues[0];
+      const errorMessage = firstIssue?.message || "Invalid query parameters.";
+
+      res.status(400).json({
+        success: false,
+        error: errorMessage,
+        code: "VALIDATION_ERROR",
+        details: issues.map((issue) => ({
+          field: issue.path.join("."),
+          message: issue.message
+        }))
+      });
+      return;
+    }
+
+    // Assign validated and coerced query
+    (req as Request & { validatedQuery: T }).validatedQuery = result.data;
+    next();
+  };
+}
+
+export function validateParams<T>(schema: ZodSchema<T>) {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const result = schema.safeParse(req.params);
+
+    if (!result.success) {
+      const issues = result.error.issues;
+      const firstIssue = issues[0];
+      const errorMessage = firstIssue?.message || "Invalid route parameters.";
+
+      res.status(400).json({
+        success: false,
+        error: errorMessage,
+        code: "VALIDATION_ERROR",
+        details: issues.map((issue) => ({
+          field: issue.path.join("."),
+          message: issue.message
+        }))
+      });
+      return;
+    }
+
     next();
   };
 }

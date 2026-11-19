@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma.js";
+import { createPaginationEnvelope } from "../utils/pagination.js";
 
-export const getProducts = async (req: Request, res: Response) => {
+export const getProducts = async (req: Request, res: Response): Promise<void> => {
   try {
     const { category, brand, q, minPrice, maxPrice, sort, featured, page, limit } = req.query;
 
-    const where: any = {
+    const where: Prisma.ProductWhereInput = {
       isActive: true,
       isArchived: false
     };
@@ -45,19 +47,27 @@ export const getProducts = async (req: Request, res: Response) => {
       ];
     }
 
-    let orderBy: any = [{ isFeatured: "desc" }, { featured: "desc" }, { createdAt: "desc" }, { id: "asc" }];
+    let orderBy: Prisma.ProductOrderByWithRelationInput | Prisma.ProductOrderByWithRelationInput[] = [
+      { isFeatured: "desc" },
+      { featured: "desc" },
+      { createdAt: "desc" },
+      { id: "asc" }
+    ];
+
     if (sort === "price-asc") orderBy = { price: "asc" };
     else if (sort === "price-desc") orderBy = { price: "desc" };
     else if (sort === "rating-desc") orderBy = [{ rating: "desc" }, { reviews: "desc" }];
     else if (sort === "title-asc") orderBy = { title: "asc" };
-    else if (sort === "featured" || sort === "featured-bench") orderBy = [{ isFeatured: "desc" }, { featured: "desc" }, { createdAt: "desc" }, { id: "asc" }];
+    else if (sort === "featured" || sort === "featured-bench") {
+      orderBy = [{ isFeatured: "desc" }, { featured: "desc" }, { createdAt: "desc" }, { id: "asc" }];
+    }
 
     // Optional pagination
     const pageNum = page ? Math.max(1, parseInt(String(page), 10) || 1) : null;
     const limitNum = limit ? Math.max(1, Math.min(100, parseInt(String(limit), 10) || 12)) : null;
 
     let total = 0;
-    let products: any[] = [];
+    let products: unknown[] = [];
 
     if (pageNum && limitNum) {
       const [fetchedProducts, count] = await Promise.all([
@@ -87,22 +97,27 @@ export const getProducts = async (req: Request, res: Response) => {
       total = products.length;
     }
 
-    const totalPages = limitNum ? Math.ceil(total / limitNum) || 1 : 1;
+    const envelope = createPaginationEnvelope(products, total, pageNum || 1, limitNum || total || 1);
 
     res.json({
       success: true,
       count: products.length,
-      total,
-      page: pageNum || 1,
-      totalPages,
-      data: products
+      total: envelope.total,
+      page: envelope.page,
+      pageSize: envelope.pageSize,
+      totalPages: envelope.totalPages,
+      hasNextPage: envelope.hasNextPage,
+      hasPrevPage: envelope.hasPrevPage,
+      data: products,
+      products
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to retrieve products";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
-export const getProductByHandle = async (req: Request, res: Response) => {
+export const getProductByHandle = async (req: Request, res: Response): Promise<void> => {
   try {
     const { handle } = req.params;
     const product = await prisma.product.findUnique({
@@ -136,12 +151,13 @@ export const getProductByHandle = async (req: Request, res: Response) => {
       data: product,
       related
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to retrieve product";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
-export const getBrands = async (_req: Request, res: Response) => {
+export const getBrands = async (_req: Request, res: Response): Promise<void> => {
   try {
     const products = await prisma.product.findMany({
       where: {
@@ -153,7 +169,8 @@ export const getBrands = async (_req: Request, res: Response) => {
     });
     const brands = products.map((p: { brand: string }) => p.brand);
     res.json({ success: true, data: brands });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to retrieve brands";
+    res.status(500).json({ success: false, error: message });
   }
 };

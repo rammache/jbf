@@ -312,11 +312,10 @@ export const AdminOrders: React.FC = () => {
                 setSelectedStatus("ALL");
                 setPage(1);
               }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex-shrink-0 ${
-                selectedStatus === "ALL"
+              className={`px-3 py-1.5 rounded-lg font-bold transition flex-shrink-0 ${selectedStatus === "ALL"
                   ? "bg-[#15161d] text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+                }`}
             >
               All Orders ({statusCounts.ALL || 0})
             </button>
@@ -327,11 +326,10 @@ export const AdminOrders: React.FC = () => {
                   setSelectedStatus(st);
                   setPage(1);
                 }}
-                className={`px-3 py-1.5 rounded-lg font-bold transition flex-shrink-0 flex items-center gap-1 ${
-                  selectedStatus === st
+                className={`px-3 py-1.5 rounded-lg font-bold transition flex-shrink-0 flex items-center gap-1 ${selectedStatus === st
                     ? "bg-[#d10024] text-white shadow-sm"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 <span>{STATUS_CONFIG[st].label}</span>
                 <span className="text-[10px] px-1.5 py-0.2 bg-black/10 rounded-full">

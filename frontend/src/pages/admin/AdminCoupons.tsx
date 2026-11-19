@@ -233,11 +233,10 @@ export const AdminCoupons: React.FC = () => {
       {/* Notifications */}
       {notification && (
         <div
-          className={`flex items-center justify-between rounded-lg p-4 text-xs font-semibold ${
-            notification.type === "success"
+          className={`flex items-center justify-between rounded-lg p-4 text-xs font-semibold ${notification.type === "success"
               ? "bg-green-50 text-green-800 border border-green-200"
               : "bg-red-50 text-red-800 border border-red-200"
-          }`}
+            }`}
         >
           <div className="flex items-center gap-2">
             {notification.type === "success" ? (
@@ -317,11 +316,10 @@ export const AdminCoupons: React.FC = () => {
             <button
               key={tab}
               onClick={() => setFilterStatus(tab)}
-              className={`rounded-lg px-3.5 py-2 text-xs font-bold capitalize transition ${
-                filterStatus === tab
+              className={`rounded-lg px-3.5 py-2 text-xs font-bold capitalize transition ${filterStatus === tab
                   ? "bg-[#15161d] text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+                }`}
             >
               {tab}
             </button>
@@ -436,15 +434,13 @@ export const AdminCoupons: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handleToggleActive(coupon)}
-                          className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                            coupon.isActive && !isExpired ? "bg-green-600" : "bg-gray-300"
-                          }`}
+                          className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${coupon.isActive && !isExpired ? "bg-green-600" : "bg-gray-300"
+                            }`}
                           title={coupon.isActive ? "Deactivate" : "Activate"}
                         >
                           <span
-                            className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                              coupon.isActive && !isExpired ? "translate-x-4" : "translate-x-0"
-                            }`}
+                            className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${coupon.isActive && !isExpired ? "translate-x-4" : "translate-x-0"
+                              }`}
                           />
                         </button>
                       </td>

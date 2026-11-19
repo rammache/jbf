@@ -307,8 +307,8 @@ export const ProductDetail: React.FC = () => {
                     type="button"
                     onClick={() => setSelectedFinish(finish)}
                     className={`flex items-center gap-2 px-3 py-1.5 rounded border text-xs font-medium transition ${selectedFinish === finish
-                        ? "border-[#d10024] bg-red-50 text-[#d10024] font-bold"
-                        : "border-gray-300 hover:border-gray-400 text-gray-700"
+                      ? "border-[#d10024] bg-red-50 text-[#d10024] font-bold"
+                      : "border-gray-300 hover:border-gray-400 text-gray-700"
                       }`}
                   >
                     <span
@@ -360,8 +360,8 @@ export const ProductDetail: React.FC = () => {
                   type="button"
                   onClick={handleAddToCart}
                   className={`flex-1 py-3.5 px-6 rounded font-bold text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 ${addedSuccess
-                      ? "bg-green-600 text-white"
-                      : "bg-[#15161d] hover:bg-[#d10024] text-white"
+                    ? "bg-green-600 text-white"
+                    : "bg-[#15161d] hover:bg-[#d10024] text-white"
                     }`}
                 >
                   {addedSuccess ? (
@@ -597,8 +597,8 @@ export const ProductDetail: React.FC = () => {
                     >
                       <Star
                         className={`w-5 h-5 ${star <= reviewRating
-                            ? "text-amber-400 fill-current"
-                            : "text-gray-300"
+                          ? "text-amber-400 fill-current"
+                          : "text-gray-300"
                           }`}
                       />
                     </button>

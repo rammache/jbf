@@ -834,9 +834,8 @@ export const AdminProducts: React.FC = () => {
                   return (
                     <tr
                       key={product.id}
-                      className={`hover:bg-gray-50/80 transition-colors ${
-                        isSelected ? "bg-red-50/30" : ""
-                      }`}
+                      className={`hover:bg-gray-50/80 transition-colors ${isSelected ? "bg-red-50/30" : ""
+                        }`}
                     >
                       <td className="px-4 py-3 text-center">
                         <input
@@ -928,14 +927,12 @@ export const AdminProducts: React.FC = () => {
                           type="button"
                           onClick={() => handleToggleActive(product)}
                           title={product.isActive ? "Click to deactivate" : "Click to activate"}
-                          className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                            product.isActive ? "bg-[#d10024]" : "bg-gray-300"
-                          }`}
+                          className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${product.isActive ? "bg-[#d10024]" : "bg-gray-300"
+                            }`}
                         >
                           <span
-                            className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                              product.isActive ? "translate-x-4" : "translate-x-0"
-                            }`}
+                            className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${product.isActive ? "translate-x-4" : "translate-x-0"
+                              }`}
                           />
                         </button>
                       </td>
@@ -945,11 +942,10 @@ export const AdminProducts: React.FC = () => {
                           type="button"
                           onClick={() => handleToggleFeatured(product)}
                           title={isFeatured ? "Remove from Featured" : "Mark as Featured"}
-                          className={`p-1 transition-colors ${
-                            isFeatured
+                          className={`p-1 transition-colors ${isFeatured
                               ? "text-amber-500 hover:text-amber-600"
                               : "text-gray-300 hover:text-gray-500"
-                          }`}
+                            }`}
                         >
                           <Star className={`h-5 w-5 ${isFeatured ? "fill-amber-400" : ""}`} />
                         </button>
@@ -1056,11 +1052,10 @@ export const AdminProducts: React.FC = () => {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`border-b-2 px-4 py-3 text-xs font-bold uppercase tracking-wider transition-colors ${
-                    activeTab === tab.id
+                  className={`border-b-2 px-4 py-3 text-xs font-bold uppercase tracking-wider transition-colors ${activeTab === tab.id
                       ? "border-[#d10024] text-[#d10024]"
                       : "border-transparent text-gray-500 hover:text-gray-900"
-                  }`}
+                    }`}
                 >
                   {tab.label}
                 </button>

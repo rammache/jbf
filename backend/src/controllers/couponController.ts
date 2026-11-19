@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma.js";
 import {
   createCouponSchema,
   updateCouponSchema,
   validateCouponSchema
 } from "../schemas/coupon.js";
+import { toNumber, toDecimal } from "../utils/decimal.js";
 
 export function calculateCouponDiscount(
   subtotal: number,
@@ -28,14 +30,15 @@ export function calculateCouponDiscount(
   return Math.round(discount * 100) / 100;
 }
 
-export const validateCoupon = async (req: Request, res: Response) => {
+export const validateCoupon = async (req: Request, res: Response): Promise<void> => {
   try {
     const parsed = validateCouponSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: parsed.error.issues[0]?.message || "Invalid coupon validation payload"
       });
+      return;
     }
 
     const { code, subtotal } = parsed.data;
@@ -45,73 +48,83 @@ export const validateCoupon = async (req: Request, res: Response) => {
     });
 
     if (!coupon) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         error: "Coupon code does not exist"
       });
+      return;
     }
 
     if (!coupon.isActive) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: "This coupon is currently inactive"
       });
+      return;
     }
 
     if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: "This coupon has expired"
       });
+      return;
     }
 
     if (coupon.usageLimit !== null && coupon.usageLimit !== undefined && coupon.usedCount >= coupon.usageLimit) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: "This coupon has reached its maximum usage limit"
       });
+      return;
     }
 
-    if (coupon.minOrderAmount && subtotal < coupon.minOrderAmount) {
-      return res.status(400).json({
+    const minAmount = coupon.minOrderAmount ? toNumber(coupon.minOrderAmount) : null;
+    if (minAmount && subtotal < minAmount) {
+      res.status(400).json({
         success: false,
-        error: `Minimum order amount of $${coupon.minOrderAmount.toFixed(2)} required to use this coupon`
+        error: `Minimum order amount of $${minAmount.toFixed(2)} required to use this coupon`
       });
+      return;
     }
+
+    const discValue = toNumber(coupon.discountValue);
+    const maxDisc = coupon.maxDiscount ? toNumber(coupon.maxDiscount) : null;
 
     const discountAmount = calculateCouponDiscount(
       subtotal,
       coupon.discountType,
-      coupon.discountValue,
-      coupon.maxDiscount
+      discValue,
+      maxDisc
     );
 
-    return res.json({
+    res.json({
       success: true,
       data: {
         code: coupon.code,
         discountType: coupon.discountType,
-        discountValue: coupon.discountValue,
+        discountValue: discValue,
         calculatedDiscount: discountAmount,
-        minOrderAmount: coupon.minOrderAmount,
-        maxDiscount: coupon.maxDiscount
+        minOrderAmount: minAmount,
+        maxDiscount: maxDisc
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unable to validate coupon code at this time";
     console.error("Error validating coupon:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      error: "Unable to validate coupon code at this time"
+      error: message
     });
   }
 };
 
-export const adminGetCoupons = async (req: Request, res: Response) => {
+export const adminGetCoupons = async (req: Request, res: Response): Promise<void> => {
   try {
     const q = typeof req.query.q === "string" ? req.query.q.trim() : "";
     const status = typeof req.query.status === "string" ? req.query.status : "all";
 
-    const where: any = {};
+    const where: Prisma.CouponWhereInput = {};
     if (q) {
       where.code = { contains: q, mode: "insensitive" };
     }
@@ -133,7 +146,7 @@ export const adminGetCoupons = async (req: Request, res: Response) => {
       _sum: { usedCount: true }
     });
 
-    return res.json({
+    res.json({
       success: true,
       data: coupons,
       stats: {
@@ -142,23 +155,25 @@ export const adminGetCoupons = async (req: Request, res: Response) => {
         totalUsed: aggregateUsed._sum.usedCount || 0
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to load coupons";
     console.error("Admin error fetching coupons:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      error: "Failed to load coupons"
+      error: message
     });
   }
 };
 
-export const adminCreateCoupon = async (req: Request, res: Response) => {
+export const adminCreateCoupon = async (req: Request, res: Response): Promise<void> => {
   try {
     const parsed = createCouponSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: parsed.error.issues[0]?.message || "Invalid coupon data"
       });
+      return;
     }
 
     const existing = await prisma.coupon.findUnique({
@@ -166,57 +181,62 @@ export const adminCreateCoupon = async (req: Request, res: Response) => {
     });
 
     if (existing) {
-      return res.status(409).json({
+      res.status(409).json({
         success: false,
         error: `Coupon with code "${parsed.data.code}" already exists`
       });
+      return;
     }
 
     const coupon = await prisma.coupon.create({
       data: {
         code: parsed.data.code,
         discountType: parsed.data.discountType,
-        discountValue: parsed.data.discountValue,
-        minOrderAmount: parsed.data.minOrderAmount ?? null,
-        maxDiscount: parsed.data.maxDiscount ?? null,
+        discountValue: toDecimal(parsed.data.discountValue),
+        minOrderAmount: parsed.data.minOrderAmount != null ? toDecimal(parsed.data.minOrderAmount) : null,
+        maxDiscount: parsed.data.maxDiscount != null ? toDecimal(parsed.data.maxDiscount) : null,
         usageLimit: parsed.data.usageLimit ?? null,
         isActive: parsed.data.isActive ?? true,
         expiresAt: parsed.data.expiresAt ? new Date(parsed.data.expiresAt) : null
       }
     });
 
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       message: "Coupon created successfully",
       data: coupon
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "An unexpected error occurred while creating coupon";
     console.error("Failed to create coupon:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      error: "An unexpected error occurred while creating coupon"
+      error: message
     });
   }
 };
 
-export const adminUpdateCoupon = async (req: Request, res: Response) => {
+export const adminUpdateCoupon = async (req: Request, res: Response): Promise<void> => {
   try {
     const id = Number(req.params.id);
     if (isNaN(id) || id <= 0) {
-      return res.status(400).json({ success: false, error: "Invalid coupon ID" });
+      res.status(400).json({ success: false, error: "Invalid coupon ID" });
+      return;
     }
 
     const parsed = updateCouponSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: parsed.error.issues[0]?.message || "Invalid coupon update payload"
       });
+      return;
     }
 
     const coupon = await prisma.coupon.findUnique({ where: { id } });
     if (!coupon) {
-      return res.status(404).json({ success: false, error: "Coupon not found" });
+      res.status(404).json({ success: false, error: "Coupon not found" });
+      return;
     }
 
     if (parsed.data.code && parsed.data.code !== coupon.code) {
@@ -224,58 +244,77 @@ export const adminUpdateCoupon = async (req: Request, res: Response) => {
         where: { code: parsed.data.code }
       });
       if (duplicate) {
-        return res.status(409).json({
+        res.status(409).json({
           success: false,
           error: `Coupon code "${parsed.data.code}" is already in use`
         });
+        return;
       }
     }
 
+    const updateData: Prisma.CouponUpdateInput = {
+      ...(parsed.data.code ? { code: parsed.data.code } : {}),
+      ...(parsed.data.discountType ? { discountType: parsed.data.discountType } : {}),
+      ...(parsed.data.discountValue !== undefined ? { discountValue: toDecimal(parsed.data.discountValue) } : {}),
+      ...(parsed.data.minOrderAmount !== undefined
+        ? { minOrderAmount: parsed.data.minOrderAmount !== null ? toDecimal(parsed.data.minOrderAmount) : null }
+        : {}),
+      ...(parsed.data.maxDiscount !== undefined
+        ? { maxDiscount: parsed.data.maxDiscount !== null ? toDecimal(parsed.data.maxDiscount) : null }
+        : {}),
+      ...(parsed.data.usageLimit !== undefined ? { usageLimit: parsed.data.usageLimit } : {}),
+      ...(parsed.data.isActive !== undefined ? { isActive: parsed.data.isActive } : {}),
+      ...(parsed.data.expiresAt !== undefined
+        ? { expiresAt: parsed.data.expiresAt ? new Date(parsed.data.expiresAt) : null }
+        : {})
+    };
+
     const updated = await prisma.coupon.update({
       where: { id },
-      data: {
-        ...parsed.data,
-        expiresAt: parsed.data.expiresAt ? new Date(parsed.data.expiresAt) : parsed.data.expiresAt === null ? null : undefined
-      }
+      data: updateData
     });
 
-    return res.json({
+    res.json({
       success: true,
       message: "Coupon updated successfully",
       data: updated
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unable to update coupon";
     console.error("Failed to update coupon:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      error: "Unable to update coupon"
+      error: message
     });
   }
 };
 
-export const adminDeleteCoupon = async (req: Request, res: Response) => {
+export const adminDeleteCoupon = async (req: Request, res: Response): Promise<void> => {
   try {
     const id = Number(req.params.id);
     if (isNaN(id) || id <= 0) {
-      return res.status(400).json({ success: false, error: "Invalid coupon ID" });
+      res.status(400).json({ success: false, error: "Invalid coupon ID" });
+      return;
     }
 
     const coupon = await prisma.coupon.findUnique({ where: { id } });
     if (!coupon) {
-      return res.status(404).json({ success: false, error: "Coupon not found" });
+      res.status(404).json({ success: false, error: "Coupon not found" });
+      return;
     }
 
     await prisma.coupon.delete({ where: { id } });
 
-    return res.json({
+    res.json({
       success: true,
       message: `Coupon "${coupon.code}" deleted successfully`
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unable to delete coupon";
     console.error("Failed to delete coupon:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      error: "Unable to delete coupon"
+      error: message
     });
   }
 };

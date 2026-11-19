@@ -72,7 +72,7 @@ export const login = async (req: Request, res: Response) => {
     });
     res.setHeader("Cache-Control", "no-store");
     res.json({ success: true, data: toPublicAdmin(admin) });
-  } catch (error: any) {
+  } catch (_error: unknown) {
     res.status(500).json({ success: false, error: "Unable to sign in right now." });
   }
 };
@@ -97,7 +97,7 @@ export const me = async (req: Request, res: Response) => {
 
     res.setHeader("Cache-Control", "no-store");
     res.json({ success: true, data: toPublicAdmin(admin) });
-  } catch (error: any) {
+  } catch (_error: unknown) {
     res.status(500).json({ success: false, error: "Unable to load the current admin." });
   }
 };

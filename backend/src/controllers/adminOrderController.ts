@@ -1,17 +1,20 @@
 import { Request, Response } from "express";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma.js";
 import { adminOrdersQuerySchema, updateOrderStatusSchema, ORDER_STATUSES, OrderStatusType } from "../schemas/order.js";
+import { createPaginationEnvelope } from "../utils/pagination.js";
+import { toNumber } from "../utils/decimal.js";
 
 /**
  * Admin: List all customer orders with filtering, search, pagination, and KPI counts.
  * GET /api/admin/orders
  */
-export const adminGetOrders = async (req: Request, res: Response) => {
+export const adminGetOrders = async (req: Request, res: Response): Promise<void> => {
   try {
     const query = adminOrdersQuerySchema.parse(req.query);
     const { page, pageSize, status, search, sortBy, sortOrder } = query;
 
-    const where: any = {};
+    const where: Prisma.OrderWhereInput = {};
 
     if (status) {
       where.status = status;
@@ -71,21 +74,28 @@ export const adminGetOrders = async (req: Request, res: Response) => {
       statusCounts[s] = (statusCountsRaw[idx + 1] as number) || 0;
     });
 
-    const revenueAggregate = statusCountsRaw[statusCountsRaw.length - 1] as any;
-    const totalRevenue = revenueAggregate?._sum?.totalAmount || 0;
+    const revenueAggregate = statusCountsRaw[statusCountsRaw.length - 1] as { _sum?: { totalAmount?: Prisma.Decimal | number | null } };
+    const rawRevenue = revenueAggregate?._sum?.totalAmount;
+    const totalRevenue = toNumber(rawRevenue, 0);
+
+    const envelope = createPaginationEnvelope(orders, total, page, pageSize);
 
     res.json({
       success: true,
       data: orders,
-      page,
-      pageSize,
-      total,
-      totalPages: Math.ceil(total / pageSize) || 1,
+      orders,
+      page: envelope.page,
+      pageSize: envelope.pageSize,
+      total: envelope.total,
+      totalPages: envelope.totalPages,
+      hasNextPage: envelope.hasNextPage,
+      hasPrevPage: envelope.hasPrevPage,
       statusCounts,
       totalRevenue: Math.round(totalRevenue * 100) / 100
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to retrieve orders";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -93,7 +103,7 @@ export const adminGetOrders = async (req: Request, res: Response) => {
  * Admin: Get single order by ID or orderNumber with full item details.
  * GET /api/admin/orders/:id
  */
-export const adminGetOrderById = async (req: Request, res: Response) => {
+export const adminGetOrderById = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const trimmed = String(id).trim();
@@ -125,9 +135,10 @@ export const adminGetOrderById = async (req: Request, res: Response) => {
       return;
     }
 
-    res.json({ success: true, data: order });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message });
+    res.json({ success: true, data: order, order });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to fetch order";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -136,7 +147,7 @@ export const adminGetOrderById = async (req: Request, res: Response) => {
  * Restores inventory if transitioned to CANCELLED; re-decrements and checks stock if uncancelled.
  * PUT /api/admin/orders/:id/status
  */
-export const adminUpdateOrderStatus = async (req: Request, res: Response) => {
+export const adminUpdateOrderStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const { status } = updateOrderStatusSchema.parse(req.body);
@@ -214,10 +225,11 @@ export const adminUpdateOrderStatus = async (req: Request, res: Response) => {
       message: `Order #${updatedOrder.orderNumber} status updated to ${targetStatus}`,
       data: updatedOrder
     });
-  } catch (error: any) {
-    res.status(error.message?.includes("insufficient stock") ? 400 : 500).json({
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to update order status";
+    res.status(message.includes("insufficient stock") ? 400 : 500).json({
       success: false,
-      error: error.message || "Failed to update order status"
+      error: message
     });
   }
 };
@@ -226,9 +238,9 @@ export const adminUpdateOrderStatus = async (req: Request, res: Response) => {
  * Admin: Shortcut endpoint to cancel an order and restore inventory.
  * POST /api/admin/orders/:id/cancel
  */
-export const adminCancelOrder = async (req: Request, res: Response) => {
+export const adminCancelOrder = async (req: Request, res: Response): Promise<void> => {
   req.body = { status: "CANCELLED" };
-  return adminUpdateOrderStatus(req, res);
+  await adminUpdateOrderStatus(req, res);
 };
 
 /**
@@ -236,7 +248,7 @@ export const adminCancelOrder = async (req: Request, res: Response) => {
  * If order was active (not already cancelled), restores stock before removing.
  * DELETE /api/admin/orders/:id
  */
-export const adminDeleteOrder = async (req: Request, res: Response) => {
+export const adminDeleteOrder = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
@@ -271,7 +283,8 @@ export const adminDeleteOrder = async (req: Request, res: Response) => {
       success: true,
       message: `Order #${order.orderNumber} deleted successfully`
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to delete order";
+    res.status(500).json({ success: false, error: message });
   }
 };

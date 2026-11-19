@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma.js";
 import { hashPassword } from "../utils/password.js";
 import { createAdminUserSchema, updateAdminUserSchema } from "../schemas/adminUser.js";
@@ -119,7 +120,7 @@ export const adminUpdateUser = async (req: Request, res: Response) => {
       }
     }
 
-    const updateData: any = {};
+    const updateData: Prisma.AdminUserUpdateInput = {};
     if (parsed.data.name) updateData.name = parsed.data.name;
     if (parsed.data.role) updateData.role = parsed.data.role;
     if (parsed.data.password) {

@@ -27,8 +27,8 @@ export const AdminLogin: React.FC = () => {
   const from = (location.state as { from?: unknown } | null)?.from;
   const returnTo =
     typeof from === "string" &&
-    from.startsWith("/admin") &&
-    !from.startsWith("/admin/login")
+      from.startsWith("/admin") &&
+      !from.startsWith("/admin/login")
       ? from
       : "/admin";
 

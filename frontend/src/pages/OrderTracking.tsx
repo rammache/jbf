@@ -224,12 +224,12 @@ export const OrderTracking: React.FC = () => {
 
             <div
               className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border ${isCancelled
-                  ? "bg-red-50 border-red-300 text-red-700"
-                  : isReturned
-                    ? "bg-gray-100 border-gray-300 text-gray-700"
-                    : order.status === "DELIVERED"
-                      ? "bg-green-50 border-green-300 text-green-700"
-                      : "bg-red-50 border-red-200 text-[#d10024]"
+                ? "bg-red-50 border-red-300 text-red-700"
+                : isReturned
+                  ? "bg-gray-100 border-gray-300 text-gray-700"
+                  : order.status === "DELIVERED"
+                    ? "bg-green-50 border-green-300 text-green-700"
+                    : "bg-red-50 border-red-200 text-[#d10024]"
                 }`}
             >
               {isCancelled ? (

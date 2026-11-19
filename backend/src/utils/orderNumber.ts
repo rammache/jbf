@@ -1,10 +1,17 @@
+import { PrismaClient, Prisma } from "@prisma/client";
 import { prisma } from "../prisma.js";
+
+type OrderClient = PrismaClient | Prisma.TransactionClient | {
+  order?: {
+    findUnique?: (args: { where: { orderNumber: string }; select: { id: boolean } }) => Promise<{ id: string } | null>;
+  };
+};
 
 /**
  * Generates a human-friendly unique order reference, e.g. "JP-2611-4821".
  * Guaranteed to be unique in the database, with safe offline/mock fallback.
  */
-export async function generateUniqueOrderNumber(client: any = prisma): Promise<string> {
+export async function generateUniqueOrderNumber(client: OrderClient = prisma): Promise<string> {
   const now = new Date();
   const yearSuffix = now.getFullYear().toString().slice(-2);
   const month = (now.getMonth() + 1).toString().padStart(2, "0");

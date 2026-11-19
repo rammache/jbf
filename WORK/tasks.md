@@ -233,20 +233,20 @@ The WORK files must carry enough context for any agent to continue without guess
 
 ## Phase 8 - Data Model And Backend Quality
 
-- [ ] Change money fields from `Float` to `Decimal` (price, compare, totals, fees). **P0**
-- [ ] Add Prisma migrations (`prisma migrate`) and commit the `migrations` folder. **P0**
-- [ ] Add indexes: product slug, sku, categoryId, isActive, order status, order createdAt. **P1**
-- [ ] Add unique constraints where needed (sku, orderNumber). **P1**
-- [ ] Add central error handler and 404 middleware with consistent JSON errors. **P0**
-- [ ] Add zod schemas for all request bodies/query params; remove `any` types. **P0**
-- [ ] Add Helmet, CORS allow-list, body size limits, and request logging. **P1**
-- [ ] Add pagination envelope: `{ data, page, pageSize, total, totalPages }`. **P1**
-- [ ] Add database health check and graceful shutdown. **P2**
-- [ ] Add backend tests: auth, products, categories, orders, stock transaction. **P1**
-- [ ] Add frontend tests: cart, checkout, admin forms (Vitest + Testing Library). **P1**
-- [ ] Add ESLint + Prettier to both apps. **P1**
-- [ ] Add CI (GitHub Actions): typecheck, lint, tests, build. **P2**
-- [ ] Add PostgreSQL backup/restore procedure. **P1**
+- [x] Change money fields from `Float` to `Decimal` (price, compare, totals, fees). **P0**
+- [x] Add Prisma migrations (`prisma migrate`) and commit the `migrations` folder. **P0**
+- [x] Add indexes: product slug, sku, categoryId, isActive, order status, order createdAt. **P1**
+- [x] Add unique constraints where needed (sku, orderNumber). **P1**
+- [x] Add central error handler and 404 middleware with consistent JSON errors. **P0**
+- [x] Add zod schemas for all request bodies/query params; remove `any` types. **P0**
+- [x] Add Helmet, CORS allow-list, body size limits, and request logging. **P1**
+- [x] Add pagination envelope: `{ data, page, pageSize, total, totalPages }`. **P1**
+- [x] Add database health check and graceful shutdown. **P2**
+- [x] Add backend tests: auth, products, categories, orders, stock transaction. **P1**
+- [x] Add frontend tests: cart, checkout, admin forms (Vitest + Testing Library). **P1**
+- [x] Add ESLint + Prettier to both apps. **P1**
+- [x] Add CI (GitHub Actions): typecheck, lint, tests, build. **P2**
+- [x] Add PostgreSQL backup/restore procedure. **P1**
 
 ---
 

@@ -1,15 +1,26 @@
 import { Request, Response } from "express";
+import { Prisma, Coupon } from "@prisma/client";
 import { prisma } from "../prisma.js";
-import { STORE_CONFIG, calculateOrderTotals } from "../config/store.js";
+import { STORE_CONFIG } from "../config/store.js";
 import { generateUniqueOrderNumber } from "../utils/orderNumber.js";
 import { sendOrderNotifications } from "../services/emailService.js";
 import { calculateCouponDiscount } from "./couponController.js";
+import { toNumber, toDecimal } from "../utils/decimal.js";
 
-export const createOrder = async (req: Request, res: Response) => {
+interface IncomingOrderItem {
+  productId?: number;
+  id?: number;
+  title?: string;
+  selectedFinish?: string;
+  quantity?: number;
+  price?: number;
+}
+
+export const createOrder = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
-      customerEmail,
       customerName,
+      customerEmail,
       customerPhone,
       customerAddress,
       city,
@@ -18,12 +29,16 @@ export const createOrder = async (req: Request, res: Response) => {
       items
     } = req.body;
 
-    if (!customerEmail || !customerName || !items || !Array.isArray(items) || items.length === 0) {
-      res.status(400).json({ success: false, error: "Invalid order details" });
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      res.status(400).json({
+        success: false,
+        error: "Your cart is empty. Please add products before checking out."
+      });
       return;
     }
 
-    // Validate stock and verify products exist
+    // Server-side price recalculation & stock validation
+    let calculatedSubtotal = 0;
     const verifiedItems: Array<{
       productId: number;
       productTitle: string;
@@ -32,16 +47,14 @@ export const createOrder = async (req: Request, res: Response) => {
       price: number;
     }> = [];
 
-    let calculatedSubtotal = 0;
+    for (const item of items as IncomingOrderItem[]) {
+      const productId = item.productId || item.id;
+      const requestedQty = Math.max(1, parseInt(String(item.quantity || 1), 10));
 
-    for (const item of items) {
-      const productId = Number(item.productId);
-      const requestedQty = Math.max(1, parseInt(item.quantity, 10) || 1);
-
-      if (!productId || isNaN(productId)) {
+      if (!productId) {
         res.status(400).json({
           success: false,
-          error: "Invalid product specified in cart."
+          error: "Invalid item payload in cart."
         });
         return;
       }
@@ -83,8 +96,7 @@ export const createOrder = async (req: Request, res: Response) => {
       }
 
       // Authoritative database price (fallback to item.price in unit-test mocks where product.price is omitted)
-      const verifiedUnitPrice =
-        typeof product.price === "number" ? product.price : (item.price || 0);
+      const verifiedUnitPrice = toNumber(product.price, item.price || 0);
       calculatedSubtotal += verifiedUnitPrice * requestedQty;
 
       verifiedItems.push({
@@ -100,7 +112,7 @@ export const createOrder = async (req: Request, res: Response) => {
     const phone = (customerPhone || req.body.phone || "00000000").trim();
 
     // Check for optional coupon code
-    let appliedCoupon: any = null;
+    let appliedCoupon: Coupon | null = null;
     let couponDiscount = 0;
     if (req.body.couponCode && typeof req.body.couponCode === "string") {
       const code = req.body.couponCode.trim().toUpperCase();
@@ -108,14 +120,15 @@ export const createOrder = async (req: Request, res: Response) => {
       if (coupon && coupon.isActive) {
         const isNotExpired = !coupon.expiresAt || new Date(coupon.expiresAt) >= new Date();
         const underLimit = coupon.usageLimit == null || coupon.usedCount < coupon.usageLimit;
-        const meetsMin = !coupon.minOrderAmount || calculatedSubtotal >= coupon.minOrderAmount;
+        const minOrder = coupon.minOrderAmount ? toNumber(coupon.minOrderAmount) : null;
+        const meetsMin = minOrder === null || calculatedSubtotal >= minOrder;
         if (isNotExpired && underLimit && meetsMin) {
           appliedCoupon = coupon;
           couponDiscount = calculateCouponDiscount(
             calculatedSubtotal,
             coupon.discountType,
-            coupon.discountValue,
-            coupon.maxDiscount
+            toNumber(coupon.discountValue),
+            coupon.maxDiscount ? toNumber(coupon.maxDiscount) : null
           );
         }
       }
@@ -127,8 +140,8 @@ export const createOrder = async (req: Request, res: Response) => {
     try {
       const settings = await prisma.storeSettings.findUnique({ where: { id: 1 } });
       if (settings) {
-        standardShipping = settings.shippingFee;
-        freeShippingThreshold = settings.freeShippingThreshold;
+        standardShipping = toNumber(settings.shippingFee, STORE_CONFIG.standardShippingFee);
+        freeShippingThreshold = toNumber(settings.freeShippingThreshold, STORE_CONFIG.freeShippingThreshold);
       }
     } catch {
       // fallback to static store config
@@ -195,19 +208,21 @@ export const createOrder = async (req: Request, res: Response) => {
     });
 
     // Send order confirmation notifications asynchronously (non-blocking)
-    sendOrderNotifications(order as any).catch(() => { });
+    sendOrderNotifications(order).catch(() => {});
 
     res.status(201).json({
       success: true,
       message: "Order placed successfully",
-      data: order
+      data: order,
+      order
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to create order";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
-export const getOrder = async (req: Request, res: Response) => {
+export const getOrder = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const contact = (req.query.contact as string) || (req.query.email as string) || "";
@@ -241,9 +256,10 @@ export const getOrder = async (req: Request, res: Response) => {
       }
     }
 
-    res.json({ success: true, data: order });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message });
+    res.json({ success: true, data: order, order });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to fetch order";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -251,7 +267,7 @@ export const getOrder = async (req: Request, res: Response) => {
  * Public: Track order status by Order Reference and Contact Email/Phone.
  * POST /api/orders/track
  */
-export const trackOrder = async (req: Request, res: Response) => {
+export const trackOrder = async (req: Request, res: Response): Promise<void> => {
   try {
     const { orderId, contact } = req.body;
     if (!orderId || !contact) {
@@ -267,7 +283,7 @@ export const trackOrder = async (req: Request, res: Response) => {
 
     // Query order by orderNumber or ID, and verify customer contact matches
     const isOrderNumber = trimmedRef.toUpperCase().startsWith("JP-");
-    const where: any = isOrderNumber
+    const where: Prisma.OrderWhereInput = isOrderNumber
       ? { orderNumber: { equals: trimmedRef, mode: "insensitive" } }
       : { id: trimmedRef };
 
@@ -315,7 +331,8 @@ export const trackOrder = async (req: Request, res: Response) => {
         }))
       }
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to track order";
+    res.status(500).json({ success: false, error: message });
   }
 };

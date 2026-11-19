@@ -6,13 +6,15 @@ import {
 } from "../utils/slug.js";
 
 /**
- * Public: Get active categories ordered by sortOrder then name.
+ * Public: Get all active categories ordered by sortOrder then name.
  * GET /api/categories
  */
 export const getCategories = async (_req: Request, res: Response): Promise<void> => {
   try {
     const categories = await prisma.category.findMany({
-      where: { isActive: true },
+      where: {
+        isActive: true
+      },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
       select: {
         id: true,
@@ -31,8 +33,9 @@ export const getCategories = async (_req: Request, res: Response): Promise<void>
     });
 
     res.json({ success: true, data: categories });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to fetch categories." });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to fetch categories.";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -52,8 +55,9 @@ export const adminGetCategories = async (_req: Request, res: Response): Promise<
     });
 
     res.json({ success: true, data: categories });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to fetch admin categories." });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to fetch admin categories.";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -84,8 +88,9 @@ export const adminGetCategoryById = async (req: Request, res: Response): Promise
     }
 
     res.json({ success: true, data: category });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to fetch category." });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to fetch category.";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -145,8 +150,9 @@ export const adminCreateCategory = async (req: Request, res: Response): Promise<
     });
 
     res.status(201).json({ success: true, data: category });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to create category." });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to create category.";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -217,8 +223,9 @@ export const adminUpdateCategory = async (req: Request, res: Response): Promise<
     });
 
     res.json({ success: true, data: updatedCategory });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to update category." });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to update category.";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -312,8 +319,9 @@ export const adminDeleteCategory = async (req: Request, res: Response): Promise<
       success: true,
       message: `Category "${category.name}" deleted successfully.`
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to delete category." });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to delete category.";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -343,7 +351,8 @@ export const adminReorderCategories = async (req: Request, res: Response): Promi
       success: true,
       message: "Categories reordered successfully."
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to reorder categories." });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to reorder categories.";
+    res.status(500).json({ success: false, error: message });
   }
 };

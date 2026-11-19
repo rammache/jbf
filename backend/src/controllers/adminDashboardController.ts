@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { prisma } from "../prisma.js";
+import { toNumber } from "../utils/decimal.js";
 
-export const adminGetDashboardMetrics = async (_req: Request, res: Response) => {
+export const adminGetDashboardMetrics = async (_req: Request, res: Response): Promise<void> => {
   try {
     const now = new Date();
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
@@ -133,18 +134,21 @@ export const adminGetDashboardMetrics = async (_req: Request, res: Response) => 
       const p = item.product;
       if (!p) continue;
 
+      const pPrice = toNumber(p.price);
+      const itemPrice = toNumber(item.price);
+
       const existing = productSalesMap.get(p.id) || {
         id: p.id,
         title: p.title,
         handle: p.handle,
-        price: p.price,
+        price: pPrice,
         image: p.images?.[0] || "",
         unitsSold: 0,
         totalRevenue: 0
       };
 
       existing.unitsSold += item.quantity;
-      existing.totalRevenue += item.price * item.quantity;
+      existing.totalRevenue += itemPrice * item.quantity;
       productSalesMap.set(p.id, existing);
     }
 
@@ -168,7 +172,7 @@ export const adminGetDashboardMetrics = async (_req: Request, res: Response) => 
         select: { totalAmount: true }
       });
 
-      const dayRevenue = dayOrders.reduce((sum, o) => sum + o.totalAmount, 0);
+      const dayRevenue = dayOrders.reduce((sum, o) => sum + toNumber(o.totalAmount), 0);
       revenueTrend.push({
         date: dayStart.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
         revenue: Math.round(dayRevenue * 100) / 100,
@@ -178,9 +182,9 @@ export const adminGetDashboardMetrics = async (_req: Request, res: Response) => 
 
     const metrics = {
       ordersToday: ordersTodayCount,
-      revenueToday: revenueTodayAgg._sum.totalAmount || 0,
+      revenueToday: toNumber(revenueTodayAgg._sum.totalAmount),
       totalOrders: totalOrdersCount,
-      totalRevenue: totalRevenueAgg._sum.totalAmount || 0,
+      totalRevenue: toNumber(totalRevenueAgg._sum.totalAmount),
       pendingOrders: pendingOrdersCount,
       lowStockCount: lowStockProducts.length,
       outOfStockCount,
@@ -191,25 +195,27 @@ export const adminGetDashboardMetrics = async (_req: Request, res: Response) => 
       lowStockProducts,
       recentOrders: recentOrders.map((o) => ({
         ...o,
+        totalAmount: toNumber(o.totalAmount),
         createdAt: o.createdAt.toISOString()
       })),
       revenueTrend
     };
 
-    return res.json({
+    res.json({
       success: true,
       data: metrics
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unable to calculate dashboard metrics";
     console.error("Dashboard metrics calculation failed:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      error: "Unable to calculate dashboard metrics"
+      error: message
     });
   }
 };
 
-export const adminGetProfitReport = async (_req: Request, res: Response) => {
+export const adminGetProfitReport = async (_req: Request, res: Response): Promise<void> => {
   try {
     const products = await prisma.product.findMany({
       where: { isArchived: false },
@@ -238,7 +244,7 @@ export const adminGetProfitReport = async (_req: Request, res: Response) => {
     for (const item of orderItems) {
       const curr = productSales.get(item.productId) || { unitsSold: 0, totalRevenue: 0 };
       curr.unitsSold += item.quantity;
-      curr.totalRevenue += item.price * item.quantity;
+      curr.totalRevenue += toNumber(item.price) * item.quantity;
       productSales.set(item.productId, curr);
     }
 
@@ -246,12 +252,14 @@ export const adminGetProfitReport = async (_req: Request, res: Response) => {
     let overallCost = 0;
 
     const items = products.map((p) => {
+      const pPrice = toNumber(p.price);
       const sales = productSales.get(p.id) || { unitsSold: 0, totalRevenue: 0 };
-      const cost = p.costPrice !== null && p.costPrice !== undefined ? p.costPrice : p.price * 0.7; // default 70% estimated cost if not set
+      const rawCost = p.costPrice !== null && p.costPrice !== undefined ? toNumber(p.costPrice) : pPrice * 0.7; // default 70% estimated cost if not set
+      const cost = rawCost;
       const totalItemCost = sales.unitsSold * cost;
       const totalItemProfit = sales.totalRevenue - totalItemCost;
-      const unitProfit = p.price - cost;
-      const marginPercent = p.price > 0 ? (unitProfit / p.price) * 100 : 0;
+      const unitProfit = pPrice - cost;
+      const marginPercent = pPrice > 0 ? (unitProfit / pPrice) * 100 : 0;
 
       overallRevenue += sales.totalRevenue;
       overallCost += totalItemCost;
@@ -260,7 +268,7 @@ export const adminGetProfitReport = async (_req: Request, res: Response) => {
         id: p.id,
         title: p.title,
         handle: p.handle,
-        sellingPrice: p.price,
+        sellingPrice: pPrice,
         costPrice: Math.round(cost * 100) / 100,
         unitProfit: Math.round(unitProfit * 100) / 100,
         marginPercent: Math.round(marginPercent * 10) / 10,
@@ -275,7 +283,7 @@ export const adminGetProfitReport = async (_req: Request, res: Response) => {
     const grossProfit = overallRevenue - overallCost;
     const grossMarginPercent = overallRevenue > 0 ? (grossProfit / overallRevenue) * 100 : 0;
 
-    return res.json({
+    res.json({
       success: true,
       data: {
         totalRevenue: Math.round(overallRevenue * 100) / 100,
@@ -285,11 +293,12 @@ export const adminGetProfitReport = async (_req: Request, res: Response) => {
         items: items.sort((a, b) => b.totalProfit - a.totalProfit)
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unable to generate profit report";
     console.error("Failed to generate profit report:", error);
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      error: "Unable to generate profit report"
+      error: message
     });
   }
 };

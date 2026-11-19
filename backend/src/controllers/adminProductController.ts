@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma.js";
 import {
   createProductSchema,
@@ -9,12 +10,14 @@ import {
   generateUniqueProductHandle,
   resolveProductHandleOnUpdate
 } from "../utils/slug.js";
+import { toNumber } from "../utils/decimal.js";
+import { createPaginationEnvelope } from "../utils/pagination.js";
 
 /**
  * GET /api/admin/products
- * Paginated, filtered list of all products for admin dashboard.
+ * List products with search, filtering, sorting, pagination, and KPI counts.
  */
-export async function adminGetProducts(req: Request, res: Response) {
+export async function adminGetProducts(req: Request, res: Response): Promise<void> {
   try {
     const page = Math.max(1, parseInt(String(req.query.page || "1"), 10) || 1);
     const limit = Math.max(1, Math.min(100, parseInt(String(req.query.limit || "20"), 10) || 20));
@@ -24,9 +27,9 @@ export async function adminGetProducts(req: Request, res: Response) {
     const status = typeof req.query.status === "string" ? req.query.status.trim() : "all";
     const isFeatured = req.query.isFeatured !== undefined ? req.query.isFeatured === "true" : undefined;
     const sortBy = typeof req.query.sortBy === "string" ? req.query.sortBy.trim() : "createdAt";
-    const sortOrder = req.query.sortOrder === "asc" ? "asc" : "desc";
+    const sortOrder: Prisma.SortOrder = req.query.sortOrder === "asc" ? "asc" : "desc";
 
-    const where: any = {};
+    const where: Prisma.ProductWhereInput = {};
 
     if (search) {
       where.OR = [
@@ -72,7 +75,7 @@ export async function adminGetProducts(req: Request, res: Response) {
     }
 
     // Build orderBy
-    let orderBy: any = { createdAt: sortOrder };
+    let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: sortOrder };
     if (sortBy === "price") {
       orderBy = { price: sortOrder };
     } else if (sortBy === "stock") {
@@ -81,9 +84,14 @@ export async function adminGetProducts(req: Request, res: Response) {
       orderBy = { title: sortOrder };
     }
 
+    const skip = (page - 1) * limit;
+
     const [products, total, totalAll, totalActive, totalLowStock, totalOutOfStock] = await Promise.all([
       prisma.product.findMany({
         where,
+        orderBy,
+        skip,
+        take: limit,
         include: {
           category: {
             select: { id: true, name: true, slug: true }
@@ -91,10 +99,7 @@ export async function adminGetProducts(req: Request, res: Response) {
           _count: {
             select: { orderItems: true }
           }
-        },
-        orderBy,
-        skip: (page - 1) * limit,
-        take: limit
+        }
       }),
       prisma.product.count({ where }),
       prisma.product.count({ where: { isArchived: false } }),
@@ -103,16 +108,23 @@ export async function adminGetProducts(req: Request, res: Response) {
       prisma.product.count({ where: { isArchived: false, stock: { lte: 0 } } })
     ]);
 
-    const totalPages = Math.ceil(total / limit) || 1;
+    const envelope = createPaginationEnvelope(products, total, page, limit);
 
     res.json({
       success: true,
+      data: products,
       products,
+      page: envelope.page,
+      pageSize: envelope.pageSize,
+      total: envelope.total,
+      totalPages: envelope.totalPages,
+      hasNextPage: envelope.hasNextPage,
+      hasPrevPage: envelope.hasPrevPage,
       pagination: {
-        page,
-        limit,
-        total,
-        totalPages
+        page: envelope.page,
+        limit: envelope.pageSize,
+        total: envelope.total,
+        totalPages: envelope.totalPages
       },
       kpis: {
         total: totalAll,
@@ -121,20 +133,22 @@ export async function adminGetProducts(req: Request, res: Response) {
         outOfStock: totalOutOfStock
       }
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to retrieve products";
     console.error("adminGetProducts error:", error);
-    res.status(500).json({ success: false, error: "Failed to retrieve products" });
+    res.status(500).json({ success: false, error: message });
   }
 }
 
 /**
  * GET /api/admin/products/:id
  */
-export async function adminGetProductById(req: Request, res: Response) {
+export async function adminGetProductById(req: Request, res: Response): Promise<void> {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
-      return res.status(400).json({ success: false, error: "Invalid product ID" });
+      res.status(400).json({ success: false, error: "Invalid product ID" });
+      return;
     }
 
     const product = await prisma.product.findUnique({
@@ -148,28 +162,31 @@ export async function adminGetProductById(req: Request, res: Response) {
     });
 
     if (!product) {
-      return res.status(404).json({ success: false, error: "Product not found" });
+      res.status(404).json({ success: false, error: "Product not found" });
+      return;
     }
 
-    res.json({ success: true, product });
-  } catch (error: any) {
+    res.json({ success: true, product, data: product });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to fetch product";
     console.error("adminGetProductById error:", error);
-    res.status(500).json({ success: false, error: "Failed to fetch product" });
+    res.status(500).json({ success: false, error: message });
   }
 }
 
 /**
  * POST /api/admin/products
  */
-export async function adminCreateProduct(req: Request, res: Response) {
+export async function adminCreateProduct(req: Request, res: Response): Promise<void> {
   try {
     const parsed = createProductSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: parsed.error.issues[0]?.message || "Validation failed",
         details: parsed.error.issues
       });
+      return;
     }
 
     const data = parsed.data;
@@ -179,7 +196,8 @@ export async function adminCreateProduct(req: Request, res: Response) {
       where: { id: data.categoryId }
     });
     if (!category) {
-      return res.status(404).json({ success: false, error: "Selected category does not exist" });
+      res.status(404).json({ success: false, error: "Selected category does not exist" });
+      return;
     }
 
     // Check SKU collision if SKU provided
@@ -188,7 +206,8 @@ export async function adminCreateProduct(req: Request, res: Response) {
         where: { sku: data.sku }
       });
       if (existingSku) {
-        return res.status(409).json({ success: false, error: `SKU '${data.sku}' is already assigned to another product.` });
+        res.status(409).json({ success: false, error: `SKU '${data.sku}' is already assigned to another product.` });
+        return;
       }
     }
 
@@ -237,22 +256,25 @@ export async function adminCreateProduct(req: Request, res: Response) {
     res.status(201).json({
       success: true,
       message: "Product created successfully",
-      product
+      product,
+      data: product
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to create product";
     console.error("adminCreateProduct error:", error);
-    res.status(500).json({ success: false, error: "Failed to create product" });
+    res.status(500).json({ success: false, error: message });
   }
 }
 
 /**
  * PUT /api/admin/products/:id
  */
-export async function adminUpdateProduct(req: Request, res: Response) {
+export async function adminUpdateProduct(req: Request, res: Response): Promise<void> {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
-      return res.status(400).json({ success: false, error: "Invalid product ID" });
+      res.status(400).json({ success: false, error: "Invalid product ID" });
+      return;
     }
 
     const currentProduct = await prisma.product.findUnique({
@@ -260,28 +282,34 @@ export async function adminUpdateProduct(req: Request, res: Response) {
     });
 
     if (!currentProduct) {
-      return res.status(404).json({ success: false, error: "Product not found" });
+      res.status(404).json({ success: false, error: "Product not found" });
+      return;
     }
 
     const parsed = updateProductSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: parsed.error.issues[0]?.message || "Validation failed",
         details: parsed.error.issues
       });
+      return;
     }
 
     const data = parsed.data;
 
     // Check compare > price against current or updated price
-    const effectivePrice = data.price !== undefined ? data.price : currentProduct.price;
-    const effectiveCompare = data.compare !== undefined ? data.compare : currentProduct.compare;
+    const currentPriceNum = toNumber(currentProduct.price);
+    const currentCompareNum = currentProduct.compare ? toNumber(currentProduct.compare) : null;
+
+    const effectivePrice = data.price !== undefined ? data.price : currentPriceNum;
+    const effectiveCompare = data.compare !== undefined ? data.compare : currentCompareNum;
     if (effectiveCompare !== null && effectiveCompare !== undefined && effectiveCompare <= effectivePrice) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: "Compare at price must be greater than the selling price"
       });
+      return;
     }
 
     // Verify category exists if updated
@@ -290,7 +318,8 @@ export async function adminUpdateProduct(req: Request, res: Response) {
         where: { id: data.categoryId }
       });
       if (!category) {
-        return res.status(404).json({ success: false, error: "Selected category does not exist" });
+        res.status(404).json({ success: false, error: "Selected category does not exist" });
+        return;
       }
     }
 
@@ -300,7 +329,8 @@ export async function adminUpdateProduct(req: Request, res: Response) {
         where: { sku: data.sku }
       });
       if (existingSku && existingSku.id !== id) {
-        return res.status(409).json({ success: false, error: `SKU '${data.sku}' is already in use by another product.` });
+        res.status(409).json({ success: false, error: `SKU '${data.sku}' is already in use by another product.` });
+        return;
       }
     }
 
@@ -358,11 +388,13 @@ export async function adminUpdateProduct(req: Request, res: Response) {
     res.json({
       success: true,
       message: "Product updated successfully",
-      product: updated
+      product: updated,
+      data: updated
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to update product";
     console.error("adminUpdateProduct error:", error);
-    res.status(500).json({ success: false, error: "Failed to update product" });
+    res.status(500).json({ success: false, error: message });
   }
 }
 
@@ -372,11 +404,12 @@ export async function adminUpdateProduct(req: Request, res: Response) {
  * - If product has past orders: soft-delete (archive) to preserve order history.
  * - If product has 0 orders: permanently delete from database.
  */
-export async function adminDeleteProduct(req: Request, res: Response) {
+export async function adminDeleteProduct(req: Request, res: Response): Promise<void> {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
-      return res.status(400).json({ success: false, error: "Invalid product ID" });
+      res.status(400).json({ success: false, error: "Invalid product ID" });
+      return;
     }
 
     const product = await prisma.product.findUnique({
@@ -389,7 +422,8 @@ export async function adminDeleteProduct(req: Request, res: Response) {
     });
 
     if (!product) {
-      return res.status(404).json({ success: false, error: "Product not found" });
+      res.status(404).json({ success: false, error: "Product not found" });
+      return;
     }
 
     const orderCount = product._count.orderItems;
@@ -404,12 +438,13 @@ export async function adminDeleteProduct(req: Request, res: Response) {
         }
       });
 
-      return res.json({
+      res.json({
         success: true,
         archived: true,
         deleted: false,
         message: `Product has ${orderCount} past order(s). It was safely archived instead of permanently deleted to preserve customer order history.`
       });
+      return;
     }
 
     // Hard-delete when 0 orders exist
@@ -423,9 +458,10 @@ export async function adminDeleteProduct(req: Request, res: Response) {
       deleted: true,
       message: "Product permanently deleted."
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to delete product";
     console.error("adminDeleteProduct error:", error);
-    res.status(500).json({ success: false, error: "Failed to delete product" });
+    res.status(500).json({ success: false, error: message });
   }
 }
 
@@ -433,11 +469,12 @@ export async function adminDeleteProduct(req: Request, res: Response) {
  * POST /api/admin/products/:id/duplicate
  * Clones a product into a new draft product with unique handle.
  */
-export async function adminDuplicateProduct(req: Request, res: Response) {
+export async function adminDuplicateProduct(req: Request, res: Response): Promise<void> {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
-      return res.status(400).json({ success: false, error: "Invalid product ID" });
+      res.status(400).json({ success: false, error: "Invalid product ID" });
+      return;
     }
 
     const original = await prisma.product.findUnique({
@@ -445,7 +482,8 @@ export async function adminDuplicateProduct(req: Request, res: Response) {
     });
 
     if (!original) {
-      return res.status(404).json({ success: false, error: "Product not found" });
+      res.status(404).json({ success: false, error: "Product not found" });
+      return;
     }
 
     const copyTitle = `${original.title} (Copy)`;
@@ -493,11 +531,13 @@ export async function adminDuplicateProduct(req: Request, res: Response) {
     res.status(201).json({
       success: true,
       message: "Product duplicated successfully as draft",
-      product: duplicated
+      product: duplicated,
+      data: duplicated
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to duplicate product";
     console.error("adminDuplicateProduct error:", error);
-    res.status(500).json({ success: false, error: "Failed to duplicate product" });
+    res.status(500).json({ success: false, error: message });
   }
 }
 
@@ -505,14 +545,15 @@ export async function adminDuplicateProduct(req: Request, res: Response) {
  * POST /api/admin/products/bulk
  * Perform bulk operations (activate, deactivate, archive, delete).
  */
-export async function adminBulkProductActions(req: Request, res: Response) {
+export async function adminBulkProductActions(req: Request, res: Response): Promise<void> {
   try {
     const parsed = bulkProductActionSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: parsed.error.issues[0]?.message || "Validation failed"
       });
+      return;
     }
 
     const { ids, action } = parsed.data;
@@ -522,7 +563,8 @@ export async function adminBulkProductActions(req: Request, res: Response) {
         where: { id: { in: ids } },
         data: { isActive: true, isArchived: false }
       });
-      return res.json({ success: true, message: `${ids.length} product(s) activated.` });
+      res.json({ success: true, message: `${ids.length} product(s) activated.` });
+      return;
     }
 
     if (action === "deactivate") {
@@ -530,7 +572,8 @@ export async function adminBulkProductActions(req: Request, res: Response) {
         where: { id: { in: ids } },
         data: { isActive: false }
       });
-      return res.json({ success: true, message: `${ids.length} product(s) deactivated.` });
+      res.json({ success: true, message: `${ids.length} product(s) deactivated.` });
+      return;
     }
 
     if (action === "archive") {
@@ -538,7 +581,8 @@ export async function adminBulkProductActions(req: Request, res: Response) {
         where: { id: { in: ids } },
         data: { isArchived: true, isActive: false }
       });
-      return res.json({ success: true, message: `${ids.length} product(s) archived.` });
+      res.json({ success: true, message: `${ids.length} product(s) archived.` });
+      return;
     }
 
     if (action === "delete") {
@@ -568,18 +612,20 @@ export async function adminBulkProductActions(req: Request, res: Response) {
         });
       }
 
-      return res.json({
+      res.json({
         success: true,
         deletedCount: deleteIds.length,
         archivedCount: archiveIds.length,
         message: `${deleteIds.length} product(s) permanently deleted, ${archiveIds.length} archived (due to existing customer orders).`
       });
+      return;
     }
 
     res.status(400).json({ success: false, error: "Invalid action" });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to perform bulk action";
     console.error("adminBulkProductActions error:", error);
-    res.status(500).json({ success: false, error: "Failed to perform bulk action" });
+    res.status(500).json({ success: false, error: message });
   }
 }
 
@@ -587,7 +633,7 @@ export async function adminBulkProductActions(req: Request, res: Response) {
  * POST /api/admin/upload
  * Multi-file image upload endpoint.
  */
-export async function adminUploadImages(req: Request, res: Response) {
+export async function adminUploadImages(req: Request, res: Response): Promise<void> {
   try {
     const files = req.files as Express.Multer.File[] | undefined;
     const singleFile = req.file as Express.Multer.File | undefined;
@@ -595,7 +641,8 @@ export async function adminUploadImages(req: Request, res: Response) {
     const uploadedFiles = files && files.length > 0 ? files : singleFile ? [singleFile] : [];
 
     if (uploadedFiles.length === 0) {
-      return res.status(400).json({ success: false, error: "No image files provided" });
+      res.status(400).json({ success: false, error: "No image files provided" });
+      return;
     }
 
     const urls = uploadedFiles.map((file) => `/uploads/${file.filename}`);
@@ -606,8 +653,9 @@ export async function adminUploadImages(req: Request, res: Response) {
       urls,
       url: urls[0]
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to upload images";
     console.error("adminUploadImages error:", error);
-    res.status(500).json({ success: false, error: "Failed to upload images" });
+    res.status(500).json({ success: false, error: message });
   }
 }

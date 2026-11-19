@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
+    "lint": "tsc --noEmit",
     "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
@@ -14,6 +15,8 @@
     "prisma:seed:demo": "tsx prisma/demo-seed.ts",
     "prisma:studio": "prisma studio",
     "admin:create": "tsx src/scripts/createAdmin.ts",
+    "db:backup": "tsx src/scripts/dbBackup.ts",
+    "db:restore": "tsx src/scripts/dbRestore.ts",
     "test": "tsx --test src/tests/*.test.ts"
   },
   "dependencies": {

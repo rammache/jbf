@@ -103,11 +103,10 @@ export const FAQ: React.FC = () => {
             key={cat}
             type="button"
             onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition ${
-              selectedCategory === cat
+            className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition ${selectedCategory === cat
                 ? "bg-[#15161d] text-white shadow"
                 : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-            }`}
+              }`}
           >
             {cat}
           </button>
@@ -130,9 +129,8 @@ export const FAQ: React.FC = () => {
               >
                 <span className="text-sm font-bold text-[#15161d]">{item.question}</span>
                 <ChevronDown
-                  className={`w-4 h-4 text-gray-500 transition-transform duration-300 flex-shrink-0 ${
-                    isOpen ? "rotate-180 text-[#d10024]" : ""
-                  }`}
+                  className={`w-4 h-4 text-gray-500 transition-transform duration-300 flex-shrink-0 ${isOpen ? "rotate-180 text-[#d10024]" : ""
+                    }`}
                 />
               </button>
 

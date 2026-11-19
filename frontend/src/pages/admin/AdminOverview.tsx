@@ -161,19 +161,17 @@ export const AdminOverview: React.FC = () => {
               Pending Orders
             </span>
             <div
-              className={`h-8 w-8 rounded-lg flex items-center justify-center ${
-                (metrics?.pendingOrders ?? 0) > 0
+              className={`h-8 w-8 rounded-lg flex items-center justify-center ${(metrics?.pendingOrders ?? 0) > 0
                   ? "bg-amber-100 text-amber-700 font-bold"
                   : "bg-gray-100 text-gray-400"
-              }`}
+                }`}
             >
               <Clock className="w-4 h-4" />
             </div>
           </div>
           <p
-            className={`mt-2 text-2xl font-black ${
-              (metrics?.pendingOrders ?? 0) > 0 ? "text-amber-600" : "text-[#15161d]"
-            }`}
+            className={`mt-2 text-2xl font-black ${(metrics?.pendingOrders ?? 0) > 0 ? "text-amber-600" : "text-[#15161d]"
+              }`}
           >
             {metrics?.pendingOrders ?? 0}
           </p>
@@ -189,19 +187,17 @@ export const AdminOverview: React.FC = () => {
               Inventory Alert
             </span>
             <div
-              className={`h-8 w-8 rounded-lg flex items-center justify-center ${
-                (metrics?.lowStockCount ?? 0) > 0
+              className={`h-8 w-8 rounded-lg flex items-center justify-center ${(metrics?.lowStockCount ?? 0) > 0
                   ? "bg-red-50 text-[#d10024]"
                   : "bg-gray-100 text-gray-400"
-              }`}
+                }`}
             >
               <AlertTriangle className="w-4 h-4" />
             </div>
           </div>
           <p
-            className={`mt-2 text-2xl font-black ${
-              (metrics?.lowStockCount ?? 0) > 0 ? "text-[#d10024]" : "text-[#15161d]"
-            }`}
+            className={`mt-2 text-2xl font-black ${(metrics?.lowStockCount ?? 0) > 0 ? "text-[#d10024]" : "text-[#15161d]"
+              }`}
           >
             {metrics?.lowStockCount ?? 0}
           </p>
@@ -398,11 +394,10 @@ export const AdminOverview: React.FC = () => {
                   </div>
                   <div className="text-right">
                     <span
-                      className={`inline-block px-2.5 py-1 rounded-md text-[11px] font-bold ${
-                        p.stock === 0
+                      className={`inline-block px-2.5 py-1 rounded-md text-[11px] font-bold ${p.stock === 0
                           ? "bg-red-100 text-red-800"
                           : "bg-amber-100 text-amber-800"
-                      }`}
+                        }`}
                     >
                       {p.stock === 0 ? "Out of Stock" : `${p.stock} units left`}
                     </span>

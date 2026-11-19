@@ -56,8 +56,9 @@ export const getProductReviews = async (req: Request, res: Response): Promise<vo
       count: reviews.length,
       data: reviews
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to load reviews" });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to load reviews";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -110,8 +111,9 @@ export const createProductReview = async (req: Request, res: Response): Promise<
       message: "Thank you for submitting your review!",
       data: review
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to submit review" });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Operation failed";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -140,8 +142,9 @@ export const adminGetReviews = async (_req: Request, res: Response): Promise<voi
       count: reviews.length,
       data: reviews
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to load reviews" });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to load reviews";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -175,8 +178,9 @@ export const adminToggleApproveReview = async (req: Request, res: Response): Pro
       message: `Review ${updated.isApproved ? "approved" : "unapproved"} successfully`,
       data: updated
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to update review" });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to update review";
+    res.status(500).json({ success: false, error: message });
   }
 };
 
@@ -205,7 +209,8 @@ export const adminDeleteReview = async (req: Request, res: Response): Promise<vo
       success: true,
       message: "Review deleted successfully"
     });
-  } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message || "Failed to delete review" });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to delete review";
+    res.status(500).json({ success: false, error: message });
   }
 };
