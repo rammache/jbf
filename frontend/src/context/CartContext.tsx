@@ -1,5 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { CartItem, Product } from "../types";
+import { useSettings } from "./SettingsContext";
+
+export interface AppliedCoupon {
+  code: string;
+  discountType: "PERCENTAGE" | "FIXED";
+  discountValue: number;
+  calculatedDiscount: number;
+  minOrderAmount?: number | null;
+  maxDiscount?: number | null;
+}
 
 interface CartContextType {
   items: CartItem[];
@@ -17,6 +27,10 @@ interface CartContextType {
   cartTotal: number;
   shippingFee: number;
   freeShippingThreshold: number;
+  appliedCoupon: AppliedCoupon | null;
+  discountAmount: number;
+  applyCoupon: (code: string) => Promise<{ success: boolean; error?: string }>;
+  removeCoupon: () => void;
   grandTotal: number;
 }
 
@@ -25,6 +39,7 @@ const STORAGE_KEY = "jabour-cart";
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { settings } = useSettings();
   const [items, setItems] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -37,6 +52,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<AppliedCoupon | null>(null);
 
   useEffect(() => {
     try {
@@ -92,13 +108,67 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const clearCart = () => {
     setItems([]);
+    setAppliedCoupon(null);
   };
 
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
   const cartTotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const freeShippingThreshold = 50;
-  const shippingFee = items.length === 0 ? 0 : cartTotal >= freeShippingThreshold ? 0 : 5;
-  const grandTotal = cartTotal + shippingFee;
+
+  const freeShippingThreshold = settings?.freeShippingThreshold ?? 50;
+  const standardShipping = settings?.shippingFee ?? 5;
+  const shippingFee = items.length === 0 ? 0 : cartTotal >= freeShippingThreshold ? 0 : standardShipping;
+
+  // Recalculate discount whenever cartTotal changes
+  let discountAmount = 0;
+  if (appliedCoupon && cartTotal > 0) {
+    if (appliedCoupon.discountType === "PERCENTAGE") {
+      discountAmount = (cartTotal * appliedCoupon.discountValue) / 100;
+      if (appliedCoupon.maxDiscount && appliedCoupon.maxDiscount > 0) {
+        discountAmount = Math.min(discountAmount, appliedCoupon.maxDiscount);
+      }
+    } else {
+      discountAmount = Math.min(appliedCoupon.discountValue, cartTotal);
+    }
+    discountAmount = Math.round(discountAmount * 100) / 100;
+  }
+
+  const grandTotal = Math.max(0, Math.round((cartTotal - discountAmount + shippingFee) * 100) / 100);
+
+  const applyCoupon = async (code: string): Promise<{ success: boolean; error?: string }> => {
+    const cleanCode = code.trim().toUpperCase();
+    if (!cleanCode) {
+      return { success: false, error: "Please enter a coupon code." };
+    }
+
+    try {
+      const res = await fetch("/api/coupons/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: cleanCode, subtotal: cartTotal })
+      });
+      const data = await res.json();
+
+      if (data.success && data.data) {
+        setAppliedCoupon({
+          code: data.data.code,
+          discountType: data.data.discountType,
+          discountValue: data.data.discountValue,
+          calculatedDiscount: data.data.calculatedDiscount,
+          minOrderAmount: data.data.minOrderAmount,
+          maxDiscount: data.data.maxDiscount
+        });
+        return { success: true };
+      } else {
+        return { success: false, error: data.error || "Invalid coupon code." };
+      }
+    } catch (err: any) {
+      return { success: false, error: err.message || "Failed to validate coupon." };
+    }
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+  };
 
   return (
     <CartContext.Provider
@@ -118,6 +188,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         cartTotal,
         shippingFee,
         freeShippingThreshold,
+        appliedCoupon,
+        discountAmount,
+        applyCoupon,
+        removeCoupon,
         grandTotal
       }}
     >

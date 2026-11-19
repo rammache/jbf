@@ -31,6 +31,8 @@ model Product {
   storage           String?
   ram               String?
   color             String?
+  costPrice         Float?
+  supplier          String?
   rating            Float       @default(5.0)
   reviews           Int         @default(0)
   finishes          String[]    @default([])
@@ -89,6 +91,8 @@ model Order {
   city            String       @default("Beirut")
   notes           String?
   paymentMethod   String       @default("COD")
+  couponCode      String?
+  discount        Float        @default(0)
   subtotal        Float        @default(0)
   shippingFee     Float        @default(0)
   tax             Float        @default(0)
@@ -125,4 +129,44 @@ model AdminUser {
   role         String   @default("ADMIN")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model StoreSettings {
+  id                    Int      @id @default(1)
+  storeName             String   @default("Jabour Phone")
+  logo                  String?
+  phone                 String   @default("+961 70 123 456")
+  whatsapp              String   @default("+961 70 123 456")
+  email                 String   @default("contact@jabourphone.com")
+  address               String   @default("Beirut, Lebanon")
+  city                  String   @default("Beirut")
+  country               String   @default("Lebanon")
+  currency              String   @default("USD")
+  currencySymbol        String   @default("$")
+  shippingFee           Float    @default(5.0)
+  freeShippingThreshold Float    @default(50.0)
+  announcement          String   @default("Free express delivery on orders over $50 | 100% Genuine phones guaranteed")
+  facebook              String?
+  instagram             String?
+  tiktok                String?
+  twitter               String?
+  workingHours          String   @default("Mon - Sat: 9:00 AM - 8:00 PM")
+  aboutText             String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Coupon {
+  id             Int       @id @default(autoincrement())
+  code           String    @unique
+  discountType   String    @default("PERCENTAGE")
+  discountValue  Float
+  minOrderAmount Float?
+  maxDiscount    Float?
+  usageLimit     Int?
+  usedCount      Int       @default(0)
+  isActive       Boolean   @default(true)
+  expiresAt      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }

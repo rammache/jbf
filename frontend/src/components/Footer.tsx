@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, Loader2 } from "lucide-react";
+import { Check, Loader2, Phone, Mail, MapPin } from "lucide-react";
 import { useCategories } from "../context/CategoryContext";
+import { useSettings } from "../context/SettingsContext";
 
 export const Footer: React.FC = () => {
   const { categories } = useCategories();
+  const { settings } = useSettings();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -42,12 +44,25 @@ export const Footer: React.FC = () => {
           {/* Brand info */}
           <div className="space-y-4">
             <h2 className="text-2xl font-black text-white tracking-tight uppercase">
-              Jabour Phone<span className="text-[#d10024]">.</span>
+              {settings.storeName}<span className="text-[#d10024]">.</span>
             </h2>
             <p className="text-xs text-gray-400 leading-relaxed">
-              Technology, without the markup. We stock what we would buy ourselves,
-              publish the real specification measured on our bench, and price it without the theatre.
+              {settings.aboutText || "Technology, without the markup. Certified smartphones, authentic accessories, and certified electronics in Lebanon."}
             </p>
+            <div className="space-y-1.5 pt-1 text-xs text-gray-400">
+              <div className="flex items-center gap-2">
+                <Phone className="w-3.5 h-3.5 text-[#d10024]" />
+                <span>{settings.phone}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail className="w-3.5 h-3.5 text-[#d10024]" />
+                <span>{settings.email}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5 text-[#d10024]" />
+                <span>{settings.address}</span>
+              </div>
+            </div>
           </div>
 
           {/* Quick shop */}

@@ -18,8 +18,17 @@ const CITIES = [
 ];
 
 export const CheckoutModal: React.FC = () => {
-  const { items, cartTotal, shippingFee, grandTotal, isCheckoutOpen, setIsCheckoutOpen, clearCart } =
-    useCart();
+  const {
+    items,
+    cartTotal,
+    shippingFee,
+    appliedCoupon,
+    discountAmount,
+    grandTotal,
+    isCheckoutOpen,
+    setIsCheckoutOpen,
+    clearCart
+  } = useCart();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -83,6 +92,7 @@ export const CheckoutModal: React.FC = () => {
           city: city.trim(),
           notes: notes.trim() || undefined,
           paymentMethod,
+          couponCode: appliedCoupon ? appliedCoupon.code : undefined,
           items: items.map((i) => ({
             productId: i.productId,
             title: i.title,
@@ -348,11 +358,10 @@ export const CheckoutModal: React.FC = () => {
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <label
-                    className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs ${
-                      paymentMethod === "COD"
+                    className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs ${paymentMethod === "COD"
                         ? "border-[#d10024] bg-red-50/40 text-gray-900 font-bold"
                         : "border-gray-200 hover:border-gray-300 text-gray-600"
-                    }`}
+                      }`}
                   >
                     <input
                       type="radio"
@@ -369,11 +378,10 @@ export const CheckoutModal: React.FC = () => {
                   </label>
 
                   <label
-                    className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs ${
-                      paymentMethod === "CARD"
+                    className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs ${paymentMethod === "CARD"
                         ? "border-[#d10024] bg-red-50/40 text-gray-900 font-bold"
                         : "border-gray-200 hover:border-gray-300 text-gray-600"
-                    }`}
+                      }`}
                   >
                     <input
                       type="radio"
@@ -397,6 +405,12 @@ export const CheckoutModal: React.FC = () => {
                   <span>Cart Items ({items.length})</span>
                   <span className="font-bold text-gray-900">${cartTotal.toFixed(2)}</span>
                 </div>
+                {appliedCoupon && (
+                  <div className="flex justify-between text-green-700 font-bold">
+                    <span>Coupon Discount ({appliedCoupon.code}):</span>
+                    <span>-${discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span>Courier Delivery:</span>
                   <span className="font-bold text-green-700">

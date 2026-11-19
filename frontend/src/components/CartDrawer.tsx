@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
@@ -13,9 +13,17 @@ export const CartDrawer: React.FC = () => {
     cartTotal,
     shippingFee,
     freeShippingThreshold,
+    appliedCoupon,
+    discountAmount,
+    applyCoupon,
+    removeCoupon,
     grandTotal,
     setIsCheckoutOpen
   } = useCart();
+
+  const [couponInput, setCouponInput] = useState("");
+  const [couponError, setCouponError] = useState("");
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
 
   // Lock body scroll and listen for Escape key
   useEffect(() => {
@@ -165,6 +173,12 @@ export const CartDrawer: React.FC = () => {
                   <span>Subtotal</span>
                   <span className="font-bold text-gray-900">${cartTotal.toFixed(2)}</span>
                 </div>
+                {appliedCoupon && (
+                  <div className="flex justify-between text-green-700 font-bold">
+                    <span>Discount ({appliedCoupon.code})</span>
+                    <span>-${discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span>Delivery Fee</span>
                   <span className="font-bold text-green-700">
@@ -175,6 +189,60 @@ export const CartDrawer: React.FC = () => {
                   <span>Total (Cash on Delivery)</span>
                   <span className="text-[#d10024]">${grandTotal.toFixed(2)}</span>
                 </div>
+              </div>
+
+              {/* Promo Coupon Box */}
+              <div className="pt-1">
+                {appliedCoupon ? (
+                  <div className="flex items-center justify-between rounded-lg bg-green-50 border border-green-200 px-3 py-2 text-xs">
+                    <span className="font-bold text-green-800">
+                      Coupon <span className="font-mono">{appliedCoupon.code}</span> applied!
+                    </span>
+                    <button
+                      type="button"
+                      onClick={removeCoupon}
+                      className="text-xs font-bold text-red-600 hover:underline"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      setCouponError("");
+                      setApplyingCoupon(true);
+                      const res = await applyCoupon(couponInput);
+                      if (!res.success) {
+                        setCouponError(res.error || "Invalid coupon");
+                      } else {
+                        setCouponInput("");
+                      }
+                      setApplyingCoupon(false);
+                    }}
+                    className="space-y-1"
+                  >
+                    <div className="flex gap-1.5">
+                      <input
+                        type="text"
+                        value={couponInput}
+                        onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                        placeholder="Discount code"
+                        className="flex-1 rounded border border-gray-300 px-2.5 py-1.5 text-xs font-mono uppercase font-bold focus:border-[#d10024] focus:outline-none"
+                      />
+                      <button
+                        type="submit"
+                        disabled={applyingCoupon || !couponInput.trim()}
+                        className="rounded bg-[#15161d] px-3 py-1.5 text-xs font-bold text-white hover:bg-black transition disabled:opacity-50"
+                      >
+                        Apply
+                      </button>
+                    </div>
+                    {couponError && (
+                      <p className="text-[11px] font-semibold text-red-600">{couponError}</p>
+                    )}
+                  </form>
+                )}
               </div>
 
               {cartTotal < freeShippingThreshold && (

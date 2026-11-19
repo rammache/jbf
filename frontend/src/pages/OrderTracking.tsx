@@ -220,15 +220,14 @@ export const OrderTracking: React.FC = () => {
             </div>
 
             <div
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border ${
-                isCancelled
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border ${isCancelled
                   ? "bg-red-50 border-red-300 text-red-700"
                   : isReturned
                     ? "bg-gray-100 border-gray-300 text-gray-700"
                     : order.status === "DELIVERED"
                       ? "bg-green-50 border-green-300 text-green-700"
                       : "bg-red-50 border-red-200 text-[#d10024]"
-              }`}
+                }`}
             >
               {isCancelled ? (
                 <XCircle className="w-4 h-4 text-red-600" />
@@ -256,14 +255,12 @@ export const OrderTracking: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-2">
                 <div
-                  className={`p-4 rounded-xl border text-center space-y-2 ${
-                    currentStep >= 1 ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200 opacity-60"
-                  }`}
+                  className={`p-4 rounded-xl border text-center space-y-2 ${currentStep >= 1 ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200 opacity-60"
+                    }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto text-xs font-bold ${
-                      currentStep >= 1 ? "bg-green-600 text-white" : "bg-gray-300 text-gray-600"
-                    }`}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto text-xs font-bold ${currentStep >= 1 ? "bg-green-600 text-white" : "bg-gray-300 text-gray-600"
+                      }`}
                   >
                     <CheckCircle className="w-4 h-4" />
                   </div>
@@ -272,14 +269,12 @@ export const OrderTracking: React.FC = () => {
                 </div>
 
                 <div
-                  className={`p-4 rounded-xl border text-center space-y-2 ${
-                    currentStep >= 2 ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200 opacity-60"
-                  }`}
+                  className={`p-4 rounded-xl border text-center space-y-2 ${currentStep >= 2 ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200 opacity-60"
+                    }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto text-xs font-bold ${
-                      currentStep >= 2 ? "bg-green-600 text-white" : "bg-gray-300 text-gray-600"
-                    }`}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto text-xs font-bold ${currentStep >= 2 ? "bg-green-600 text-white" : "bg-gray-300 text-gray-600"
+                      }`}
                   >
                     <Clock className="w-4 h-4" />
                   </div>
@@ -288,14 +283,12 @@ export const OrderTracking: React.FC = () => {
                 </div>
 
                 <div
-                  className={`p-4 rounded-xl border text-center space-y-2 ${
-                    currentStep >= 3 ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200 opacity-60"
-                  }`}
+                  className={`p-4 rounded-xl border text-center space-y-2 ${currentStep >= 3 ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200 opacity-60"
+                    }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto text-xs font-bold ${
-                      currentStep >= 3 ? "bg-green-600 text-white" : "bg-gray-300 text-gray-600"
-                    }`}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto text-xs font-bold ${currentStep >= 3 ? "bg-green-600 text-white" : "bg-gray-300 text-gray-600"
+                      }`}
                   >
                     <Truck className="w-4 h-4" />
                   </div>
@@ -304,14 +297,12 @@ export const OrderTracking: React.FC = () => {
                 </div>
 
                 <div
-                  className={`p-4 rounded-xl border text-center space-y-2 ${
-                    currentStep >= 4 ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200 opacity-60"
-                  }`}
+                  className={`p-4 rounded-xl border text-center space-y-2 ${currentStep >= 4 ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200 opacity-60"
+                    }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto text-xs font-bold ${
-                      currentStep >= 4 ? "bg-green-600 text-white" : "bg-gray-300 text-gray-600"
-                    }`}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto text-xs font-bold ${currentStep >= 4 ? "bg-green-600 text-white" : "bg-gray-300 text-gray-600"
+                      }`}
                   >
                     <CheckCircle className="w-4 h-4" />
                   </div>

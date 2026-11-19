@@ -35,6 +35,7 @@ export const createOrderSchema = z.object({
   city: z.string().trim().min(2, "City is required").default("Beirut"),
   notes: z.string().trim().max(500, "Notes cannot exceed 500 characters").optional().nullable(),
   paymentMethod: z.enum(["COD", "CARD"]).default("COD"),
+  couponCode: z.string().trim().max(30).optional().nullable(),
   items: z.array(orderItemInputSchema).min(1, "Your cart must contain at least one item to checkout")
 });
 

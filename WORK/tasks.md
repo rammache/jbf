@@ -219,15 +219,15 @@ The WORK files must carry enough context for any agent to continue without guess
 
 ## Phase 7 - Newsletter, Settings, And Admin Extras
 
-- [ ] Add `StoreSettings` model: store name, logo, phone, WhatsApp, email, address, currency, shipping fee, free-shipping threshold, social links. **P1**
-- [ ] Admin settings page to edit these values. **P1**
-- [ ] Frontend reads settings instead of hardcoded business text. **P1**
-- [ ] Admin newsletter list with search, delete, and CSV export. **P1**
-- [ ] Admin dashboard: orders today, revenue, pending orders, low stock, top products. **P1**
-- [ ] Recent orders and recent products on the dashboard. **P2**
-- [ ] Second admin account or role support. **P2**
-- [ ] Coupon/discount codes. **P2**
-- [ ] Supplier/purchase price and profit report. **P2**
+- [x] Add `StoreSettings` model: store name, logo, phone, WhatsApp, email, address, currency, shipping fee, free-shipping threshold, social links. **P1**
+- [x] Admin settings page to edit these values. **P1**
+- [x] Frontend reads settings instead of hardcoded business text. **P1**
+- [x] Admin newsletter list with search, delete, and CSV export. **P1**
+- [x] Admin dashboard: orders today, revenue, pending orders, low stock, top products. **P1**
+- [x] Recent orders and recent products on the dashboard. **P2**
+- [x] Second admin account or role support. **P2**
+- [x] Coupon/discount codes. **P2**
+- [x] Supplier/purchase price and profit report. **P2**
 
 ---
 

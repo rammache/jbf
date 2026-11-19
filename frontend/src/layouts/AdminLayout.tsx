@@ -5,12 +5,14 @@ import {
   LayoutDashboard,
   Loader2,
   LogOut,
+  Mail,
   Menu,
   Package,
   Settings,
   ShieldCheck,
   ShoppingCart,
   Store,
+  Tag,
   Tags,
   X
 } from "lucide-react";
@@ -28,6 +30,8 @@ const navigation: AdminNavItem[] = [
   { label: "Categories", icon: Tags, to: "/admin/categories" },
   { label: "Products", icon: Package, to: "/admin/products" },
   { label: "Orders", icon: ShoppingCart, to: "/admin/orders" },
+  { label: "Coupons", icon: Tag, to: "/admin/coupons" },
+  { label: "Newsletter", icon: Mail, to: "/admin/newsletter" },
   { label: "Settings", icon: Settings, to: "/admin/settings" }
 ];
 
@@ -47,7 +51,11 @@ export const AdminLayout: React.FC = () => {
         ? "Products"
         : location.pathname.startsWith("/admin/orders")
           ? "Orders"
-          : "Overview";
+          : location.pathname.startsWith("/admin/coupons")
+            ? "Coupons & Discounts"
+            : location.pathname.startsWith("/admin/newsletter")
+              ? "Newsletter Subscribers"
+              : "Overview";
 
   const handleLogout = async () => {
     if (loggingOut) return;

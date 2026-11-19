@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { SettingsProvider } from "./context/SettingsContext";
 import { CategoryProvider } from "./context/CategoryContext";
 import { GuestOnlyRoute, ProtectedRoute } from "./components/RouteGuards";
 import { StorefrontLayout } from "./layouts/StorefrontLayout";
@@ -25,45 +26,51 @@ import { AdminSettings } from "./pages/admin/AdminSettings";
 import { AdminCategories } from "./pages/admin/AdminCategories";
 import { AdminProducts } from "./pages/admin/AdminProducts";
 import { AdminOrders } from "./pages/admin/AdminOrders";
+import { AdminCoupons } from "./pages/admin/AdminCoupons";
+import { AdminNewsletter } from "./pages/admin/AdminNewsletter";
 
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <ErrorBoundary>
         <AuthProvider>
-          <CategoryProvider>
-            <Routes>
-              <Route element={<GuestOnlyRoute />}>
-                <Route path="/admin/login" element={<AdminLogin />} />
-              </Route>
-
-              <Route element={<ProtectedRoute />}>
-                <Route path="/admin" element={<AdminLayout />}>
-                  <Route index element={<AdminOverview />} />
-                  <Route path="categories" element={<AdminCategories />} />
-                  <Route path="products" element={<AdminProducts />} />
-                  <Route path="orders" element={<AdminOrders />} />
-                  <Route path="settings" element={<AdminSettings />} />
-                  <Route path="*" element={<Navigate to="/admin" replace />} />
+          <SettingsProvider>
+            <CategoryProvider>
+              <Routes>
+                <Route element={<GuestOnlyRoute />}>
+                  <Route path="/admin/login" element={<AdminLogin />} />
                 </Route>
-              </Route>
 
-              <Route element={<StorefrontLayout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/product/:handle" element={<ProductDetail />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/shipping" element={<Shipping />} />
-                <Route path="/returns" element={<Returns />} />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/track" element={<OrderTracking />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
-          </CategoryProvider>
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<AdminOverview />} />
+                    <Route path="categories" element={<AdminCategories />} />
+                    <Route path="products" element={<AdminProducts />} />
+                    <Route path="orders" element={<AdminOrders />} />
+                    <Route path="coupons" element={<AdminCoupons />} />
+                    <Route path="newsletter" element={<AdminNewsletter />} />
+                    <Route path="settings" element={<AdminSettings />} />
+                    <Route path="*" element={<Navigate to="/admin" replace />} />
+                  </Route>
+                </Route>
+
+                <Route element={<StorefrontLayout />}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/product/:handle" element={<ProductDetail />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/shipping" element={<Shipping />} />
+                  <Route path="/returns" element={<Returns />} />
+                  <Route path="/privacy" element={<Privacy />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/track" element={<OrderTracking />} />
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+              </Routes>
+            </CategoryProvider>
+          </SettingsProvider>
         </AuthProvider>
       </ErrorBoundary>
     </BrowserRouter>

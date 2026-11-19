@@ -3,7 +3,7 @@ import { prisma } from "../prisma.js";
 import { ADMIN_AUTH_COOKIE_NAME, getAdminCookieOptions } from "../utils/authCookie.js";
 import { verifyAdminToken } from "../utils/jwt.js";
 
-const ADMIN_ROLE = "ADMIN";
+const ALLOWED_ADMIN_ROLES = ["SUPER_ADMIN", "ADMIN", "STAFF"];
 
 export interface AuthenticatedAdmin {
   id: number;
@@ -44,7 +44,7 @@ export async function requireAdmin(
       return;
     }
 
-    if (admin.role !== ADMIN_ROLE) {
+    if (!ALLOWED_ADMIN_ROLES.includes(admin.role)) {
       res.status(403).json({ success: false, error: "Admin access required." });
       return;
     }

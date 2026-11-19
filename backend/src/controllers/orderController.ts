@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { prisma } from "../prisma.js";
-import { calculateOrderTotals } from "../config/store.js";
+import { STORE_CONFIG, calculateOrderTotals } from "../config/store.js";
 import { generateUniqueOrderNumber } from "../utils/orderNumber.js";
 import { sendOrderNotifications } from "../services/emailService.js";
+import { calculateCouponDiscount } from "./couponController.js";
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
@@ -98,13 +99,48 @@ export const createOrder = async (req: Request, res: Response) => {
     // Contact phone is enforced in createOrderSchema on HTTP requests
     const phone = (customerPhone || req.body.phone || "00000000").trim();
 
-    // Calculate official totals using server store rules
-    const financials = calculateOrderTotals(calculatedSubtotal);
+    // Check for optional coupon code
+    let appliedCoupon: any = null;
+    let couponDiscount = 0;
+    if (req.body.couponCode && typeof req.body.couponCode === "string") {
+      const code = req.body.couponCode.trim().toUpperCase();
+      const coupon = await prisma.coupon.findUnique({ where: { code } });
+      if (coupon && coupon.isActive) {
+        const isNotExpired = !coupon.expiresAt || new Date(coupon.expiresAt) >= new Date();
+        const underLimit = coupon.usageLimit == null || coupon.usedCount < coupon.usageLimit;
+        const meetsMin = !coupon.minOrderAmount || calculatedSubtotal >= coupon.minOrderAmount;
+        if (isNotExpired && underLimit && meetsMin) {
+          appliedCoupon = coupon;
+          couponDiscount = calculateCouponDiscount(
+            calculatedSubtotal,
+            coupon.discountType,
+            coupon.discountValue,
+            coupon.maxDiscount
+          );
+        }
+      }
+    }
+
+    // Check dynamic store settings for shipping fee & free-shipping threshold
+    let standardShipping: number = STORE_CONFIG.standardShippingFee;
+    let freeShippingThreshold: number = STORE_CONFIG.freeShippingThreshold;
+    try {
+      const settings = await prisma.storeSettings.findUnique({ where: { id: 1 } });
+      if (settings) {
+        standardShipping = settings.shippingFee;
+        freeShippingThreshold = settings.freeShippingThreshold;
+      }
+    } catch {
+      // fallback to static store config
+    }
+
+    const shippingFee = calculatedSubtotal >= freeShippingThreshold ? 0 : standardShipping;
+    const finalTotal = Math.max(0, Math.round((calculatedSubtotal - couponDiscount + shippingFee) * 100) / 100);
 
     // Generate unique order number (e.g. JP-2611-4821)
     const orderNumber = await generateUniqueOrderNumber();
 
-    // Execute order creation and stock decrements atomically in a transaction
+    // Execute order creation, stock decrements, and coupon counter atomically in a transaction
     const order = await prisma.$transaction(async (tx) => {
       // Decrement inventory for each ordered item
       for (const item of verifiedItems) {
@@ -113,6 +149,14 @@ export const createOrder = async (req: Request, res: Response) => {
           data: {
             stock: { decrement: item.quantity }
           }
+        });
+      }
+
+      // Increment coupon usage if coupon applied
+      if (appliedCoupon) {
+        await tx.coupon.update({
+          where: { id: appliedCoupon.id },
+          data: { usedCount: { increment: 1 } }
         });
       }
 
@@ -127,10 +171,12 @@ export const createOrder = async (req: Request, res: Response) => {
           city: (city || "Beirut").trim(),
           notes: notes ? notes.trim() : null,
           paymentMethod: paymentMethod === "CARD" ? "CARD" : "COD",
-          subtotal: financials.subtotal,
-          shippingFee: financials.shippingFee,
-          tax: financials.tax,
-          totalAmount: financials.totalAmount,
+          couponCode: appliedCoupon ? appliedCoupon.code : null,
+          discount: couponDiscount,
+          subtotal: calculatedSubtotal,
+          shippingFee: shippingFee,
+          tax: 0,
+          totalAmount: finalTotal,
           status: "PENDING",
           items: {
             create: verifiedItems.map((item) => ({
@@ -149,7 +195,7 @@ export const createOrder = async (req: Request, res: Response) => {
     });
 
     // Send order confirmation notifications asynchronously (non-blocking)
-    sendOrderNotifications(order as any).catch(() => {});
+    sendOrderNotifications(order as any).catch(() => { });
 
     res.status(201).json({
       success: true,

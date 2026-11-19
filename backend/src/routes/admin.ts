@@ -40,13 +40,64 @@ import {
   adminDeleteOrder
 } from "../controllers/adminOrderController.js";
 import { updateOrderStatusSchema } from "../schemas/order.js";
+import {
+  adminGetDashboardMetrics,
+  adminGetProfitReport
+} from "../controllers/adminDashboardController.js";
+import {
+  adminGetStoreSettings,
+  adminUpdateStoreSettings
+} from "../controllers/settingsController.js";
+import {
+  adminGetNewsletterSubscribers,
+  adminExportNewsletterCsv,
+  adminDeleteNewsletterSubscriber
+} from "../controllers/newsletterController.js";
+import {
+  adminGetCoupons,
+  adminCreateCoupon,
+  adminUpdateCoupon,
+  adminDeleteCoupon
+} from "../controllers/couponController.js";
+import {
+  adminGetUsers,
+  adminCreateUser,
+  adminUpdateUser,
+  adminDeleteUser
+} from "../controllers/adminUserController.js";
+import { updateStoreSettingsSchema } from "../schemas/settings.js";
+import { createCouponSchema, updateCouponSchema } from "../schemas/coupon.js";
+import { createAdminUserSchema, updateAdminUserSchema } from "../schemas/adminUser.js";
 
 const router = Router();
 
 router.use(requireAdmin);
 
-// Admin security & settings
+// Admin Dashboard & Analytics
+router.get("/dashboard", adminGetDashboardMetrics);
+router.get("/reports/profit", adminGetProfitReport);
+
+// Admin security & store settings
 router.post("/change-password", validateBody(changePasswordSchema), changePassword);
+router.get("/settings", adminGetStoreSettings);
+router.put("/settings", validateBody(updateStoreSettingsSchema), adminUpdateStoreSettings);
+
+// Newsletter Subscribers
+router.get("/newsletter", adminGetNewsletterSubscribers);
+router.get("/newsletter/export", adminExportNewsletterCsv);
+router.delete("/newsletter/:id", adminDeleteNewsletterSubscriber);
+
+// Coupons & Promotions
+router.get("/coupons", adminGetCoupons);
+router.post("/coupons", validateBody(createCouponSchema), adminCreateCoupon);
+router.put("/coupons/:id", validateBody(updateCouponSchema), adminUpdateCoupon);
+router.delete("/coupons/:id", adminDeleteCoupon);
+
+// Admin Accounts & Role Management
+router.get("/users", adminGetUsers);
+router.post("/users", validateBody(createAdminUserSchema), adminCreateUser);
+router.put("/users/:id", validateBody(updateAdminUserSchema), adminUpdateUser);
+router.delete("/users/:id", adminDeleteUser);
 
 // Image Uploads (up to 10 images at once)
 router.post("/upload", uploadMiddleware.array("images", 10), adminUploadImages);

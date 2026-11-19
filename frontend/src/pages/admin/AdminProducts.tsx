@@ -31,6 +31,8 @@ interface ProductFormData {
   regenerateHandle?: boolean;
   price: string;
   compare: string;
+  costPrice: string;
+  supplier: string;
   categoryId: string;
   brand: string;
   sku: string;
@@ -60,6 +62,8 @@ const INITIAL_FORM: ProductFormData = {
   regenerateHandle: false,
   price: "",
   compare: "",
+  costPrice: "",
+  supplier: "",
   categoryId: "",
   brand: "Apple",
   sku: "",
@@ -193,6 +197,8 @@ export const AdminProducts: React.FC = () => {
       regenerateHandle: false,
       price: product.price.toString(),
       compare: product.compare !== null && product.compare !== undefined ? product.compare.toString() : "",
+      costPrice: product.costPrice !== null && product.costPrice !== undefined ? product.costPrice.toString() : "",
+      supplier: product.supplier || "",
       categoryId: String(catId),
       brand: product.brand || "",
       sku: product.sku || "",
@@ -416,6 +422,8 @@ export const AdminProducts: React.FC = () => {
         title: formData.title.trim(),
         price: priceNum,
         compare: compareNum,
+        costPrice: formData.costPrice.trim() ? parseFloat(formData.costPrice) : null,
+        supplier: formData.supplier.trim() || null,
         categoryId: catIdNum,
         brand: formData.brand.trim() || "Jabour",
         sku: formData.sku.trim() || null,
@@ -1237,6 +1245,34 @@ export const AdminProducts: React.FC = () => {
                           Warning: Compare at price must be greater than selling price.
                         </p>
                       )}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
+                        Supplier / Purchase Cost ($) <span className="text-gray-400 font-normal">(For Profit Reports)</span>
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={formData.costPrice}
+                        onChange={(e) => setFormData({ ...formData, costPrice: e.target.value })}
+                        placeholder="Cost to buy from supplier, e.g. 750.00"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
+                        Supplier Name / Source
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.supplier}
+                        onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
+                        placeholder="e.g. Official Distributor, Dubai Tech Wholesaler"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                      />
                     </div>
 
                     <div>

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Phone, Mail, MapPin, Clock, MessageCircle, Send, CheckCircle } from "lucide-react";
 import { SEO } from "../components/SEO";
+import { useSettings } from "../context/SettingsContext";
 
 export const Contact: React.FC = () => {
+  const { settings } = useSettings();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -50,10 +52,10 @@ export const Contact: React.FC = () => {
           <h2 className="text-sm font-black uppercase text-[#15161d]">Phone Support</h2>
           <p className="text-xs text-gray-500">Direct phone line for quick stock inquiries and orders.</p>
           <a
-            href="tel:+96170123456"
+            href={`tel:${settings.phone.replace(/\s+/g, "")}`}
             className="block text-sm font-bold text-[#15161d] hover:text-[#d10024] transition font-mono"
           >
-            +961 70 123 456
+            {settings.phone}
           </a>
         </div>
 
@@ -64,7 +66,7 @@ export const Contact: React.FC = () => {
           <h2 className="text-sm font-black uppercase text-[#15161d]">WhatsApp Chat</h2>
           <p className="text-xs text-gray-500">Instant answers, photo requests, and direct chat orders.</p>
           <a
-            href="https://wa.me/96170123456?text=Hello%20Jabour%20Phone,%20I%20have%20an%20inquiry."
+            href={`https://wa.me/${settings.whatsapp.replace(/[^\d]/g, "")}?text=Hello%20${encodeURIComponent(settings.storeName)},%20I%20have%20an%20inquiry.`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-sm font-bold text-green-600 hover:text-green-700 transition"
@@ -80,10 +82,10 @@ export const Contact: React.FC = () => {
           <h2 className="text-sm font-black uppercase text-[#15161d]">Direct Email</h2>
           <p className="text-xs text-gray-500">Warranty inquiries, business requests, and general support.</p>
           <a
-            href="mailto:info@jabourphone.com"
+            href={`mailto:${settings.email}`}
             className="block text-sm font-bold text-[#15161d] hover:text-[#d10024] transition"
           >
-            info@jabourphone.com
+            {settings.email}
           </a>
         </div>
 
@@ -94,7 +96,7 @@ export const Contact: React.FC = () => {
           <h2 className="text-sm font-black uppercase text-[#15161d]">Working Hours</h2>
           <p className="text-xs text-gray-500">Showroom &amp; dispatch center schedule.</p>
           <p className="text-xs font-semibold text-gray-800">
-            Mon - Sat: 9:00 AM - 8:00 PM<br />
+            {settings.workingHours}<br />
             Sunday: Closed
           </p>
         </div>

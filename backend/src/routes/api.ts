@@ -5,6 +5,8 @@ import { getCategories } from "../controllers/categoryController.js";
 import { createOrder, getOrder, trackOrder } from "../controllers/orderController.js";
 import { subscribeNewsletter } from "../controllers/newsletterController.js";
 import { getProductReviews, createProductReview } from "../controllers/reviewController.js";
+import { getStoreSettings } from "../controllers/settingsController.js";
+import { validateCoupon } from "../controllers/couponController.js";
 import { validateBody } from "../middleware/validate.js";
 import {
   loginRateLimiter,
@@ -43,5 +45,11 @@ router.get("/orders/:id", getOrder);
 
 // Newsletter
 router.post("/newsletter", newsletterRateLimiter, subscribeNewsletter);
+
+// Store Settings & Policies
+router.get("/settings", getStoreSettings);
+
+// Coupon Validation for Checkout
+router.post("/coupons/validate", validateCoupon);
 
 export default router;
