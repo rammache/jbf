@@ -169,6 +169,28 @@ export const ProductDetail: React.FC = () => {
             )}
           </div>
 
+          {/* Stock Status Indicator */}
+          <div className="flex items-center space-x-2 text-xs">
+            {product.stock <= 0 ? (
+              <span className="inline-flex items-center rounded-full bg-red-100 px-3 py-1 font-bold text-red-700">
+                Out of Stock
+              </span>
+            ) : product.stock <= (product.lowStockThreshold ?? 5) ? (
+              <span className="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 font-bold text-amber-800">
+                Low Stock: Only {product.stock} left in stock - order soon!
+              </span>
+            ) : (
+              <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 font-bold text-green-800">
+                In Stock ({product.stock} available)
+              </span>
+            )}
+            {product.condition && (
+              <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 font-semibold text-gray-700 uppercase text-[10px]">
+                Condition: {product.condition}
+              </span>
+            )}
+          </div>
+
           {/* Color Finish Selection */}
           {product.finishes && product.finishes.length > 0 && (
             <div className="space-y-2">
@@ -201,11 +223,12 @@ export const ProductDetail: React.FC = () => {
           {/* Quantity & Add to Cart button */}
           <div className="space-y-3 pt-4 border-t border-gray-200">
             <div className="flex items-center gap-4">
-              <div className="flex items-center border border-gray-300 rounded bg-white">
+              <div className={`flex items-center border border-gray-300 rounded bg-white ${product.stock <= 0 ? "opacity-50 pointer-events-none" : ""}`}>
                 <button
                   type="button"
+                  disabled={product.stock <= 0}
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="p-3 text-gray-600 hover:bg-gray-100"
+                  className="p-3 text-gray-600 hover:bg-gray-100 disabled:opacity-50"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
@@ -214,30 +237,41 @@ export const ProductDetail: React.FC = () => {
                 </span>
                 <button
                   type="button"
-                  onClick={() => setQuantity((q) => q + 1)}
-                  className="p-3 text-gray-600 hover:bg-gray-100"
+                  disabled={product.stock <= 0 || quantity >= product.stock}
+                  onClick={() => setQuantity((q) => Math.min(product.stock, q + 1))}
+                  className="p-3 text-gray-600 hover:bg-gray-100 disabled:opacity-50"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
               </div>
 
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                className={`flex-1 py-3.5 px-6 rounded font-bold text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 ${
-                  addedSuccess
-                    ? "bg-green-600 text-white"
-                    : "bg-[#15161d] hover:bg-[#d10024] text-white"
-                }`}
-              >
-                {addedSuccess ? (
-                  <>
-                    <CheckCircle className="w-4 h-4" /> Added to Cart
-                  </>
-                ) : (
-                  `Add to Cart · $${(product.price * quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
-                )}
-              </button>
+              {product.stock <= 0 ? (
+                <button
+                  type="button"
+                  disabled
+                  className="flex-1 py-3.5 px-6 rounded font-bold text-xs uppercase tracking-wider bg-gray-300 text-gray-600 cursor-not-allowed shadow-none"
+                >
+                  Out of Stock
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  className={`flex-1 py-3.5 px-6 rounded font-bold text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 ${
+                    addedSuccess
+                      ? "bg-green-600 text-white"
+                      : "bg-[#15161d] hover:bg-[#d10024] text-white"
+                  }`}
+                >
+                  {addedSuccess ? (
+                    <>
+                      <CheckCircle className="w-4 h-4" /> Added to Cart
+                    </>
+                  ) : (
+                    `Add to Cart · $${(product.price * quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+                  )}
+                </button>
+              )}
             </div>
           </div>
 
@@ -245,46 +279,107 @@ export const ProductDetail: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 border-t border-gray-200 text-xs text-gray-600">
             <div className="flex items-center gap-2">
               <Truck className="w-4 h-4 text-[#d10024]" />
-              <span>Next-day over $50</span>
+              <span>Fast Express Delivery</span>
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-[#d10024]" />
-              <span>Two year warranty</span>
+              <span>{product.warranty || "1 Year Warranty"}</span>
             </div>
             <div className="flex items-center gap-2">
               <RotateCcw className="w-4 h-4 text-[#d10024]" />
-              <span>30 day bench returns</span>
+              <span>Guaranteed Authentic</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bench Verification Specification Table */}
+      {/* Product Description */}
+      {product.description && (
+        <section className="bg-white border border-[#e4e7ed] rounded-xl p-8 space-y-4">
+          <h2 className="text-xl font-bold text-[#15161d] uppercase tracking-tight">
+            Product Overview
+          </h2>
+          <div className="prose text-sm text-gray-700 leading-relaxed max-w-none whitespace-pre-line">
+            {product.description}
+          </div>
+        </section>
+      )}
+
+      {/* Technical Specifications Table */}
       <section className="bg-white border border-[#e4e7ed] rounded-xl p-8 space-y-6">
         <h2 className="text-xl font-bold text-[#15161d] uppercase tracking-tight">
-          Bench-Tested Verification Report
+          Technical Specifications
         </h2>
-        <p className="text-xs text-gray-500">
-          Measured on our bench in Manchester. We record thermals, panel color gamut, battery drainage under sustained load, and real-world port bandwidth.
-        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-4 bg-gray-50 rounded border flex justify-between">
-            <span className="font-semibold text-gray-500">Department</span>
-            <span className="font-bold text-gray-900">{categoryName}</span>
-          </div>
-          <div className="p-4 bg-gray-50 rounded border flex justify-between">
-            <span className="font-semibold text-gray-500">Hardware Brand</span>
+            <span className="font-semibold text-gray-500">Brand</span>
             <span className="font-bold text-gray-900">{product.brand}</span>
           </div>
           <div className="p-4 bg-gray-50 rounded border flex justify-between">
-            <span className="font-semibold text-gray-500">Configuration</span>
-            <span className="font-bold text-gray-900">{product.spec}</span>
+            <span className="font-semibold text-gray-500">Category</span>
+            <span className="font-bold text-gray-900">{categoryName}</span>
           </div>
-          <div className="p-4 bg-gray-50 rounded border flex justify-between">
-            <span className="font-semibold text-gray-500">Bench Score</span>
-            <span className="font-bold text-green-700">{product.rating} / 5.0 (Passed)</span>
-          </div>
+          {product.sku && (
+            <div className="p-4 bg-gray-50 rounded border flex justify-between">
+              <span className="font-semibold text-gray-500">SKU</span>
+              <span className="font-mono font-bold text-gray-900">{product.sku}</span>
+            </div>
+          )}
+          {product.condition && (
+            <div className="p-4 bg-gray-50 rounded border flex justify-between">
+              <span className="font-semibold text-gray-500">Condition</span>
+              <span className="font-bold text-gray-900">{product.condition}</span>
+            </div>
+          )}
+          {product.storage && (
+            <div className="p-4 bg-gray-50 rounded border flex justify-between">
+              <span className="font-semibold text-gray-500">Internal Storage</span>
+              <span className="font-bold text-gray-900">{product.storage}</span>
+            </div>
+          )}
+          {product.ram && (
+            <div className="p-4 bg-gray-50 rounded border flex justify-between">
+              <span className="font-semibold text-gray-500">RAM</span>
+              <span className="font-bold text-gray-900">{product.ram}</span>
+            </div>
+          )}
+          {product.screen && (
+            <div className="p-4 bg-gray-50 rounded border flex justify-between">
+              <span className="font-semibold text-gray-500">Display / Screen</span>
+              <span className="font-bold text-gray-900">{product.screen}</span>
+            </div>
+          )}
+          {product.battery && (
+            <div className="p-4 bg-gray-50 rounded border flex justify-between">
+              <span className="font-semibold text-gray-500">Battery & Charging</span>
+              <span className="font-bold text-gray-900">{product.battery}</span>
+            </div>
+          )}
+          {product.camera && (
+            <div className="p-4 bg-gray-50 rounded border flex justify-between">
+              <span className="font-semibold text-gray-500">Camera System</span>
+              <span className="font-bold text-gray-900">{product.camera}</span>
+            </div>
+          )}
+          {product.processor && (
+            <div className="p-4 bg-gray-50 rounded border flex justify-between">
+              <span className="font-semibold text-gray-500">Processor / Chipset</span>
+              <span className="font-bold text-gray-900">{product.processor}</span>
+            </div>
+          )}
+          {product.network && (
+            <div className="p-4 bg-gray-50 rounded border flex justify-between">
+              <span className="font-semibold text-gray-500">Network Connectivity</span>
+              <span className="font-bold text-gray-900">{product.network}</span>
+            </div>
+          )}
+          {product.warranty && (
+            <div className="p-4 bg-gray-50 rounded border flex justify-between">
+              <span className="font-semibold text-gray-500">Warranty</span>
+              <span className="font-bold text-gray-900">{product.warranty}</span>
+            </div>
+          )}
         </div>
       </section>
 

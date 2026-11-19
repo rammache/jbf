@@ -12,6 +12,9 @@ export const Shop: React.FC = () => {
   const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   // Active filters
   const currentCategory = searchParams.get("category") || "";
@@ -35,11 +38,17 @@ export const Shop: React.FC = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const query = searchParams.toString();
-        const res = await fetch(`/api/products?${query}`);
+        const params = new URLSearchParams(searchParams);
+        params.set("page", page.toString());
+        params.set("limit", "12");
+
+        const res = await fetch(`/api/products?${params.toString()}`);
         const json = await res.json();
         if (json.success) {
           setProducts(json.data);
+          if (json.totalPages) setTotalPages(json.totalPages);
+          if (json.total !== undefined) setTotalCount(json.total);
+          else setTotalCount(json.data.length);
         }
       } catch (err) {
         console.error("Error fetching products", err);
@@ -49,7 +58,7 @@ export const Shop: React.FC = () => {
     };
 
     fetchProducts();
-  }, [searchParams]);
+  }, [searchParams, page]);
 
   const updateFilter = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -58,10 +67,12 @@ export const Shop: React.FC = () => {
     } else {
       newParams.set(key, value);
     }
+    setPage(1);
     setSearchParams(newParams);
   };
 
   const clearFilters = () => {
+    setPage(1);
     setSearchParams(new URLSearchParams());
   };
 
@@ -88,7 +99,7 @@ export const Shop: React.FC = () => {
             {displayCategoryTitle}
           </h1>
           <p className="text-xs text-gray-500 mt-1">
-            {products.length} products verified against bench tolerances.
+            {totalCount} products available in store catalog.
           </p>
         </div>
 
@@ -261,10 +272,46 @@ export const Shop: React.FC = () => {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product) => (
-                <ProductCard key={product.handle} product={product} />
-              ))}
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {products.map((product) => (
+                  <ProductCard key={product.handle} product={product} />
+                ))}
+              </div>
+
+              {/* Pagination controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between border-t border-gray-200 pt-6">
+                  <div className="text-xs text-gray-500">
+                    Showing page <span className="font-bold text-gray-900">{page}</span> of{" "}
+                    <span className="font-bold text-gray-900">{totalPages}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      type="button"
+                      disabled={page <= 1}
+                      onClick={() => {
+                        setPage((p) => Math.max(1, p - 1));
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="rounded border border-gray-300 bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-gray-700 hover:bg-gray-50 disabled:opacity-40"
+                    >
+                      Previous
+                    </button>
+                    <button
+                      type="button"
+                      disabled={page >= totalPages}
+                      onClick={() => {
+                        setPage((p) => Math.min(totalPages, p + 1));
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="rounded border border-gray-300 bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-gray-700 hover:bg-gray-50 disabled:opacity-40"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </main>

@@ -8,23 +8,40 @@ datasource db {
 }
 
 model Product {
-  id          Int         @id @default(autoincrement())
-  handle      String      @unique
-  title       String
-  price       Float
-  compare     Float?
-  categoryId  Int
-  category    Category    @relation(fields: [categoryId], references: [id])
-  brand       String
-  spec        String
-  rating      Float       @default(5.0)
-  reviews     Int         @default(0)
-  finishes    String[]    @default([])
-  images      String[]    @default([])
-  featured    Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  orderItems  OrderItem[]
+  id                Int         @id @default(autoincrement())
+  handle            String      @unique
+  title             String
+  description       String?
+  price             Float
+  compare           Float?
+  sku               String?     @unique
+  stock             Int         @default(0)
+  lowStockThreshold Int         @default(5)
+  categoryId        Int
+  category          Category    @relation(fields: [categoryId], references: [id])
+  brand             String
+  spec              String      @default("")
+  screen            String?
+  battery           String?
+  camera            String?
+  network           String?
+  warranty          String?
+  processor         String?
+  condition         String      @default("NEW")
+  storage           String?
+  ram               String?
+  color             String?
+  rating            Float       @default(5.0)
+  reviews           Int         @default(0)
+  finishes          String[]    @default([])
+  images            String[]    @default([])
+  featured          Boolean     @default(false)
+  isFeatured        Boolean     @default(false)
+  isActive          Boolean     @default(true)
+  isArchived        Boolean     @default(false)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  orderItems        OrderItem[]
 }
 
 model Category {

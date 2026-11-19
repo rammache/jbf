@@ -331,11 +331,27 @@ async function main() {
       where: { handle: product.handle },
       update: {
         ...rest,
-        categoryId
+        categoryId,
+        isFeatured: rest.featured ?? false,
+        isActive: true,
+        isArchived: false,
+        stock: 25,
+        lowStockThreshold: 5,
+        condition: "NEW",
+        sku: `JBF-${product.handle.replace(/[^a-zA-Z0-9]/g, "").slice(0, 8).toUpperCase()}`,
+        description: `Official authentic ${product.title} from Jabour Phone. Full manufacturer warranty, guaranteed authentic with fast delivery.`
       },
       create: {
         ...rest,
-        categoryId
+        categoryId,
+        isFeatured: rest.featured ?? false,
+        isActive: true,
+        isArchived: false,
+        stock: 25,
+        lowStockThreshold: 5,
+        condition: "NEW",
+        sku: `JBF-${product.handle.replace(/[^a-zA-Z0-9]/g, "").slice(0, 8).toUpperCase()}`,
+        description: `Official authentic ${product.title} from Jabour Phone. Full manufacturer warranty, guaranteed authentic with fast delivery.`
       }
     });
   }

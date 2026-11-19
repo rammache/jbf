@@ -188,3 +188,135 @@ export async function resolveCategorySlugOnUpdate(
   // Even if newName changed, the existing slug remains unchanged
   return currentCategory.slug;
 }
+
+/**
+ * Checks against the database whether a product handle is already in use,
+ * optionally excluding a specific product ID.
+ */
+export async function isProductHandleTaken(
+  handle: string,
+  excludeId?: number
+): Promise<boolean> {
+  const count = await prisma.product.count({
+    where: {
+      handle,
+      ...(excludeId !== undefined ? { id: { not: excludeId } } : {})
+    }
+  });
+  return count > 0;
+}
+
+export interface GenerateProductHandleOptions {
+  /** The primary title to generate the handle from (e.g. "iPhone 15 Pro"). */
+  title: string;
+  /** Optional custom handle provided by user or client. */
+  customHandle?: string | null;
+  /** Product ID to exclude when checking for collisions (e.g. updating self). */
+  currentId?: number;
+  /** Fallback string if generated handle is empty. Defaults to "product". */
+  fallback?: string;
+  /** Custom check function to test for collisions (defaults to database query). */
+  isHandleTaken?: (handle: string, excludeId?: number) => Promise<boolean> | boolean;
+}
+
+/**
+ * Auto-generates a unique product handle (slug).
+ * Resolves collisions by appending sequential numeric suffixes (-2, -3, etc.).
+ */
+export async function generateUniqueProductHandle(
+  options: GenerateProductHandleOptions
+): Promise<string> {
+  const {
+    title,
+    customHandle,
+    currentId,
+    fallback = "product",
+    isHandleTaken = isProductHandleTaken
+  } = options;
+
+  const rawBase = customHandle && customHandle.trim().length > 0 ? customHandle : title;
+  const baseHandle = slugify(rawBase, fallback);
+
+  // Check if base handle is available
+  const isTaken = await isHandleTaken(baseHandle, currentId);
+  if (!isTaken) {
+    return baseHandle;
+  }
+
+  // Resolve collisions by appending sequential numeric suffixes (-2, -3, ...)
+  let counter = 2;
+  const MAX_ATTEMPTS = 10000;
+
+  while (counter <= MAX_ATTEMPTS) {
+    const candidate = `${baseHandle}-${counter}`;
+    const candidateTaken = await isHandleTaken(candidate, currentId);
+    if (!candidateTaken) {
+      return candidate;
+    }
+    counter++;
+  }
+
+  return `${baseHandle}-${Date.now()}`;
+}
+
+export interface ResolveProductHandleOnUpdateOptions {
+  /** The existing product record before update. */
+  currentProduct: {
+    id: number;
+    handle: string;
+    title: string;
+  };
+  /** New title if product is being renamed. */
+  newTitle?: string;
+  /** Explicit new handle if provided in update payload. */
+  newHandle?: string | null;
+  /** Flag to explicitly request regenerating the handle from title. */
+  regenerateHandle?: boolean;
+  /** Fallback string if generated handle is empty. Defaults to "product". */
+  fallback?: string;
+  /** Custom check function to test for collisions (defaults to database query). */
+  isHandleTaken?: (handle: string, excludeId?: number) => Promise<boolean> | boolean;
+}
+
+/**
+ * Resolves the product handle during an update/rename.
+ * Enforces URL/link stability: old handle is preserved by default when title changes.
+ */
+export async function resolveProductHandleOnUpdate(
+  options: ResolveProductHandleOnUpdateOptions
+): Promise<string> {
+  const {
+    currentProduct,
+    newTitle,
+    newHandle,
+    regenerateHandle = false,
+    fallback = "product",
+    isHandleTaken = isProductHandleTaken
+  } = options;
+
+  // 1. Explicit new handle provided by caller
+  if (typeof newHandle === "string" && newHandle.trim().length > 0) {
+    return generateUniqueProductHandle({
+      title: newHandle,
+      customHandle: newHandle,
+      currentId: currentProduct.id,
+      fallback,
+      isHandleTaken
+    });
+  }
+
+  // 2. Explicit regeneration requested
+  if (regenerateHandle) {
+    const targetTitle =
+      newTitle && newTitle.trim().length > 0 ? newTitle : currentProduct.title;
+    return generateUniqueProductHandle({
+      title: targetTitle,
+      currentId: currentProduct.id,
+      fallback,
+      isHandleTaken
+    });
+  }
+
+  // 3. Default: keep old handle stable on rename
+  return currentProduct.handle;
+}

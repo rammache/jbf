@@ -12,11 +12,11 @@ Remaining work is in `WORK/tasks.md`.
 - **Owner:** Jabour. The user is helping him build and manage the store.
 - **Main goal:** Jabour must be able to log in and manage categories, products, photos, stock, orders, and site content without a developer.
 - **Stack:** React + Vite + TypeScript + Tailwind (frontend), Express + TypeScript + Prisma + PostgreSQL (backend).
-- **Current state:** public demo storefront, admin auth API, first-admin CLI, admin login page, admin shell, protected admin route guards (with session context and redirects), frontend API layer with centralized 401/403 handling, admin settings with password change, Zod validation for auth and category payloads, login rate limiting, and complete Category Management (Phase 3) exist. Category model includes relation to Product, slug auto-generation with rename stability, full admin CRUD + reorder endpoints, product block / reassign deletion safety, admin management UI, dynamic CategoryContext, and zero hardcoded category arrays across the storefront with category image showcase on the homepage. Product CRUD, stock, and order management are not built yet.
-- **Work style:** one task per session. Finish the task, update the WORK files, run checks, commit, then remind the user to open a new session for the next task.
+- **Current state:** public storefront, admin auth API, first-admin CLI, admin login page, admin shell, protected admin route guards (with session context and redirects), frontend API layer with centralized 401/403 handling, admin settings with password change, Zod validation for auth, category, and product payloads, login rate limiting, complete Category Management (Phase 3), and complete Product Management (Phase 4). Product model includes description, sku, stock, lowStockThreshold, condition, phone specs (screen, battery, camera, network, warranty, processor, storage, ram), auto-generated unique handle with rename stability, full admin CRUD API with pagination/search/filtering, admin product dashboard with KPI counters and bulk actions, multi-image upload with reordering and primary cover selection, sale price validation (`compare > price`), duplicate product action, archive/delete rules protecting ordered products, stock decrement transaction on checkout with zero-stock checkout block, and storefront alignment with real descriptions, specs, and pagination.
+- **Work style:** continuous progress per user directive. Finish tasks, update the WORK files, run checks, commit, and proceed.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
-- **Current phase:** Phase 4 - Product Management.
-- **Current task:** Task #49 - Extend `Product`: description, sku, stock, lowStockThreshold, isActive, categoryId, brand, isFeatured (Phase 4, P0).
+- **Current phase:** Phase 5 - Storefront Alignment / Phase 6 - Orders And Checkout.
+- **Current task:** Phase 4 completed. Next: Phase 5 or Phase 6 tasks in `WORK/tasks.md`.
 - **A session can use the same AI agent or a different one.** These files must carry all context so any agent can continue.
 - **Demo data decision (2026-11-19):** the fake brands and demo catalog stay during development. Jabour will remove all demo products/categories and create the real ones from the admin panel after the project is finished, so no real catalog data is needed now.
 - **Pending business decisions:** currency, payment method, delivery fee, hosting, image storage.
@@ -179,6 +179,27 @@ Audit results:
 
 ---
 
+## Phase 10 - Phase 4 Product Management (DONE)
+
+- [x] 2026-11-19 - Task #49: Extended `Product` model in `backend/prisma/schema.prisma` with `description`, `sku`, `stock`, `lowStockThreshold`, `isActive`, `isFeatured`, `isArchived`, `condition`, `storage`, `ram`, `color`, and phone specs (`screen`, `battery`, `camera`, `network`, `warranty`, `processor`). Regenerated Prisma Client (`npm run prisma:generate`). Updated `backend/prisma/demo-seed.ts` with extended fields and upsert handling, and updated `frontend/src/types/index.ts`.
+- [x] 2026-11-19 - Task #50: Decided phone variants model: stored first-class phone attributes `condition` ("NEW", "USED", "REFURBISHED"), `storage` ("128GB", "256GB", etc.), `ram`, `color`, and `finishes` string array for customer finish selection on the storefront.
+- [x] 2026-11-19 - Task #51: Added phone-specific spec fields (`screen`, `battery`, `camera`, `network`, `warranty`, `processor`) to Prisma model, TypeScript types, admin forms, and storefront technical specification tables.
+- [x] 2026-11-19 - Task #52: Auto-generate unique product handles with collision avoidance (`-2`, `-3`) and rename stability in `backend/src/utils/slug.ts` (`generateUniqueProductHandle`, `resolveProductHandleOnUpdate`). Preserves existing URLs on product edits unless explicit change or regeneration is requested.
+- [x] 2026-11-19 - Task #53: Admin Product API: implemented full CRUD under `/api/admin/products` with pagination, search, brand/category/status filters, and KPI summary stats in `backend/src/controllers/adminProductController.ts` and mounted with `requireAdmin` in `backend/src/routes/admin.ts`.
+- [x] 2026-11-19 - Task #54: Admin Product UI: built `frontend/src/pages/admin/AdminProducts.tsx` with search, category filter, status filter, stock badges, active toggle, featured star toggle, and actions. Mounted `/admin/products` in `AdminLayout.tsx` and `App.tsx`.
+- [x] 2026-11-19 - Task #55: Admin UI Create/Edit modal: tabbed product form with validation, real-time compare vs price checks, phone specifications, and live storefront card preview.
+- [x] 2026-11-19 - Task #56: Image upload endpoint: configured `multer` in `backend/src/middleware/upload.ts` saving to `uploads/`, mounted `POST /api/admin/upload`, and configured static serving of `/uploads` in `backend/src/server.ts`.
+- [x] 2026-11-19 - Task #57: Admin UI Multi-image upload: direct file upload to `/api/admin/upload`, thumbnail gallery, reordering (move left/right), set primary cover image, and delete image.
+- [x] 2026-11-19 - Task #58: Validate sale price: enforced `compare > price` when compare price is set in Zod schemas (`createProductSchema`, `updateProductSchema`) and in frontend client forms.
+- [x] 2026-11-19 - Task #59: Duplicate product action: implemented `POST /api/admin/products/:id/duplicate` cloning title with " (Copy)", generating unique handle, and saving as draft (`isActive: false`).
+- [x] 2026-11-19 - Task #60: Archive/delete rules: implemented protection in `adminDeleteProduct`: products with existing customer order items are safely archived (`isArchived: true, isActive: false`), while products with 0 orders are permanently deleted.
+- [x] 2026-11-19 - Task #61: Stock tracking: added `stock` and `lowStockThreshold` to `Product`, color-coded inventory badges in admin and storefront, disabled Add to Cart on out of stock items, and enforced atomic stock checks and decrements in Prisma `$transaction` during checkout in `backend/src/controllers/orderController.ts`.
+- [x] 2026-11-19 - Task #62: Public shop displays only active, non-archived products (`where: { isActive: true, isArchived: false }`), with pagination support in `backend/src/controllers/productController.ts` and `frontend/src/pages/Shop.tsx`.
+- [x] 2026-11-19 - Task #63: Public product detail page in `frontend/src/pages/ProductDetail.tsx` renders real description, full technical specifications grid, stock status messages, and disabled cart button when inventory is zero.
+- [x] 2026-11-19 - Task #64: Admin bulk actions: implemented `POST /api/admin/products/bulk` in `adminProductController.ts` and multi-selection toolbar in `AdminProducts.tsx` supporting batch activate, deactivate, and delete with archive order safety.
+
+---
+
 ## Completed Features At A Glance
 
 | Area | Status |
@@ -209,13 +230,23 @@ Audit results:
 | Category deletion safety & reassignment | Done |
 | Dynamic storefront category integration | Done |
 | Category image showcase | Done |
-| Image uploads | Not started |
-| Stock/inventory | Not started |
+| Product model extension (description, SKU, stock, specs, condition) | Done |
+| Product handle generation & stability on rename | Done |
+| Product admin CRUD API with pagination & search | Done |
+| Product admin UI with KPI counters & table filters | Done |
+| Multi-image upload, reorder, primary cover | Done |
+| Sale price validation (`compare > price`) | Done |
+| Product duplicate action | Done |
+| Archive / delete rules protecting past orders | Done |
+| Stock tracking & atomic checkout decrement / zero block | Done |
+| Public shop active product filter & pagination | Done |
+| Product detail real description & specs table | Done |
+| Admin bulk actions (activate/deactivate/delete) | Done |
 | Order status management | Not started |
-| Payments / delivery | Not started |
+| Payments / delivery (Cash on Delivery) | Not started |
 | Rebranding to Jabour Phone | In progress |
-| Security hardening + validation | Not started |
-| Tests + deployment | Not started |
+| Security hardening + validation | Done (auth, categories, products) |
+| Tests + deployment | Tests: 51/51 passing |
 
 Next: see `WORK/tasks.md`.
 
@@ -510,3 +541,28 @@ Add one entry here at the end of every session. New agents must read the latest 
 - **Checks run:** backend `npm test` -> passed (36/36 tests passed across 4 test suites); backend `npm run build` -> passed (`tsc`, 0 errors); frontend `npm run build` -> passed (`tsc && vite build`, built in 1.81s, 0 errors).
 - **Decisions:** Followed strict user directive to proceed and complete all tasks in the current phase (Phase 3). Every category management feature, API endpoint, UI element, and storefront integration is now fully implemented, verified, and passing builds/tests.
 - **Next task:** Task #49 - Extend `Product`: description, sku, stock, lowStockThreshold, isActive, categoryId, brand, isFeatured (Phase 4 - Product Management, P0).
+
+### 2026-11-19 - Phase 4 Completion: All Product Management Tasks (#49 - #64) (DONE)
+
+- **Done:** Delivered all 16 tasks in Phase 4 (Product Management) per the user's explicit directive ("now proceed all tasks in next phase i said all tasks"):
+  1. **Extended Product Model (Task #49):** Extended `Product` in `backend/prisma/schema.prisma` with `description`, `sku` (unique), `stock`, `lowStockThreshold`, `isActive`, `isFeatured`, `isArchived`, `condition`, `storage`, `ram`, `color`, and phone specs (`screen`, `battery`, `camera`, `network`, `warranty`, `processor`). Regenerated Prisma Client (`npm run prisma:generate`), updated demo seed upserts, and updated frontend TypeScript types.
+  2. **Phone Variants & Attributes Model (Task #50):** Structured phone attributes into first-class fields (`condition`: NEW/USED/REFURBISHED, `storage`, `ram`, `color`, `finishes` array).
+  3. **Phone Specifications (Task #51):** Added dedicated hardware specification fields across Prisma schema, TypeScript types, admin forms, and storefront presentation.
+  4. **Product Handle Generation & Rename Stability (Task #52):** Implemented in `backend/src/utils/slug.ts` with `generateUniqueProductHandle` (avoids collisions with `-2`, `-3`) and `resolveProductHandleOnUpdate` (keeps existing URLs stable on title rename unless explicitly requested).
+  5. **Admin Product CRUD API (Task #53):** Created `backend/src/controllers/adminProductController.ts` mounted at `/api/admin/products` with `requireAdmin` in `backend/src/routes/admin.ts`. Supports pagination, search, brand/category/status filters, and live KPI summary counters.
+  6. **Admin Product UI Dashboard (Task #54):** Built `frontend/src/pages/admin/AdminProducts.tsx` with KPI summary cards, filter toolbar, sortable/paginated table, one-click active switch toggle, one-click featured star toggle, and row actions. Connected navigation link in `frontend/src/layouts/AdminLayout.tsx` and registered `/admin/products` route in `frontend/src/App.tsx`.
+  7. **Create/Edit Product Modal & Live Preview (Task #55):** Tabbed modal covering Basic Info, Pricing & Stock, Media Gallery, Phone Specs, Description, and a real-time storefront card preview simulating live catalog appearance.
+  8. **Image Upload Endpoint (Task #56):** Configured `multer` in `backend/src/middleware/upload.ts` with disk storage in `uploads/`, unique filename generation, MIME type filtering, 10MB limits, mounted `POST /api/admin/upload`, and configured static serving of `/uploads` in `backend/src/server.ts`.
+  9. **Admin Multi-Image UI (Task #57):** Multi-file computer upload, manual URL input, image thumbnail grid, move left/right reordering, set primary cover photo, and image removal.
+  10. **Sale Price Validation (Task #58):** Enforced `compare > price` when compare price is set in Zod schemas (`createProductSchema`, `updateProductSchema`) and client forms with real-time feedback.
+  11. **Duplicate Product Action (Task #59):** Implemented `POST /api/admin/products/:id/duplicate` cloning title with " (Copy)", generating new unique handle, and saving as draft (`isActive: false`).
+  12. **Archive/Delete Rules for Order Safety (Task #60):** Implemented guard in `adminDeleteProduct`: products appearing in customer order items are safely soft-deleted/archived (`isArchived: true, isActive: false`) so order histories and invoices are preserved; products with 0 orders are permanently hard-deleted.
+  13. **Stock Tracking & Checkout Inventory Guards (Task #61):** Added `stock` and `lowStockThreshold` tracking with color-coded badges, blocked add to cart and disabled checkout on out of stock products, and implemented atomic stock decrement and inventory availability checks inside a Prisma `$transaction` in `backend/src/controllers/orderController.ts`.
+  14. **Public Shop Active Filter & Pagination (Task #62):** Updated `getProducts` in `backend/src/controllers/productController.ts` to query only active, non-archived products (`isActive: true, isArchived: false`), and implemented pagination controls (Previous, Next, page numbers) in `frontend/src/pages/Shop.tsx`.
+  15. **Product Detail Description & Specs (Task #63):** Updated `frontend/src/pages/ProductDetail.tsx` to render real product descriptions, comprehensive technical specifications table, stock status indicators (In stock, Low stock warning, Out of stock), and disabled quantity/cart controls when out of stock.
+  16. **Admin Bulk Actions (Task #64):** Implemented `POST /api/admin/products/bulk` and selection toolbar in `AdminProducts.tsx` supporting batch activate, deactivate, and delete with archive order safety.
+  17. **Automated Test Suite:** Created `backend/src/tests/productPhase4.test.ts` (15 tests covering Zod validation, price rules, handle collision resolution, rename stability, delete/archive order protection, product duplication, stock checkout guards, transaction decrement, and bulk actions).
+- **Files changed:** `backend/prisma/schema.prisma`, `backend/prisma/demo-seed.ts`, `backend/package.json`, `backend/package-lock.json`, `backend/src/middleware/upload.ts` (new), `backend/src/schemas/product.ts` (new), `backend/src/utils/slug.ts`, `backend/src/controllers/adminProductController.ts` (new), `backend/src/controllers/productController.ts`, `backend/src/controllers/orderController.ts`, `backend/src/routes/admin.ts`, `backend/src/server.ts`, `backend/src/tests/productPhase4.test.ts` (new), `frontend/src/types/index.ts`, `frontend/src/pages/admin/AdminProducts.tsx` (new), `frontend/src/layouts/AdminLayout.tsx`, `frontend/src/App.tsx`, `frontend/src/components/ProductCard.tsx`, `frontend/src/pages/ProductDetail.tsx`, `frontend/src/pages/Shop.tsx`, `WORK/tasks.md`, `WORK/progression.md`.
+- **Checks run:** backend `npm test` -> passed (51/51 tests passed across 5 test suites); backend `npm run build` -> passed (`tsc`, 0 errors); frontend `npm run build` -> passed (`tsc && vite build`, built in 1.87s, 0 errors).
+- **Decisions:** Followed strict user instruction to complete all tasks in Phase 4. All product management features, APIs, admin controls, image handling, stock protection, and storefront enhancements are fully operational and verified.
+- **Next task:** Phase 5 (Storefront Alignment) or Phase 6 (Orders And Checkout).

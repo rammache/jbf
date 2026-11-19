@@ -15,6 +15,7 @@ import { AdminLogin } from "./pages/admin/AdminLogin";
 import { AdminOverview } from "./pages/admin/AdminOverview";
 import { AdminSettings } from "./pages/admin/AdminSettings";
 import { AdminCategories } from "./pages/admin/AdminCategories";
+import { AdminProducts } from "./pages/admin/AdminProducts";
 
 export const App: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ export const App: React.FC = () => {
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminOverview />} />
                 <Route path="categories" element={<AdminCategories />} />
+                <Route path="products" element={<AdminProducts />} />
                 <Route path="settings" element={<AdminSettings />} />
                 <Route path="*" element={<Navigate to="/admin" replace />} />
               </Route>

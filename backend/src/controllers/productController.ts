@@ -3,9 +3,12 @@ import { prisma } from "../prisma.js";
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const { category, brand, q, minPrice, maxPrice, sort, featured } = req.query;
+    const { category, brand, q, minPrice, maxPrice, sort, featured, page, limit } = req.query;
 
-    const where: any = {};
+    const where: any = {
+      isActive: true,
+      isArchived: false
+    };
 
     if (category && typeof category === "string") {
       where.category = {
@@ -47,18 +50,51 @@ export const getProducts = async (req: Request, res: Response) => {
     else if (sort === "price-desc") orderBy = { price: "desc" };
     else if (sort === "rating-desc") orderBy = { rating: "desc" };
     else if (sort === "title-asc") orderBy = { title: "asc" };
+    else if (sort === "featured" || sort === "featured-bench") orderBy = [{ isFeatured: "desc" }, { featured: "desc" }, { id: "asc" }];
 
-    const products = await prisma.product.findMany({
-      where,
-      orderBy,
-      include: {
-        category: true
-      }
-    });
+    // Optional pagination
+    const pageNum = page ? Math.max(1, parseInt(String(page), 10) || 1) : null;
+    const limitNum = limit ? Math.max(1, Math.min(100, parseInt(String(limit), 10) || 12)) : null;
+
+    let total = 0;
+    let products: any[] = [];
+
+    if (pageNum && limitNum) {
+      const [fetchedProducts, count] = await Promise.all([
+        prisma.product.findMany({
+          where,
+          orderBy,
+          include: {
+            category: true
+          },
+          skip: (pageNum - 1) * limitNum,
+          take: limitNum
+        }),
+        typeof prisma.product.count === "function"
+          ? prisma.product.count({ where })
+          : Promise.resolve(0)
+      ]);
+      products = fetchedProducts;
+      total = count;
+    } else {
+      products = await prisma.product.findMany({
+        where,
+        orderBy,
+        include: {
+          category: true
+        }
+      });
+      total = products.length;
+    }
+
+    const totalPages = limitNum ? Math.ceil(total / limitNum) || 1 : 1;
 
     res.json({
       success: true,
       count: products.length,
+      total,
+      page: pageNum || 1,
+      totalPages,
       data: products
     });
   } catch (error: any) {
@@ -76,7 +112,7 @@ export const getProductByHandle = async (req: Request, res: Response) => {
       }
     });
 
-    if (!product) {
+    if (!product || product.isArchived || product.isActive === false) {
       res.status(404).json({ success: false, error: "Product not found" });
       return;
     }
@@ -85,7 +121,9 @@ export const getProductByHandle = async (req: Request, res: Response) => {
     const related = await prisma.product.findMany({
       where: {
         categoryId: product.categoryId,
-        handle: { not: handle }
+        handle: { not: handle },
+        isActive: true,
+        isArchived: false
       },
       include: {
         category: true
@@ -106,6 +144,10 @@ export const getProductByHandle = async (req: Request, res: Response) => {
 export const getBrands = async (_req: Request, res: Response) => {
   try {
     const products = await prisma.product.findMany({
+      where: {
+        isActive: true,
+        isArchived: false
+      },
       select: { brand: true },
       distinct: ["brand"]
     });

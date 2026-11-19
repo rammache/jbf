@@ -46,9 +46,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     >
       {/* Badges */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
-        {product.compare && product.compare > product.price && (
+        {product.stock <= 0 ? (
+          <span className="bg-gray-800 text-white text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider rounded">
+            Out of Stock
+          </span>
+        ) : product.compare && product.compare > product.price ? (
           <span className="bg-[#d10024] text-white text-[11px] font-bold px-2.5 py-1 uppercase tracking-wider rounded">
             Sale
+          </span>
+        ) : null}
+        {product.condition && product.condition !== "NEW" && (
+          <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider rounded">
+            {product.condition}
           </span>
         )}
       </div>
@@ -66,25 +75,31 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         />
         {/* Quick Add Overlay on hover */}
         <div className="absolute inset-x-4 bottom-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button
-            type="button"
-            onClick={handleQuickAdd}
-            className={`w-full py-2.5 px-4 rounded font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-colors ${
-              added
-                ? "bg-green-600 text-white"
-                : "bg-[#15161d] hover:bg-[#d10024] text-white"
-            }`}
-          >
-            {added ? (
-              <>
-                <Check className="w-4 h-4" /> Added
-              </>
-            ) : (
-              <>
-                <ShoppingBag className="w-4 h-4" /> Quick Add
-              </>
-            )}
-          </button>
+          {product.stock <= 0 ? (
+            <div className="w-full py-2.5 px-4 rounded font-bold text-xs uppercase tracking-wider flex items-center justify-center bg-gray-300 text-gray-600 shadow cursor-not-allowed">
+              Out of Stock
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleQuickAdd}
+              className={`w-full py-2.5 px-4 rounded font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-colors ${
+                added
+                  ? "bg-green-600 text-white"
+                  : "bg-[#15161d] hover:bg-[#d10024] text-white"
+              }`}
+            >
+              {added ? (
+                <>
+                  <Check className="w-4 h-4" /> Added
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="w-4 h-4" /> Quick Add
+                </>
+              )}
+            </button>
+          )}
         </div>
       </Link>
 

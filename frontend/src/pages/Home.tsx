@@ -214,11 +214,10 @@ export const Home: React.FC = () => {
                     key={cat.id}
                     type="button"
                     onClick={() => setSelectedCategory(cat.slug || cat.name)}
-                    className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition ${
-                      isSelected
+                    className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition ${isSelected
                         ? "bg-[#15161d] text-white shadow"
                         : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-                    }`}
+                      }`}
                   >
                     {cat.name}
                   </button>

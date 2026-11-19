@@ -157,22 +157,22 @@ The WORK files must carry enough context for any agent to continue without guess
 
 ## Phase 4 - Product Management
 
-- [ ] Extend `Product`: description, sku, stock, lowStockThreshold, isActive, categoryId, brand, isFeatured. **P0**
-- [ ] Decide phone variants model: color, storage, RAM, condition (new/used/refurbished). **P0**
-- [ ] Add phone-specific spec fields (screen, battery, camera, network, warranty). **P1**
-- [ ] Auto-generate unique slug/handle from title; do not break existing links on edit. **P0**
-- [ ] Admin API: full CRUD under `/api/admin/products` with pagination and search. **P0**
-- [ ] Admin UI: product table with search, category filter, active/featured status, stock, actions. **P0**
-- [ ] Admin UI: create/edit product form with validation and live preview. **P0**
-- [ ] Image upload endpoint (Cloudinary recommended, or local `/uploads` with persistent volume). **P0**
-- [ ] Admin UI: multi-image upload, reorder, set primary image, delete image. **P0**
-- [ ] Validate sale price: `compare` must be greater than `price` when set. **P1**
-- [ ] Duplicate product action. **P2**
-- [ ] Archive/delete rules: soft-delete products that appear in past orders. **P1**
-- [ ] Stock: quantity, low-stock warnings, block checkout at zero. **P0**
-- [ ] Public shop shows only active products, with pagination. **P0**
-- [ ] Public product detail uses real description and specs. **P1**
-- [ ] Admin bulk actions (activate/deactivate/delete). **P2**
+- [x] Extend `Product`: description, sku, stock, lowStockThreshold, isActive, categoryId, brand, isFeatured. **P0**
+- [x] Decide phone variants model: color, storage, RAM, condition (new/used/refurbished). **P0**
+- [x] Add phone-specific spec fields (screen, battery, camera, network, warranty). **P1**
+- [x] Auto-generate unique slug/handle from title; do not break existing links on edit. **P0**
+- [x] Admin API: full CRUD under `/api/admin/products` with pagination and search. **P0**
+- [x] Admin UI: product table with search, category filter, active/featured status, stock, actions. **P0**
+- [x] Admin UI: create/edit product form with validation and live preview. **P0**
+- [x] Image upload endpoint (Cloudinary recommended, or local `/uploads` with persistent volume). **P0**
+- [x] Admin UI: multi-image upload, reorder, set primary image, delete image. **P0**
+- [x] Validate sale price: `compare` must be greater than `price` when set. **P1**
+- [x] Duplicate product action. **P2**
+- [x] Archive/delete rules: soft-delete products that appear in past orders. **P1**
+- [x] Stock: quantity, low-stock warnings, block checkout at zero. **P0**
+- [x] Public shop shows only active products, with pagination. **P0**
+- [x] Public product detail uses real description and specs. **P1**
+- [x] Admin bulk actions (activate/deactivate/delete). **P2**
 
 ---
 
