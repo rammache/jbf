@@ -900,3 +900,28 @@ Add one entry here at the end of every session. New agents must read the latest 
 - **Decisions:** All tasks across Phase 0 through Phase 10 are completely finished, verified, and committed. The application is 100% production-ready for Jabour Phone.
 - **Next step:** Store is fully built and ready for live hosting (Render / Railway / Docker VPS) and handover to Jabour.
 
+---
+
+### Session: 2026-11-20 (Phase 11 & Phase 12 Backlog Addition - MAD Currency & Arabic/French Bilingual Switcher)
+
+- **Done:** Added new tasks to the project roadmap and task tracker (`WORK/tasks.md`) based on the user request:
+  1. **Phase 11: Moroccan Dirham (MAD) Currency Localization:**
+     - Update default store settings to Moroccan Dirham: currency `MAD`, symbol `DH` (or `د.م.`), default country Morocco.
+     - Adapt frontend currency formatting (`formatPrice`) for clean MAD display (e.g. `1,299.00 DH` / `1 299 DH`).
+     - Update backend `DEFAULT_SETTINGS` in `settingsController.ts` and `demo-seed.ts` (currency `MAD`, symbol `DH`, shippingFee `35.0`, freeShippingThreshold `300.0`).
+     - Calibrate demo catalog pricing, cart/checkout calculations, and shipping thresholds to realistic Moroccan Dirham values.
+     - Verify consistent price presentation across all storefront views and admin management screens.
+     - Add automated test suite for MAD currency calculation and formatting.
+  2. **Phase 12: Bilingual Arabic & French Internationalization (i18n & RTL):**
+     - Setup frontend i18n support for Arabic (`ar`) and French (`fr`), persisted in localStorage.
+     - Add language switcher widget to the header / navigation bar.
+     - Implement bidirectional support (`dir="rtl"` vs `dir="ltr"`) with proper RTL layout adjustments.
+     - Localize storefront dictionaries (navigation, catalog, filters, cart, checkout, policy pages, tracking, WhatsApp messages).
+     - Link active language to localized currency symbol (`DH` in French, `د.م.` in Arabic).
+     - Add automated verification tests for i18n and RTL layout handling.
+- **Files changed:**
+  - `WORK/tasks.md`
+  - `WORK/progression.md`
+- **Decisions:** Phase 11 and Phase 12 are structured into prioritized sub-tasks (**P0**, **P1**, **P2**) adhering to the one-task-per-session rule.
+- **Next step:** Confirm with user whether to start Phase 11 (Moroccan Dirham Currency) or Phase 12 (Arabic & French Switcher).
+

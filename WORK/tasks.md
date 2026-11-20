@@ -66,6 +66,8 @@ The WORK files must carry enough context for any agent to continue without guess
 12. Contact page, WhatsApp order option, FAQ, shipping/returns/privacy/terms.
 13. Input validation, security middleware, migrations, .gitignore, tests.
 14. Production deployment and a simple handover guide for Jabour.
+15. Moroccan Dirham (MAD) currency localization across storefront, admin, and backend.
+16. Arabic & French bilingual language switcher with RTL/LTR layout support.
 
 ---
 
@@ -277,6 +279,35 @@ The WORK files must carry enough context for any agent to continue without guess
 
 ---
 
+## Phase 11 - Moroccan Dirham (MAD) Currency Localization
+
+- [ ] Update default store settings to Moroccan Dirham: currency code `MAD`, symbol `DH` (or `د.م.` in Arabic), country Morocco, and realistic MAD delivery thresholds. **P0**
+- [ ] Update frontend currency utility (`formatPrice`) and settings context to format prices cleanly in Moroccan Dirham (e.g. `1,299.00 DH` or `1 299 DH`). **P0**
+- [ ] Update backend `DEFAULT_SETTINGS` in `backend/src/controllers/settingsController.ts` and `demo-seed.ts` to use MAD defaults (currency `MAD`, symbol `DH`, shippingFee `35.0`, freeShippingThreshold `300.0`). **P0**
+- [ ] Audit and adapt all prices, demo seed product prices, shipping calculations, and coupon thresholds to realistic Moroccan Dirham values. **P0**
+- [ ] Verify consistent MAD formatting across all storefront views: Home, Shop, Product Detail, Cart Drawer, Checkout Modal, Order Confirmation, and Order Tracking. **P0**
+- [ ] Verify consistent MAD formatting across all admin views: Dashboard metrics (revenue), Products table, Orders table, and Store Settings editor. **P1**
+- [ ] Add automated test suite for MAD currency formatting, thresholds, and calculations. **P1**
+
+---
+
+## Phase 12 - Bilingual Localization (Arabic & French with RTL Support)
+
+- [ ] Set up frontend internationalization (i18n) system supporting Arabic (`ar`) and French (`fr`), with language persistence in localStorage. **P0**
+- [ ] Implement language switcher component in Navbar / Top Bar allowing seamless toggle between "العربية" and "Français". **P0**
+- [ ] Implement bidirectional layout support: dynamic `dir="rtl"` attribute on `<html>` / root, font selection (e.g. Cairo or Tajawal for Arabic), and RTL-adapted Tailwind styles (spacing, alignment, chevron icons). **P0**
+- [ ] Create translation dictionaries for Arabic (`ar`) and French (`fr`) covering all storefront UI:
+  - Header, Navbar, Search Bar, Announcements, and Footer. **P0**
+  - Product catalog, filters, sorting options, badge labels (Sale, Out of stock, New), and product detail specifications. **P0**
+  - Cart drawer, empty states, and discount coupon messages. **P0**
+  - Checkout form labels, payment method descriptions (Cash on Delivery / الدفع عند الاستلام), and WhatsApp order template. **P0**
+  - Informational pages: About Us, Contact, FAQ, Shipping, Returns, Privacy, and Terms. **P1**
+  - Order tracking page, order status badges, and error messages. **P1**
+- [ ] Adapt currency display based on active language (e.g., `DH` in French, `د.م.` in Arabic). **P1**
+- [ ] Add automated tests for language switching, translation key completeness, and RTL attribute toggling. **P1**
+
+---
+
 ## Minimum Launch Checklist (Recommended Order)
 
 1. Phase 0: fix build errors, `.gitignore`, remove REA/legacy files.
@@ -288,5 +319,7 @@ The WORK files must carry enough context for any agent to continue without guess
 7. Phase 8: validation, security, migrations, tests.
 8. Phase 9: deploy, backups, and handover to Jabour.
 9. Phase 10: launch readiness, bundle optimization, and system verification.
+10. Phase 11: Moroccan Dirham (MAD) currency localization.
+11. Phase 12: Bilingual Arabic & French language switcher with RTL support.
 
-All phases and launch checklist items are 100% complete and verified.
+Phases 0 through 10 are 100% complete and verified. Phases 11 and 12 are queued for implementation.

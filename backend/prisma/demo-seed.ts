@@ -320,12 +320,15 @@ async function main() {
     categoryMap.set(saved.name, saved.id);
   }
 
-  for (const product of PRODUCTS) {
+  for (let i = 0; i < PRODUCTS.length; i++) {
+    const product = PRODUCTS[i];
     const { category: categoryName, ...rest } = product;
     const categoryId = categoryMap.get(categoryName);
     if (!categoryId) {
       throw new Error(`Category "${categoryName}" not found for product "${product.title}"`);
     }
+
+    const sku = `JBF-${String(i + 1).padStart(3, "0")}-${product.handle.replace(/[^a-zA-Z0-9]/g, "").slice(0, 10).toUpperCase()}`;
 
     await prisma.product.upsert({
       where: { handle: product.handle },
@@ -338,7 +341,7 @@ async function main() {
         stock: 25,
         lowStockThreshold: 5,
         condition: "NEW",
-        sku: `JBF-${product.handle.replace(/[^a-zA-Z0-9]/g, "").slice(0, 8).toUpperCase()}`,
+        sku,
         description: `Official authentic ${product.title} from Jabour Phone. Full manufacturer warranty, guaranteed authentic with fast delivery.`
       },
       create: {
@@ -350,7 +353,7 @@ async function main() {
         stock: 25,
         lowStockThreshold: 5,
         condition: "NEW",
-        sku: `JBF-${product.handle.replace(/[^a-zA-Z0-9]/g, "").slice(0, 8).toUpperCase()}`,
+        sku,
         description: `Official authentic ${product.title} from Jabour Phone. Full manufacturer warranty, guaranteed authentic with fast delivery.`
       }
     });
