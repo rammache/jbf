@@ -9,6 +9,7 @@ import React, {
 import {
   ApiError,
   apiFetch,
+  setAuthToken,
   setForbiddenHandler,
   setUnauthorizedHandler
 } from "../api";
@@ -63,6 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const signOut = useCallback(() => {
+    setAuthToken(null);
     setAdmin(null);
     setStatus("unauthenticated");
     setForbiddenError(null);
@@ -100,6 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     setUnauthorizedHandler(() => {
+      setAuthToken(null);
       setAdmin(null);
       setStatus("unauthenticated");
     });

@@ -24,6 +24,22 @@ export type ApiErrorHandler = (
   context: { endpoint: string; options: ApiFetchOptions }
 ) => void;
 
+const TOKEN_STORAGE_KEY = "jabour_admin_token";
+
+export function getAuthToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(TOKEN_STORAGE_KEY);
+}
+
+export function setAuthToken(token: string | null): void {
+  if (typeof window === "undefined") return;
+  if (token) {
+    localStorage.setItem(TOKEN_STORAGE_KEY, token);
+  } else {
+    localStorage.removeItem(TOKEN_STORAGE_KEY);
+  }
+}
+
 let onUnauthorizedHandler: ApiErrorHandler | null = null;
 let onForbiddenHandler: ApiErrorHandler | null = null;
 
@@ -44,6 +60,11 @@ export async function apiFetch<T = unknown>(
   const headers = new Headers(fetchOptions.headers);
   if (!headers.has("Accept")) {
     headers.set("Accept", "application/json");
+  }
+
+  const token = getAuthToken();
+  if (token && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${token}`);
   }
 
   let body = fetchOptions.body;

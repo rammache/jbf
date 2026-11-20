@@ -49,6 +49,10 @@ export function getCorsOptions(): CorsOptions {
     "http://localhost:5000"
   ];
 
+  if (process.env.VERCEL_URL) {
+    allowedOrigins.push(`https://${process.env.VERCEL_URL}`);
+  }
+
   if (process.env.CORS_ORIGIN) {
     const custom = process.env.CORS_ORIGIN.split(",").map((s) => s.trim());
     allowedOrigins.push(...custom);
@@ -59,43 +63,47 @@ export function getCorsOptions(): CorsOptions {
       // Allow requests with no origin (such as mobile apps or curl / same-origin)
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
+        const isAllowedVercel =
+          origin.endsWith(".vercel.app") ||
+          (process.env.VERCEL_URL ? origin.includes(process.env.VERCEL_URL) : false);
+
+        if (allowedOrigins.includes(origin) || isAllowedVercel) {
+          return callback(null, true);
+        }
+
+        // In production reject unallowed origins; in development warn
+        if (process.env.NODE_ENV === "production") {
+          return callback(new Error(`Origin ${origin} not allowed by CORS`));
+        }
+
+        // Development permissive fallback
         return callback(null, true);
+      },
+      credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+          allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+    };
+  }
+
+  /**
+   * Structured HTTP request logger middleware
+   */
+  export function requestLogger(req: Request, res: Response, next: NextFunction): void {
+    const start = Date.now();
+
+    res.on("finish", () => {
+      const duration = Date.now() - start;
+      const { method, originalUrl, ip } = req;
+      const { statusCode } = res;
+
+      // Skip verbose logs during automated unit testing
+      if (process.env.NODE_ENV === "test") {
+        return;
       }
 
-      // In production reject unallowed origins; in development warn
-      if (process.env.NODE_ENV === "production") {
-        return callback(new Error(`Origin ${origin} not allowed by CORS`));
-      }
+      const timestamp = new Date().toISOString();
+      console.log(`[${timestamp}] ${method} ${originalUrl} ${statusCode} - ${duration}ms (IP: ${ip})`);
+    });
 
-      // Development permissive fallback
-      return callback(null, true);
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
-  };
-}
-
-/**
- * Structured HTTP request logger middleware
- */
-export function requestLogger(req: Request, res: Response, next: NextFunction): void {
-  const start = Date.now();
-
-  res.on("finish", () => {
-    const duration = Date.now() - start;
-    const { method, originalUrl, ip } = req;
-    const { statusCode } = res;
-
-    // Skip verbose logs during automated unit testing
-    if (process.env.NODE_ENV === "test") {
-      return;
-    }
-
-    const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] ${method} ${originalUrl} ${statusCode} - ${duration}ms (IP: ${ip})`);
-  });
-
-  next();
-}
+    next();
+  }

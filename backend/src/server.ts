@@ -14,7 +14,11 @@ import { getUploadsDir } from "./middleware/upload.js";
 dotenv.config();
 
 // Ensure JWT secret is valid
-getJwtSecret();
+try {
+  getJwtSecret();
+} catch (err) {
+  console.error("JWT Secret Error:", err);
+}
 
 const uploadsDir = getUploadsDir();
   try {

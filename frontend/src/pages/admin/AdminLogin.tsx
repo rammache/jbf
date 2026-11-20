@@ -10,7 +10,7 @@ import {
   Mail,
   ShieldCheck
 } from "lucide-react";
-import { ApiError, api } from "../../api";
+import { ApiError, api, setAuthToken } from "../../api";
 import { isAdminUser, useAuth } from "../../context/AuthContext";
 import { BrandLogo } from "../../components/BrandLogo";
 
@@ -44,6 +44,7 @@ export const AdminLogin: React.FC = () => {
         success?: boolean;
         error?: string;
         data?: unknown;
+        token?: string;
       }>(
         "/api/auth/login",
         { email: email.trim(), password },
@@ -51,6 +52,9 @@ export const AdminLogin: React.FC = () => {
       );
 
       if (body?.success && isAdminUser(body.data)) {
+        if (body.token) {
+          setAuthToken(body.token);
+        }
         setPassword("");
         signIn(body.data);
         navigate(returnTo, { replace: true });
