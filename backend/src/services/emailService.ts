@@ -31,7 +31,7 @@ export interface OrderNotificationData {
  */
 export async function sendOrderNotifications(order: OrderNotificationData): Promise<void> {
   try {
-    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const frontendUrl = (process.env.FRONTEND_URL || "http://localhost:5173").trim().replace(/\/+$/, "");
     const trackingUrl = `${frontendUrl}/track?id=${encodeURIComponent(order.orderNumber)}&email=${encodeURIComponent(order.customerEmail)}`;
 
     const subtotal = toNumber(order.subtotal);
