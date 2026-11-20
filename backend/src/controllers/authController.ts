@@ -71,14 +71,16 @@ export const login = async (req: Request, res: Response) => {
       maxAge: ttlSeconds * 1000
     });
     res.setHeader("Cache-Control", "no-store");
-    res.json({ success: true, data: toPublicAdmin(admin) });
+    res.json({ success: true, data: toPublicAdmin(admin), token });
   } catch (_error: unknown) {
     res.status(500).json({ success: false, error: "Unable to sign in right now." });
   }
 };
 
 export const me = async (req: Request, res: Response) => {
-  const token = req.cookies?.[ADMIN_AUTH_COOKIE_NAME];
+  const authHeader = req.headers.authorization;
+  const bearerToken = authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : null;
+  const token = req.cookies?.[ADMIN_AUTH_COOKIE_NAME] || bearerToken;
   const payload = typeof token === "string" ? verifyAdminToken(token) : null;
   const adminId = payload ? Number(payload.sub) : NaN;
 

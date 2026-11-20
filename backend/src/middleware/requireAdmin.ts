@@ -25,7 +25,9 @@ export async function requireAdmin(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const token = req.cookies?.[ADMIN_AUTH_COOKIE_NAME];
+  const authHeader = req.headers.authorization;
+  const bearerToken = authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : null;
+  const token = req.cookies?.[ADMIN_AUTH_COOKIE_NAME] || bearerToken;
   const payload = typeof token === "string" ? verifyAdminToken(token) : null;
   const adminId = payload ? Number(payload.sub) : NaN;
 
