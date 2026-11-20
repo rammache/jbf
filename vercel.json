@@ -1,53 +1,29 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "services": {
-    "frontend": {
-      "root": "frontend",
-      "framework": "vite"
-    },
-    "backend": {
-      "root": "backend",
-      "framework": "express",
-      "entrypoint": "index.js",
-      "buildCommand": "prisma generate && tsc"
-    }
-  },
   "rewrites": [
     {
-      "source": "/api",
-      "destination": {
-        "path": "/api"
-      }
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
     },
     {
-      "source": "/api/(.*)",
-      "destination": {
-        "path": "/api/$1"
-      }
+      "source": "/api",
+      "destination": "/api/index.js"
     },
     {
       "source": "/health",
-      "destination": {
-        "path": "/health"
-      }
+      "destination": "/api/index.js"
     },
     {
       "source": "/health/(.*)",
-      "destination": {
-        "path": "/health/$1"
-      }
+      "destination": "/api/index.js"
     },
     {
       "source": "/uploads/(.*)",
-      "destination": {
-        "path": "/uploads/$1"
-      }
+      "destination": "/api/index.js"
     },
     {
       "source": "/(.*)",
-      "destination": {
-        "path": "/$1"
-      }
+      "destination": "/index.html"
     }
   ]
 }
