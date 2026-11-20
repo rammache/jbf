@@ -391,11 +391,11 @@ export const ProductDetail: React.FC = () => {
               href={`https://wa.me/${(settings.whatsapp || "212661123456").replace(/[^\d]/g, "")}?text=${encodeURIComponent(
                 language === "ar"
                   ? `مرحباً ${settings.storeName}! أود طلب "${product.title}" بسعر ${formatPrice(
-                      product.price * quantity
-                    )}. اللون: ${selectedFinish || "قياسي"}، الكمية: ${quantity}. رابط المتجر: ${typeof window !== "undefined" ? window.location.href : ""}`
+                    product.price * quantity
+                  )}. اللون: ${selectedFinish || "قياسي"}، الكمية: ${quantity}. رابط المتجر: ${typeof window !== "undefined" ? window.location.href : ""}`
                   : `Bonjour ${settings.storeName} ! Je souhaite commander "${product.title}" pour ${formatPrice(
-                      product.price * quantity
-                    )}. Finition: ${selectedFinish || "Standard"}, Quantité: ${quantity}. Lien boutique: ${typeof window !== "undefined" ? window.location.href : ""}`
+                    product.price * quantity
+                  )}. Finition: ${selectedFinish || "Standard"}, Quantité: ${quantity}. Lien boutique: ${typeof window !== "undefined" ? window.location.href : ""}`
               )}`}
               target="_blank"
               rel="noopener noreferrer"

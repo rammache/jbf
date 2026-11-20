@@ -131,8 +131,8 @@ export const useLanguage = (): LanguageContextType => {
       language: "fr",
       direction: "ltr",
       isRTL: false,
-      setLanguage: () => {},
-      toggleLanguage: () => {},
+      setLanguage: () => { },
+      toggleLanguage: () => { },
       t: (key: string, params?: Record<string, string | number>) => {
         const parts = key.split(".");
         let val: any = translations.fr;

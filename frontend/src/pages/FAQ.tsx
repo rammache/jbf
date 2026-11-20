@@ -133,8 +133,8 @@ export const FAQ: React.FC = () => {
             type="button"
             onClick={() => setSelectedCategory(cat)}
             className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition ${selectedCategory === cat
-                ? "bg-[#15161d] text-white shadow"
-                : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+              ? "bg-[#15161d] text-white shadow"
+              : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
               }`}
           >
             {cat}
