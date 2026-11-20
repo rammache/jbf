@@ -1,5 +1,5 @@
 import { rateLimit, type Options } from "express-rate-limit";
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction, RequestHandler } from "express";
 
 export const DEFAULT_LOGIN_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 export const DEFAULT_LOGIN_RATE_LIMIT_MAX = 5; // 5 attempts per window
@@ -47,7 +47,7 @@ export function createLoginRateLimiter(overrides?: Partial<Options>) {
     skipSuccessfulRequests,
     standardHeaders: "draft-7",
     legacyHeaders: false,
-    handler: (req: Request, res: Response, _next: NextFunction, options) => {
+    handler: ((req: any, res: any, _next: any, options: any) => {
       const minutes = Math.ceil(options.windowMs / (60 * 1000));
       const message =
         minutes > 1
@@ -58,9 +58,9 @@ export function createLoginRateLimiter(overrides?: Partial<Options>) {
         success: false,
         error: message
       });
-    },
+    }) as any,
     ...overrides
-  });
+  }) as unknown as RequestHandler;
 }
 
 export const loginRateLimiter = createLoginRateLimiter();
@@ -69,20 +69,20 @@ export const loginRateLimiter = createLoginRateLimiter();
  * Rate limiter for checkout order placement (prevent abuse/spam)
  * Default: 10 order attempts per 15 minutes per IP.
  */
-export function createOrderRateLimiter(overrides?: Partial<Options>) {
+export function createOrderRateLimiter(overrides?: Partial<Options>): RequestHandler {
   return rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 10,
     standardHeaders: "draft-7",
     legacyHeaders: false,
-    handler: (_req: Request, res: Response, _next: NextFunction, options) => {
+    handler: ((_req: any, res: any, _next: any, options: any) => {
       res.status(options.statusCode).json({
         success: false,
         error: "Too many order requests from your network. Please wait a few minutes before trying again."
       });
-    },
+    }) as any,
     ...overrides
-  });
+  }) as unknown as RequestHandler;
 }
 
 export const orderRateLimiter = createOrderRateLimiter();
@@ -91,20 +91,20 @@ export const orderRateLimiter = createOrderRateLimiter();
  * Rate limiter for newsletter subscription
  * Default: 5 attempts per 15 minutes per IP.
  */
-export function createNewsletterRateLimiter(overrides?: Partial<Options>) {
+export function createNewsletterRateLimiter(overrides?: Partial<Options>): RequestHandler {
   return rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 5,
     standardHeaders: "draft-7",
     legacyHeaders: false,
-    handler: (_req: Request, res: Response, _next: NextFunction, options) => {
+    handler: ((_req: any, res: any, _next: any, options: any) => {
       res.status(options.statusCode).json({
         success: false,
         error: "Too many newsletter subscription attempts. Please try again later."
       });
-    },
+    }) as any,
     ...overrides
-  });
+  }) as unknown as RequestHandler;
 }
 
 export const newsletterRateLimiter = createNewsletterRateLimiter();

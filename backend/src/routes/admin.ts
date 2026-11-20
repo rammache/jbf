@@ -100,7 +100,7 @@ router.put("/users/:id", validateBody(updateAdminUserSchema), adminUpdateUser);
 router.delete("/users/:id", adminDeleteUser);
 
 // Image Uploads (up to 10 images at once)
-router.post("/upload", uploadMiddleware.array("images", 10), adminUploadImages);
+router.post("/upload", uploadMiddleware.array("images", 10) as any, adminUploadImages);
 
 // Category management
 router.get("/categories", adminGetCategories);

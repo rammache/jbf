@@ -20,7 +20,7 @@ import adminRoutes from "./admin.js";
 const router = Router();
 
 // Admin auth
-router.post("/auth/login", loginRateLimiter, validateBody(loginSchema), login);
+router.post("/auth/login", loginRateLimiter as any, validateBody(loginSchema), login);
 router.get("/auth/me", me);
 router.post("/auth/logout", logout);
 
@@ -39,12 +39,12 @@ router.post("/products/:id/reviews", createProductReview);
 router.get("/categories", getCategories);
 
 // Orders & Checkout
-router.post("/orders", orderRateLimiter, validateBody(createOrderSchema), createOrder);
+router.post("/orders", orderRateLimiter as any, validateBody(createOrderSchema), createOrder);
 router.post("/orders/track", validateBody(trackOrderSchema), trackOrder);
 router.get("/orders/:id", getOrder);
 
 // Newsletter
-router.post("/newsletter", newsletterRateLimiter, subscribeNewsletter);
+router.post("/newsletter", newsletterRateLimiter as any, subscribeNewsletter);
 
 // Store Settings & Policies
 router.get("/settings", getStoreSettings);
