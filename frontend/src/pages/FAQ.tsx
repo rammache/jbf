@@ -2,97 +2,126 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, HelpCircle, Phone, MessageCircle } from "lucide-react";
 import { SEO } from "../components/SEO";
+import { useLanguage } from "../context/LanguageContext";
+import { useSettings } from "../context/SettingsContext";
 
 interface FAQItem {
-  question: string;
-  answer: string;
-  category: string;
+  questionFr: string;
+  questionAr: string;
+  answerFr: string;
+  answerAr: string;
+  categoryFr: string;
+  categoryAr: string;
 }
 
 const FAQ_DATA: FAQItem[] = [
   {
-    category: "Ordering & Payment",
-    question: "What payment methods do you accept?",
-    answer:
-      "We primarily operate via Cash on Delivery (COD). You only hand over payment once the courier delivers your package to your doorstep. You can inspect the outer packaging and security seal before completing payment."
+    categoryFr: "Commandes & Paiement",
+    categoryAr: "الطلب وطرق الدفع",
+    questionFr: "Quels sont les modes de paiement acceptés ?",
+    questionAr: "ما هي طرق الدفع المتاحة في المتجر ؟",
+    answerFr:
+      "Nous fonctionnons principalement avec le Paiement à la Livraison (Cash on Delivery). Vous ne payez en espèces qu'après réception et vérification physique de votre colis auprès du livreur.",
+    answerAr:
+      "نعتمد بشكل أساسي على الدفع نقداً عند الاستلام. لا تدفع أي مبلغ حتى تستلم طردك وتتحقق منه بنفسك عند باب منزلك."
   },
   {
-    category: "Ordering & Payment",
-    question: "Can I place an order directly through WhatsApp?",
-    answer:
-      "Yes! Every product page features an 'Order via WhatsApp' button. Clicking it opens a pre-composed chat with Jabour Phone referencing the exact product, price, and finish you want to purchase."
+    categoryFr: "Commandes & Paiement",
+    categoryAr: "الطلب وطرق الدفع",
+    questionFr: "Puis-je commander directement via WhatsApp ?",
+    questionAr: "هل يمكنني الطلب مباشرة عبر تطبيق واتساب ؟",
+    answerFr:
+      "Oui absolument ! Chaque fiche produit dispose d'un bouton 'Commander directement via WhatsApp'. Il ouvre une discussion instantanée avec toutes les références de votre produit.",
+    answerAr:
+      "نعم بكل تأكيد ! تحتوي كل صفحة منتج على زر 'طلب مباشر عبر واتساب'. بالضغط عليه يتم فتح محادثة فورية مجهزة بكافة تفاصيل وسعر المنتج المطلوب."
   },
   {
-    category: "Ordering & Payment",
-    question: "How do I know my order is confirmed?",
-    answer:
-      "Upon submitting checkout or ordering on WhatsApp, you will receive an immediate order reference ID. Our dispatch team also contacts you via phone or WhatsApp to verify your delivery address before shipment."
+    categoryFr: "Authenticité & Qualité",
+    categoryAr: "الجودة والأصالة",
+    questionFr: "Vos téléphones sont-ils 100% authentiques et certifiés ?",
+    questionAr: "هل جميع هواتفكم أصلية ومضمونة 100% ؟",
+    answerFr:
+      "Oui, tous nos appareils proviennent de canaux de distribution officiels certifiés avec numéros IMEI d'origine et compatibilité totale avec tous les opérateurs marocains.",
+    answerAr:
+      "نعم بكل تأكيد. جميع أجهزتنا أصلية ومستوردة من موزعين معتمدين رسمياً مع أرقام IMEI أصلية وتوافق كامل مع جميع شبكات الاتصال في المغرب."
   },
   {
-    category: "Testing & Quality",
-    question: "What is the Jabour Phone Quality Guarantee?",
-    answer:
-      "Every device we sell is thoroughly inspected by our technicians. We verify battery health, display responsiveness, cellular and Wi-Fi connectivity, speaker clarity, and authentic IMEI registration prior to dispatch."
+    categoryFr: "Authenticité & Qualité",
+    categoryAr: "الجودة والأصالة",
+    questionFr: "En quoi consiste le contrôle qualité Jabour Phone ?",
+    questionAr: "ما هو الفحص الفني الذي تخضع له الأجهزة قبل الشحن ؟",
+    answerFr:
+      "Nos techniciens vérifient l'état de la batterie, la réactivité de l'écran, les caméras, les haut-parleurs et la connectivité réseau avant toute expédition.",
+    answerAr:
+      "يقوم خبراؤنا بفحص صحة البطارية، استجابة شاشة اللمس، عمل الكاميرات، نقاء الصوت وتوصيل الشبكة والواي فاي قبل تغليف وإرسال أي جهاز."
   },
   {
-    category: "Testing & Quality",
-    question: "Are your phones and hardware 100% genuine?",
-    answer:
-      "Yes, absolutely. We source all hardware directly from authorized distributors. Every device carries authentic serial numbers and is backed by official manufacturer warranties."
+    categoryFr: "Livraison & Suivi",
+    categoryAr: "الشحن والتوصيل",
+    questionFr: "Combien de temps prend la livraison ?",
+    questionAr: "كم تستغرق مدة توصيل الطلب إلى مدينتي ؟",
+    answerFr:
+      "Les commandes sont livrées sous 24h à Casablanca et Rabat, et sous 24h à 48h pour les autres villes du Royaume.",
+    answerAr:
+      "يتم التوصيل خلال 24 ساعة في الدار البيضاء والرباط، وخلال 24 إلى 48 ساعة لباقي المدن المغربية."
   },
   {
-    category: "Delivery & Shipping",
-    question: "How long does delivery take?",
-    answer:
-      "Orders placed before 4:00 PM are typically dispatched the same day for next-business-day delivery in central zones. Remote or regional destinations take between 2 to 3 business days."
+    categoryFr: "Garantie & SAV",
+    categoryAr: "الضمان وما بعد البيع",
+    questionFr: "Quelle est la garantie offerte sur vos appareils ?",
+    questionAr: "ما هي مدة الضمان المعتمدة للأجهزة ؟",
+    answerFr:
+      "Chaque smartphone neuf bénéficie de notre garantie officielle de 1 an contre tout vice de fabrication matériel avec assistance directe.",
+    answerAr:
+      "كل هاتف ذكي جديد مشمول بضمان رسمي حقيقي لمدة عام كامل (12 شهراً) ضد أي عيب مصنعي أو عطل فني في العتاد."
   },
   {
-    category: "Delivery & Shipping",
-    question: "Can I track my order status?",
-    answer:
-      "Yes! Visit our dedicated Order Tracking page, input your Order Reference ID and your email address, and you can view live verification, packing, and dispatch progress."
-  },
-  {
-    category: "Warranty & Returns",
-    question: "What warranty is included with my purchase?",
-    answer:
-      "Every new smartphone and tablet includes our official 1-year warranty against hardware manufacturer defects, handled directly through our team rather than third-party bureaucracy."
-  },
-  {
-    category: "Warranty & Returns",
-    question: "What is your return policy?",
-    answer:
-      "We offer a 14-day exchange and return policy for manufacturer defects. If a device has any verified factory fault, we provide immediate exchange, repair, or refund. Items must be returned with all original box accessories and packaging."
+    categoryFr: "Garantie & SAV",
+    categoryAr: "الضمان وما بعد البيع",
+    questionFr: "Quelle est votre politique d'échange ?",
+    questionAr: "ما هي سياسة الاستبدال والإرجاع في حالة وجود عيب ؟",
+    answerFr:
+      "Nous proposons une politique d'échange sous 14 jours en cas de défaut matériel avéré. Le produit doit être retourné complet avec sa boîte et ses accessoires d'origine.",
+    answerAr:
+      "نوفر حق الاستبدال خلال 14 يوماً في حالة وجود أي عيب مصنعي مؤكد. يشترط إعادة الجهاز بملحقاته وعلبته الأصلية."
   }
 ];
 
 export const FAQ: React.FC = () => {
+  const { t, language } = useLanguage();
+  const { settings } = useSettings();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const isAr = language === "ar";
 
-  const categories = ["All", ...Array.from(new Set(FAQ_DATA.map((item) => item.category)))];
+  const allCatLabel = isAr ? "جميع الأسئلة" : "Toutes les catégories";
+  const [selectedCategory, setSelectedCategory] = useState<string>(allCatLabel);
+
+  const categories = [
+    allCatLabel,
+    ...Array.from(new Set(FAQ_DATA.map((item) => (isAr ? item.categoryAr : item.categoryFr))))
+  ];
 
   const filtered =
-    selectedCategory === "All"
+    selectedCategory === allCatLabel
       ? FAQ_DATA
-      : FAQ_DATA.filter((item) => item.category === selectedCategory);
+      : FAQ_DATA.filter((item) => (isAr ? item.categoryAr === selectedCategory : item.categoryFr === selectedCategory));
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <SEO
-        title="Frequently Asked Questions (FAQ)"
-        description="Find answers to common questions about Jabour Phone orders, Cash on Delivery, device inspection, delivery times, and warranty."
+        title={t("pages.faq.title")}
+        description={t("pages.faq.subtitle")}
       />
 
       <div className="text-center space-y-3">
         <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
-          Help &amp; Knowledge Base
+          {t("nav.faq")}
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-[#15161d] tracking-tight uppercase">
-          Frequently Asked Questions
+          {t("pages.faq.title")}
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 max-w-xl mx-auto">
-          Everything you need to know about purchasing, warranty coverage, quality inspection, and delivery.
+          {t("pages.faq.subtitle")}
         </p>
       </div>
 
@@ -117,6 +146,9 @@ export const FAQ: React.FC = () => {
       <div className="space-y-3">
         {filtered.map((item, idx) => {
           const isOpen = openIndex === idx;
+          const question = isAr ? item.questionAr : item.questionFr;
+          const answer = isAr ? item.answerAr : item.answerFr;
+
           return (
             <div
               key={idx}
@@ -125,9 +157,9 @@ export const FAQ: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setOpenIndex(isOpen ? null : idx)}
-                className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition"
+                className="w-full p-5 text-left rtl:text-right flex items-center justify-between gap-4 hover:bg-gray-50 transition"
               >
-                <span className="text-sm font-bold text-[#15161d]">{item.question}</span>
+                <span className="text-sm font-bold text-[#15161d]">{question}</span>
                 <ChevronDown
                   className={`w-4 h-4 text-gray-500 transition-transform duration-300 flex-shrink-0 ${isOpen ? "rotate-180 text-[#d10024]" : ""
                     }`}
@@ -136,7 +168,7 @@ export const FAQ: React.FC = () => {
 
               {isOpen && (
                 <div className="px-5 pb-5 text-xs text-gray-600 leading-relaxed border-t border-gray-100 pt-3">
-                  {item.answer}
+                  {answer}
                 </div>
               )}
             </div>
@@ -147,24 +179,26 @@ export const FAQ: React.FC = () => {
       {/* Still need help callout */}
       <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center space-y-4">
         <HelpCircle className="w-8 h-8 text-[#d10024] mx-auto" />
-        <h3 className="text-base font-bold text-[#15161d]">Have a question not listed here?</h3>
+        <h3 className="text-base font-bold text-[#15161d]">{t("pages.faq.needMoreHelp")}</h3>
         <p className="text-xs text-gray-500 max-w-md mx-auto">
-          Our team is available 6 days a week to clarify technical specifications, stock counts, or bulk orders.
+          {t("pages.contact.subtitle")}
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">
           <Link
             to="/contact"
             className="px-5 py-2.5 bg-[#15161d] hover:bg-[#a7001d] text-white text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center gap-2"
           >
-            <Phone className="w-3.5 h-3.5" /> Contact Us
+            <Phone className="w-3.5 h-3.5" /> {t("nav.contact")}
           </Link>
           <a
-            href="https://wa.me/96170123456"
+            href={`https://wa.me/${(settings.whatsapp || "212661123456").replace(/[^\d]/g, "")}?text=${encodeURIComponent(
+              isAr ? "مرحباً جبور فون، لدي استفسار." : "Bonjour Jabour Phone, j'ai une question."
+            )}`}
             target="_blank"
             rel="noopener noreferrer"
             className="px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center gap-2"
           >
-            <MessageCircle className="w-3.5 h-3.5" /> Chat On WhatsApp
+            <MessageCircle className="w-3.5 h-3.5" /> {t("pages.faq.whatsappCta")}
           </a>
         </div>
       </div>

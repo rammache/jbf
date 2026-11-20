@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useSettings } from "../context/SettingsContext";
+import { useLanguage } from "../context/LanguageContext";
 
 export const CartDrawer: React.FC = () => {
   const { formatPrice } = useSettings();
+  const { t } = useLanguage();
   const {
     items,
     isCartOpen,
@@ -69,7 +71,7 @@ export const CartDrawer: React.FC = () => {
           <div className="p-5 border-b border-gray-200 flex items-center justify-between bg-[#15161d] text-white">
             <div className="flex items-center gap-2">
               <ShoppingBag className="w-5 h-5 text-[#d10024]" />
-              <h2 className="text-lg font-bold">Shopping Cart ({items.length})</h2>
+              <h2 className="text-lg font-bold">{t("cart.title")} ({items.length})</h2>
             </div>
             <button
               onClick={() => setIsCartOpen(false)}
@@ -87,15 +89,15 @@ export const CartDrawer: React.FC = () => {
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto text-gray-400">
                   <ShoppingBag className="w-8 h-8" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-800">Your basket is empty</h3>
+                <h3 className="text-lg font-bold text-gray-800">{t("cart.empty")}</h3>
                 <p className="text-xs text-gray-500 max-w-xs mx-auto">
-                  Nothing here yet. Explore our authentic phone and tech catalog to find your gear.
+                  {t("cart.emptyDesc")}
                 </p>
                 <button
                   onClick={() => setIsCartOpen(false)}
                   className="inline-block mt-2 px-6 py-2.5 bg-[#15161d] hover:bg-[#d10024] text-white text-xs font-bold uppercase tracking-wider rounded transition"
                 >
-                  Start Shopping
+                  {t("cart.startShopping")}
                 </button>
               </div>
             ) : (
@@ -121,7 +123,7 @@ export const CartDrawer: React.FC = () => {
                         </Link>
                         <button
                           onClick={() => removeFromCart(item.key)}
-                          className="text-gray-400 hover:text-red-600 transition ml-2"
+                          className="text-gray-400 hover:text-red-600 transition ml-2 rtl:ml-0 rtl:mr-2"
                           aria-label="Remove item"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -130,7 +132,7 @@ export const CartDrawer: React.FC = () => {
 
                       {item.selectedFinish && (
                         <p className="text-xs text-gray-500 mt-0.5">
-                          Finish: <span className="font-semibold text-gray-700">{item.selectedFinish}</span>
+                          {t("cart.finish")}: <span className="font-semibold text-gray-700">{item.selectedFinish}</span>
                         </p>
                       )}
 
@@ -145,7 +147,7 @@ export const CartDrawer: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.key, item.quantity - 1)}
-                          className="p-1 text-gray-600 hover:bg-gray-100 rounded-l"
+                          className="p-1 text-gray-600 hover:bg-gray-100 rounded-l rtl:rounded-l-none rtl:rounded-r"
                         >
                           <Minus className="w-3 h-3" />
                         </button>
@@ -155,7 +157,7 @@ export const CartDrawer: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.key, item.quantity + 1)}
-                          className="p-1 text-gray-600 hover:bg-gray-100 rounded-r"
+                          className="p-1 text-gray-600 hover:bg-gray-100 rounded-r rtl:rounded-r-none rtl:rounded-l"
                         >
                           <Plus className="w-3 h-3" />
                         </button>
@@ -172,23 +174,23 @@ export const CartDrawer: React.FC = () => {
             <div className="p-5 border-t border-gray-200 bg-gray-50 space-y-3">
               <div className="space-y-1.5 text-xs text-gray-600">
                 <div className="flex justify-between">
-                  <span>Subtotal</span>
+                  <span>{t("cart.subtotal")}</span>
                   <span className="font-bold text-gray-900">{formatPrice(cartTotal)}</span>
                 </div>
                 {appliedCoupon && (
                   <div className="flex justify-between text-green-700 font-bold">
-                    <span>Discount ({appliedCoupon.code})</span>
+                    <span>{t("cart.discount")} ({appliedCoupon.code})</span>
                     <span>-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span>Delivery Fee</span>
+                  <span>{t("cart.shipping")}</span>
                   <span className="font-bold text-green-700">
-                    {shippingFee === 0 ? "FREE" : formatPrice(shippingFee)}
+                    {shippingFee === 0 ? t("common.free") : formatPrice(shippingFee)}
                   </span>
                 </div>
                 <div className="flex justify-between text-base font-black text-[#15161d] pt-2 border-t">
-                  <span>Total (Cash on Delivery)</span>
+                  <span>{t("cart.total")}</span>
                   <span className="text-[#d10024]">{formatPrice(grandTotal)}</span>
                 </div>
               </div>
@@ -198,14 +200,14 @@ export const CartDrawer: React.FC = () => {
                 {appliedCoupon ? (
                   <div className="flex items-center justify-between rounded-lg bg-green-50 border border-green-200 px-3 py-2 text-xs">
                     <span className="font-bold text-green-800">
-                      Coupon <span className="font-mono">{appliedCoupon.code}</span> applied!
+                      {t("cart.couponApplied")} (<span className="font-mono">{appliedCoupon.code}</span>)
                     </span>
                     <button
                       type="button"
                       onClick={removeCoupon}
                       className="text-xs font-bold text-red-600 hover:underline"
                     >
-                      Remove
+                      {t("cart.removeCoupon")}
                     </button>
                   </div>
                 ) : (
@@ -229,7 +231,7 @@ export const CartDrawer: React.FC = () => {
                         type="text"
                         value={couponInput}
                         onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
-                        placeholder="Discount code"
+                        placeholder={t("cart.couponCode")}
                         className="flex-1 rounded border border-gray-300 px-2.5 py-1.5 text-xs font-mono uppercase font-bold focus:border-[#d10024] focus:outline-none"
                       />
                       <button
@@ -237,7 +239,7 @@ export const CartDrawer: React.FC = () => {
                         disabled={applyingCoupon || !couponInput.trim()}
                         className="rounded bg-[#15161d] px-3 py-1.5 text-xs font-bold text-white hover:bg-black transition disabled:opacity-50"
                       >
-                        Apply
+                        {t("cart.apply")}
                       </button>
                     </div>
                     {couponError && (
@@ -249,7 +251,8 @@ export const CartDrawer: React.FC = () => {
 
               {cartTotal < freeShippingThreshold && (
                 <div className="p-2 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-800 text-center font-medium">
-                  Add <span className="font-bold">{formatPrice(freeShippingThreshold - cartTotal)}</span> more to get <span className="font-bold text-green-700">Free Delivery</span>!
+                  {t("cart.freeShippingProgress", { amount: formatPrice(freeShippingThreshold - cartTotal) })}{" "}
+                  <span className="font-bold text-green-700">{t("cart.freeShippingBadge")}</span>
                 </div>
               )}
 
@@ -262,14 +265,14 @@ export const CartDrawer: React.FC = () => {
                   }}
                   className="w-full py-3 bg-[#d10024] hover:bg-[#a7001d] text-white text-sm font-bold uppercase tracking-wider rounded shadow-md flex items-center justify-center gap-2 transition"
                 >
-                  Proceed to Checkout <ArrowRight className="w-4 h-4" />
+                  {t("cart.checkout")} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsCartOpen(false)}
                   className="w-full py-2 bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 text-xs font-bold uppercase tracking-wider rounded transition"
                 >
-                  Continue Shopping
+                  {t("cart.continueShopping")}
                 </button>
               </div>
             </div>

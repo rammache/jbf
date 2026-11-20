@@ -303,8 +303,9 @@ The WORK files must carry enough context for any agent to continue without guess
   - Checkout form labels, payment method descriptions (Cash on Delivery / الدفع عند الاستلام), and WhatsApp order template. **P0**
   - Informational pages: About Us, Contact, FAQ, Shipping, Returns, Privacy, and Terms. **P1**
   - Order tracking page, order status badges, and error messages. **P1**
+- [x] Fully wire and integrate `useLanguage` / translations across all storefront views and interactive components (`SearchModal`, `ProductCard`, `Shop`, `ProductDetail`, `CartDrawer`, `CheckoutModal`, `OrderTracking`, `Home`, and 7 informational pages). **P0**
 - [x] Adapt currency display based on active language (e.g., `DH` in French, `د.م.` in Arabic). **P1**
-- [x] Add automated tests for language switching, translation key completeness, and RTL attribute toggling. **P1**
+- [x] Add automated tests for language switching, translation key completeness, RTL attribute toggling, and complete storefront translation wiring. **P1**
 
 ---
 

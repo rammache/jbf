@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { X, CheckCircle, Loader2, ArrowRight, MessageCircle, Truck, ShieldCheck } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useSettings } from "../context/SettingsContext";
+import { useLanguage } from "../context/LanguageContext";
 
 const CITIES = [
   "Casablanca",
@@ -19,11 +20,12 @@ const CITIES = [
   "El Jadida",
   "Nador",
   "Mohammédia",
-  "Autre ville / مدينة أخرى"
+  "Autre ville / Other City"
 ];
 
 export const CheckoutModal: React.FC = () => {
   const { settings, formatPrice } = useSettings();
+  const { t } = useLanguage();
   const {
     items,
     cartTotal,
@@ -156,7 +158,7 @@ export const CheckoutModal: React.FC = () => {
           <div className="flex items-center gap-2">
             <Truck className="w-5 h-5 text-[#d10024]" />
             <h2 id="checkout-modal-title" className="text-base sm:text-lg font-bold">
-              {confirmedOrder ? "Order Confirmation" : "Cash on Delivery Checkout"}
+              {confirmedOrder ? t("checkout.orderSuccess") : t("checkout.title")}
             </h2>
           </div>
           <button
@@ -175,44 +177,44 @@ export const CheckoutModal: React.FC = () => {
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
               <div>
                 <span className="text-[11px] font-bold text-green-700 bg-green-50 border border-green-200 px-3 py-1 rounded-full uppercase tracking-wider">
-                  Order Successfully Placed
+                  {t("checkout.orderSuccess")}
                 </span>
-                <h3 className="text-2xl font-black text-gray-900 mt-2">Thank You, {name}!</h3>
+                <h3 className="text-2xl font-black text-gray-900 mt-2">{name}</h3>
                 <p className="text-xs text-gray-500 mt-1">
-                  Your order is received and queued for quality check and courier dispatch.
+                  {t("checkout.orderPlacedDesc", { orderNumber: confirmedOrder.orderNumber })}
                 </p>
               </div>
 
               {/* Order Reference Details */}
-              <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 text-left text-xs space-y-2">
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 text-left rtl:text-right text-xs space-y-2">
                 <div className="flex justify-between items-center pb-2 border-b border-gray-200">
-                  <span className="font-semibold text-gray-600">Order Number:</span>
+                  <span className="font-semibold text-gray-600">{t("tracking.orderNumber")}:</span>
                   <code className="font-mono text-sm font-black text-[#d10024] bg-white px-2 py-0.5 border rounded">
                     {confirmedOrder.orderNumber}
                   </code>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Recipient:</span>
+                  <span className="text-gray-600">{t("checkout.fullName")}:</span>
                   <span className="font-bold text-gray-800">{confirmedOrder.customerName}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Contact Phone:</span>
+                  <span className="text-gray-600">{t("checkout.phone")}:</span>
                   <span className="font-bold text-gray-800">{confirmedOrder.customerPhone}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Delivery Destination:</span>
+                  <span className="text-gray-600">{t("checkout.city")}:</span>
                   <span className="font-bold text-gray-800">
                     {confirmedOrder.city}, {confirmedOrder.customerAddress}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Payment:</span>
+                  <span className="text-gray-600">{t("checkout.paymentMethod")}:</span>
                   <span className="font-bold text-gray-800">
-                    {confirmedOrder.paymentMethod === "CARD" ? "Card on Delivery" : "Cash on Delivery (COD)"}
+                    {confirmedOrder.paymentMethod === "CARD" ? "Card on Delivery" : t("checkout.codTitle")}
                   </span>
                 </div>
                 <div className="flex justify-between items-center pt-2 border-t border-gray-200 text-sm">
-                  <span className="font-bold text-gray-700">Total Due Upon Delivery:</span>
+                  <span className="font-bold text-gray-700">{t("cart.total")}:</span>
                   <span className="font-black text-[#d10024]">
                     {formatPrice(confirmedOrder.totalAmount)}
                   </span>
@@ -226,7 +228,7 @@ export const CheckoutModal: React.FC = () => {
                   onClick={handleClose}
                   className="w-full py-3 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-1.5 shadow"
                 >
-                  Track Order Status <ArrowRight className="w-3.5 h-3.5" />
+                  {t("tracking.title")} <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
                 </Link>
 
                 <a
@@ -235,7 +237,7 @@ export const CheckoutModal: React.FC = () => {
                   rel="noopener noreferrer"
                   className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-1.5"
                 >
-                  <MessageCircle className="w-4 h-4" /> Message Jabour on WhatsApp
+                  <MessageCircle className="w-4 h-4" /> {t("checkout.whatsappConfirm")}
                 </a>
 
                 <button
@@ -243,7 +245,7 @@ export const CheckoutModal: React.FC = () => {
                   onClick={handleClose}
                   className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs uppercase tracking-wider rounded-lg transition"
                 >
-                  Continue Browsing
+                  {t("cart.continueShopping")}
                 </button>
               </div>
             </div>
@@ -259,21 +261,21 @@ export const CheckoutModal: React.FC = () => {
               <div className="flex items-center gap-2 p-2.5 bg-blue-50 border border-blue-100 rounded-lg text-blue-900 text-xs">
                 <ShieldCheck className="w-4 h-4 text-blue-600 flex-shrink-0" />
                 <span>
-                  <strong>Pay Upon Delivery:</strong> Inspect your phone package in front of courier before paying.
+                  <strong>{t("features.paymentTitle")}:</strong> {t("checkout.codDesc")}
                 </span>
               </div>
 
               {/* Customer Full Name */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                  Full Name *
+                  {t("checkout.fullName")}
                 </label>
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Michel Aoun"
+                  placeholder="e.g. Alex M."
                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
                 />
               </div>
@@ -282,21 +284,21 @@ export const CheckoutModal: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                    Email Address *
+                    {t("checkout.email")}
                   </label>
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="michel@example.com"
+                    placeholder="client@example.com"
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                    Contact Phone *
+                    {t("checkout.phone")}
                   </label>
                   <div className="relative">
                     <input
@@ -314,7 +316,7 @@ export const CheckoutModal: React.FC = () => {
               {/* City Selection */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                  Delivery City / Region *
+                  {t("checkout.city")}
                 </label>
                 <select
                   value={city}
@@ -323,7 +325,7 @@ export const CheckoutModal: React.FC = () => {
                 >
                   {CITIES.map((c) => (
                     <option key={c} value={c}>
-                      {c}
+                      {c === "Autre ville / Other City" ? t("checkout.otherCity") : c}
                     </option>
                   ))}
                 </select>
@@ -332,14 +334,14 @@ export const CheckoutModal: React.FC = () => {
               {/* Detailed Street Address */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                  Detailed Street Address *
+                  {t("checkout.address")}
                 </label>
                 <textarea
                   required
                   rows={2}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Street name, building, floor, apartment number"
+                  placeholder="Quartier, Rue, N° d'immeuble, étage, appartement..."
                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
                 />
               </div>
@@ -347,7 +349,7 @@ export const CheckoutModal: React.FC = () => {
               {/* Delivery Notes */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">
-                  Delivery Notes / Landmark (Optional)
+                  {t("checkout.notes")}
                 </label>
                 <input
                   type="text"
@@ -361,7 +363,7 @@ export const CheckoutModal: React.FC = () => {
               {/* Payment Method Selector */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                  Payment Method
+                  {t("checkout.paymentMethod")}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <label
@@ -379,8 +381,8 @@ export const CheckoutModal: React.FC = () => {
                       className="text-[#d10024] focus:ring-[#d10024]"
                     />
                     <div>
-                      <p>Paiement à la livraison / الدفع عند الاستلام</p>
-                      <p className="text-[10px] text-gray-500 font-normal">Pay cash upon receipt & inspection</p>
+                      <p>{t("checkout.codTitle")}</p>
+                      <p className="text-[10px] text-gray-500 font-normal">{t("features.paymentDesc")}</p>
                     </div>
                   </label>
 
@@ -409,23 +411,23 @@ export const CheckoutModal: React.FC = () => {
               {/* Financial Breakdown */}
               <div className="pt-3 border-t border-gray-200 space-y-1.5 text-xs text-gray-600">
                 <div className="flex justify-between">
-                  <span>Cart Items ({items.length})</span>
+                  <span>{t("cart.subtotal")} ({items.length})</span>
                   <span className="font-bold text-gray-900">{formatPrice(cartTotal)}</span>
                 </div>
                 {appliedCoupon && (
                   <div className="flex justify-between text-green-700 font-bold">
-                    <span>Coupon Discount ({appliedCoupon.code}):</span>
+                    <span>{t("cart.discount")} ({appliedCoupon.code}):</span>
                     <span>-{formatPrice(discountAmount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span>Courier Delivery:</span>
+                  <span>{t("cart.shipping")}:</span>
                   <span className="font-bold text-green-700">
-                    {shippingFee === 0 ? `FREE (Orders over ${formatPrice(settings.freeShippingThreshold)})` : formatPrice(shippingFee)}
+                    {shippingFee === 0 ? t("common.free") : formatPrice(shippingFee)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-sm pt-2 border-t font-black text-gray-900">
-                  <span>Total Due Upon Delivery:</span>
+                  <span>{t("cart.total")}:</span>
                   <span className="text-lg text-[#d10024]">{formatPrice(grandTotal)}</span>
                 </div>
               </div>
@@ -438,10 +440,10 @@ export const CheckoutModal: React.FC = () => {
               >
                 {loading ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" /> Verifying Stock &amp; Ordering...
+                    <Loader2 className="w-4 h-4 animate-spin" /> {t("common.loading")}
                   </>
                 ) : (
-                  <>Place Order Now (Cash on Delivery)</>
+                  <>{t("checkout.confirmOrder")}</>
                 )}
               </button>
             </form>

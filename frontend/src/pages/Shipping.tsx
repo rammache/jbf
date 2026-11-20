@@ -3,26 +3,29 @@ import { Link } from "react-router-dom";
 import { Truck, Clock, ShieldCheck, CheckCircle2, ArrowRight } from "lucide-react";
 import { SEO } from "../components/SEO";
 import { useSettings } from "../context/SettingsContext";
+import { useLanguage } from "../context/LanguageContext";
 
 export const Shipping: React.FC = () => {
   const { settings, formatPrice } = useSettings();
+  const { t } = useLanguage();
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <SEO
-        title="Shipping & Delivery Policy"
-        description="Learn about Jabour Phone shipping policies, Cash on Delivery courier options, delivery timeframes, and inspection rights."
+        title={t("pages.shipping.title")}
+        description={t("pages.shipping.subtitle")}
       />
 
       {/* Header */}
       <div className="text-center space-y-3">
         <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
-          Courier &amp; Delivery Logistics
+          {t("pages.shipping.badge")}
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-[#15161d] tracking-tight uppercase">
-          Shipping &amp; Delivery
+          {t("pages.shipping.title")}
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 max-w-xl mx-auto">
-          Fast, insured delivery across all regions with comprehensive quality inspection before every dispatch.
+          {t("pages.shipping.subtitle")}
         </p>
       </div>
 
@@ -32,9 +35,9 @@ export const Shipping: React.FC = () => {
           <div className="w-10 h-10 rounded-lg bg-red-50 text-[#d10024] flex items-center justify-center">
             <Clock className="w-5 h-5" />
           </div>
-          <h2 className="text-sm font-black uppercase text-[#15161d]">Next-Day Dispatch</h2>
+          <h2 className="text-sm font-black uppercase text-[#15161d]">{t("pages.shipping.nextDayTitle")}</h2>
           <p className="text-xs text-gray-500 leading-relaxed">
-            Orders confirmed by 4:00 PM are inspected, safely packaged, and handed to our courier partners for next-day transit.
+            {t("pages.shipping.nextDayDesc")}
           </p>
         </div>
 
@@ -42,9 +45,9 @@ export const Shipping: React.FC = () => {
           <div className="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center">
             <ShieldCheck className="w-5 h-5" />
           </div>
-          <h2 className="text-sm font-black uppercase text-[#15161d]">Cash On Delivery</h2>
+          <h2 className="text-sm font-black uppercase text-[#15161d]">{t("pages.shipping.codTitle")}</h2>
           <p className="text-xs text-gray-500 leading-relaxed">
-            Zero upfront risk. Pay cash directly to the delivery courier once your package arrives at your home or workplace.
+            {t("pages.shipping.codDesc")}
           </p>
         </div>
 
@@ -52,9 +55,9 @@ export const Shipping: React.FC = () => {
           <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
             <Truck className="w-5 h-5" />
           </div>
-          <h2 className="text-sm font-black uppercase text-[#15161d]">Insured Transit</h2>
+          <h2 className="text-sm font-black uppercase text-[#15161d]">{t("pages.shipping.insuredTitle")}</h2>
           <p className="text-xs text-gray-500 leading-relaxed">
-            Every device is packed in tamper-evident security packaging with shock absorption. Full replacement if damaged in transit.
+            {t("pages.shipping.insuredDesc")}
           </p>
         </div>
       </div>
@@ -63,57 +66,41 @@ export const Shipping: React.FC = () => {
       <div className="bg-white border border-gray-200 rounded-2xl p-8 space-y-8 shadow-sm">
         <section className="space-y-3">
           <h2 className="text-lg font-black uppercase tracking-tight text-[#15161d] flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-[#d10024]" /> 1. Delivery Rates &amp; Schedules
+            <CheckCircle2 className="w-5 h-5 text-[#d10024]" /> 1. {t("pages.shipping.zonesTitle")}
           </h2>
           <div className="text-xs text-gray-600 leading-relaxed space-y-2">
             <p>
-              We partner with trusted nationwide courier networks to deliver orders promptly and securely.
+              {t("pages.shipping.zonesDesc")}
             </p>
-            <ul className="list-disc pl-5 space-y-1 text-gray-700">
-              <li><strong>Central &amp; Major Cities:</strong> 24 to 48 business hours.</li>
-              <li><strong>Regional / Outlying Districts:</strong> 2 to 3 business days.</li>
-              <li><strong>Delivery Fee:</strong> Standard flat rate of {formatPrice(settings.shippingFee)} nationwide. Free delivery automatically applies to all orders of {formatPrice(settings.freeShippingThreshold)} and above!</li>
-            </ul>
+            <p className="font-semibold text-gray-800">
+              {formatPrice(settings.shippingFee)} - {t("announcements.freeShipping")}
+            </p>
           </div>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-lg font-black uppercase tracking-tight text-[#15161d] flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-[#d10024]" /> 2. Package Inspection Rights
+            <CheckCircle2 className="w-5 h-5 text-[#d10024]" /> 2. {t("pages.shipping.processTitle")}
           </h2>
           <div className="text-xs text-gray-600 leading-relaxed space-y-2">
             <p>
-              At Jabour Phone, customer confidence is paramount. When the courier delivers your package:
+              {t("pages.shipping.processDesc")}
             </p>
-            <ul className="list-disc pl-5 space-y-1 text-gray-700">
-              <li>You may inspect the outer box and security seals for any evidence of tampering.</li>
-              <li>Verify that the delivery receipt matches your order details.</li>
-              <li>Once confirmed, pay the exact cash amount stated on the official invoice.</li>
-            </ul>
           </div>
-        </section>
-
-        <section className="space-y-3">
-          <h2 className="text-lg font-black uppercase tracking-tight text-[#15161d] flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-[#d10024]" /> 3. Order Verification Call
-          </h2>
-          <p className="text-xs text-gray-600 leading-relaxed">
-            Before dispatching higher-value smartphone and hardware orders, our dispatch coordinator will place a quick confirmation call or WhatsApp message to re-confirm your address and availability.
-          </p>
         </section>
       </div>
 
-      {/* Track order CTA */}
-      <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* Quick link to catalog */}
+      <div className="p-8 bg-[#15161d] text-white rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
         <div>
-          <h3 className="text-sm font-bold text-[#15161d]">Already have an active order?</h3>
-          <p className="text-xs text-gray-500 mt-0.5">Track your order quality inspection and delivery status live.</p>
+          <h3 className="text-xl font-bold">{t("home.shopByDepartment")}</h3>
+          <p className="text-xs text-gray-400 mt-1">{t("announcements.freeShipping")}</p>
         </div>
         <Link
-          to="/track"
-          className="px-5 py-2.5 bg-[#15161d] hover:bg-[#d10024] text-white text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center gap-2"
+          to="/shop"
+          className="px-6 py-3 bg-[#d10024] hover:bg-[#a7001d] text-white text-xs font-bold uppercase tracking-wider rounded transition flex items-center gap-2"
         >
-          Track My Order <ArrowRight className="w-4 h-4" />
+          {t("hero.ctaShop")} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
         </Link>
       </div>
     </div>

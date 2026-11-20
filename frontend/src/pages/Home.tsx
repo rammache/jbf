@@ -5,12 +5,14 @@ import { Product } from "../types";
 import { ProductCard } from "../components/ProductCard";
 import { useCategories } from "../context/CategoryContext";
 import { useSettings } from "../context/SettingsContext";
+import { useLanguage } from "../context/LanguageContext";
 import { ImageWithFallback } from "../components/ImageWithFallback";
 import { SEO } from "../components/SEO";
 
 export const Home: React.FC = () => {
   const { categories, loading: categoriesLoading } = useCategories();
   const { settings, formatPrice } = useSettings();
+  const { t } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -120,21 +122,20 @@ export const Home: React.FC = () => {
           ) : (
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-950/60 border border-[#d10024]/50 rounded-full text-xs font-bold uppercase text-[#d10024] tracking-wider">
-                <Cpu className="w-3.5 h-3.5" /> Authentic Tech Boutique
+                <Cpu className="w-3.5 h-3.5" /> {t("hero.badge")}
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
-                Technology Without The Markup.
+                {t("hero.title")}
               </h1>
               <p className="text-sm sm:text-base text-gray-300 max-w-xl font-normal leading-relaxed">
-                {settings.aboutText ||
-                  "Jabour Phone supplies authentic smartphones, accessories, and certified electronics with official warranties and cash on delivery."}
+                {settings.aboutText || t("hero.subtitle")}
               </p>
               <div className="flex flex-wrap gap-4 pt-2">
                 <Link
                   to="/shop"
                   className="px-6 py-3.5 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded shadow-lg transition flex items-center gap-2"
                 >
-                  Browse Store Catalog <ArrowRight className="w-4 h-4" />
+                  {t("hero.ctaShop")} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
                 </Link>
               </div>
             </div>
@@ -190,17 +191,17 @@ export const Home: React.FC = () => {
           <div className="flex items-end justify-between mb-8 pb-4 border-b border-gray-200">
             <div>
               <h2 className="text-2xl font-black text-[#15161d] tracking-tight uppercase flex items-center gap-2">
-                <FolderTree className="w-6 h-6 text-[#d10024]" /> Featured Departments
+                <FolderTree className="w-6 h-6 text-[#d10024]" /> {t("home.featuredCategories")}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
-                Browse our verified catalog organized by department.
+                {t("home.shopByDepartmentDesc")}
               </p>
             </div>
             <Link
               to="/shop"
               className="hidden sm:inline-flex items-center gap-1 text-xs font-bold uppercase text-[#d10024] hover:underline"
             >
-              Browse All <ArrowRight className="w-3.5 h-3.5" />
+              {t("home.browseAll")} <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
             </Link>
           </div>
 
@@ -225,7 +226,7 @@ export const Home: React.FC = () => {
                     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
                       <span className="inline-flex items-center gap-1 rounded bg-[#15161d]/80 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-xs">
                         <Tag className="h-3 w-3 text-[#d10024]" />
-                        {productCount} {productCount === 1 ? "Product" : "Products"}
+                        {productCount} {t("home.productsCount")}
                       </span>
                     </div>
                   </div>
@@ -242,9 +243,9 @@ export const Home: React.FC = () => {
                       )}
                     </div>
 
-                    <div className="mt-4 flex items-center text-xs font-bold uppercase tracking-wider text-[#d10024] group-hover:translate-x-1 transition-transform">
-                      <span>Explore</span>
-                      <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                    <div className="mt-4 flex items-center text-xs font-bold uppercase tracking-wider text-[#d10024] group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform">
+                      <span>{t("home.explore")}</span>
+                      <ArrowRight className="ml-1 rtl:mr-1 rtl:ml-0 h-3.5 w-3.5 rtl:rotate-180" />
                     </div>
                   </div>
                 </Link>
@@ -259,10 +260,10 @@ export const Home: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-gray-200 gap-4">
           <div>
             <h2 className="text-2xl font-black text-[#15161d] tracking-tight uppercase">
-              Shop by Department
+              {t("home.shopByDepartment")}
             </h2>
             <p className="text-xs text-gray-500 mt-1">
-              Verified categories with genuine manufacturer specifications on every listing.
+              {t("home.shopByDepartmentDesc")}
             </p>
           </div>
 
@@ -380,17 +381,17 @@ export const Home: React.FC = () => {
         <div className="flex items-end justify-between mb-8 pb-4 border-b border-gray-200">
           <div>
             <h2 className="text-2xl font-black text-[#15161d] tracking-tight uppercase flex items-center gap-2">
-              <Award className="w-6 h-6 text-[#d10024]" /> Highest Rated Right Now
+              <Award className="w-6 h-6 text-[#d10024]" /> {t("home.highestRated")}
             </h2>
             <p className="text-xs text-gray-500 mt-1">
-              Ranked purely by verified customer scores, not by brand promotional sponsorship.
+              {t("home.highestRatedDesc")}
             </p>
           </div>
           <Link
             to="/shop"
             className="hidden sm:inline-flex items-center gap-1 text-xs font-bold uppercase text-[#d10024] hover:underline"
           >
-            View Catalog <ArrowRight className="w-3.5 h-3.5" />
+            {t("home.browseAll")} <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
           </Link>
         </div>
 
@@ -409,10 +410,10 @@ export const Home: React.FC = () => {
               <Truck className="w-6 h-6" />
             </div>
             <h3 className="font-bold text-base text-[#15161d]">
-              Free Delivery Over {formatPrice(settings.freeShippingThreshold)}
+              {t("features.shippingTitle")}
             </h3>
             <p className="text-xs text-gray-500 leading-relaxed">
-              Fast Cash on Delivery nationwide. Inspected before dispatch.
+              {t("features.shippingDesc")}
             </p>
           </div>
 
@@ -420,9 +421,9 @@ export const Home: React.FC = () => {
             <div className="w-12 h-12 rounded-full bg-red-50 text-[#d10024] flex items-center justify-center mx-auto">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="font-bold text-base text-[#15161d]">1-Year Official Warranty</h3>
+            <h3 className="font-bold text-base text-[#15161d]">{t("features.warrantyTitle")}</h3>
             <p className="text-xs text-gray-500 leading-relaxed">
-              Authentic warranty on all devices, backed by direct Jabour Phone support.
+              {t("features.warrantyDesc")}
             </p>
           </div>
 
@@ -430,9 +431,9 @@ export const Home: React.FC = () => {
             <div className="w-12 h-12 rounded-full bg-red-50 text-[#d10024] flex items-center justify-center mx-auto">
               <RefreshCw className="w-6 h-6" />
             </div>
-            <h3 className="font-bold text-base text-[#15161d]">14-Day Defect Exchange</h3>
+            <h3 className="font-bold text-base text-[#15161d]">{t("features.paymentTitle")}</h3>
             <p className="text-xs text-gray-500 leading-relaxed">
-              Straightforward exchange or refund for any verified manufacturer defects.
+              {t("features.paymentDesc")}
             </p>
           </div>
         </div>

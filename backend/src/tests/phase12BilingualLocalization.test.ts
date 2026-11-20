@@ -106,4 +106,88 @@ describe("Phase 12 - Bilingual Localization (Arabic & French with RTL Support)",
       assert.ok(content.includes("Cairo"), "index.html must load Cairo font family");
     });
   });
+
+  describe("Task 5: Complete Storefront Translation Integration Across All Views", () => {
+    it("SearchModal integrates useLanguage and translations", () => {
+      const filePath = path.join(rootDir, "frontend/src/components/SearchModal.tsx");
+      const content = fs.readFileSync(filePath, "utf-8");
+      assert.ok(content.includes("useLanguage"), "SearchModal must import useLanguage");
+      assert.ok(content.includes('t("header.searchPlaceholder")'), "Must use header.searchPlaceholder");
+      assert.ok(content.includes('t("header.searchEsc")'), "Must use header.searchEsc");
+    });
+
+    it("ProductCard integrates useLanguage and localized badges", () => {
+      const filePath = path.join(rootDir, "frontend/src/components/ProductCard.tsx");
+      const content = fs.readFileSync(filePath, "utf-8");
+      assert.ok(content.includes("useLanguage"), "ProductCard must import useLanguage");
+      assert.ok(content.includes('t("shop.outOfStock")'), "Must translate out of stock");
+      assert.ok(content.includes('t("shop.sale")'), "Must translate sale");
+      assert.ok(content.includes('t("shop.addToCart")'), "Must translate quick add button");
+    });
+
+    it("Shop page integrates useLanguage and localized filters", () => {
+      const filePath = path.join(rootDir, "frontend/src/pages/Shop.tsx");
+      const content = fs.readFileSync(filePath, "utf-8");
+      assert.ok(content.includes("useLanguage"), "Shop must import useLanguage");
+      assert.ok(content.includes('t("shop.categories")'), "Must translate categories");
+      assert.ok(content.includes('t("shop.brands")'), "Must translate brands");
+      assert.ok(content.includes('t("shop.filters")'), "Must translate filters button");
+    });
+
+    it("ProductDetail integrates useLanguage and localized specifications", () => {
+      const filePath = path.join(rootDir, "frontend/src/pages/ProductDetail.tsx");
+      const content = fs.readFileSync(filePath, "utf-8");
+      assert.ok(content.includes("useLanguage"), "ProductDetail must import useLanguage");
+      assert.ok(content.includes('t("product.orderOnWhatsapp")'), "Must translate WhatsApp button");
+      assert.ok(content.includes('t("product.specifications")'), "Must translate specs header");
+    });
+
+    it("CartDrawer integrates useLanguage and localized calculations", () => {
+      const filePath = path.join(rootDir, "frontend/src/components/CartDrawer.tsx");
+      const content = fs.readFileSync(filePath, "utf-8");
+      assert.ok(content.includes("useLanguage"), "CartDrawer must import useLanguage");
+      assert.ok(content.includes('t("cart.title")'), "Must translate cart title");
+      assert.ok(content.includes('t("cart.checkout")'), "Must translate checkout button");
+    });
+
+    it("CheckoutModal integrates useLanguage and localized payment details", () => {
+      const filePath = path.join(rootDir, "frontend/src/components/CheckoutModal.tsx");
+      const content = fs.readFileSync(filePath, "utf-8");
+      assert.ok(content.includes("useLanguage"), "CheckoutModal must import useLanguage");
+      assert.ok(content.includes('t("checkout.confirmOrder")'), "Must translate confirm order");
+      assert.ok(content.includes('t("checkout.codTitle")'), "Must translate COD title");
+    });
+
+    it("OrderTracking integrates useLanguage and localized statuses", () => {
+      const filePath = path.join(rootDir, "frontend/src/pages/OrderTracking.tsx");
+      const content = fs.readFileSync(filePath, "utf-8");
+      assert.ok(content.includes("useLanguage"), "OrderTracking must import useLanguage");
+      assert.ok(content.includes('t("tracking.statusPending")'), "Must translate statusPending");
+      assert.ok(content.includes('t("tracking.searchBtn")'), "Must translate search button");
+    });
+
+    it("Home page integrates useLanguage for Hero and feature highlights", () => {
+      const filePath = path.join(rootDir, "frontend/src/pages/Home.tsx");
+      const content = fs.readFileSync(filePath, "utf-8");
+      assert.ok(content.includes("useLanguage"), "Home must import useLanguage");
+      assert.ok(content.includes('t("hero.title")'), "Must translate hero title");
+      assert.ok(content.includes('t("home.shopByDepartment")'), "Must translate shop by department");
+    });
+
+    it("All 7 informational pages integrate useLanguage and translations", () => {
+      const pages = ["About", "Contact", "FAQ", "Shipping", "Returns", "Privacy", "Terms"];
+      for (const page of pages) {
+        const filePath = path.join(rootDir, `frontend/src/pages/${page}.tsx`);
+        const content = fs.readFileSync(filePath, "utf-8");
+        assert.ok(content.includes("useLanguage"), `${page}.tsx must import useLanguage`);
+      }
+    });
+
+    it("SettingsContext connects to useLanguage for dynamic currency symbol", () => {
+      const filePath = path.join(rootDir, "frontend/src/context/SettingsContext.tsx");
+      const content = fs.readFileSync(filePath, "utf-8");
+      assert.ok(content.includes("useLanguage"), "SettingsContext must import useLanguage");
+      assert.ok(content.includes("langCurrencySymbol"), "Must use localized currency symbol");
+    });
+  });
 });

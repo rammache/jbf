@@ -4,6 +4,7 @@ import { Star, ShoppingBag, Check, ShieldCheck } from "lucide-react";
 import { Product } from "../types";
 import { useCart } from "../context/CartContext";
 import { useSettings } from "../context/SettingsContext";
+import { useLanguage } from "../context/LanguageContext";
 import { ImageWithFallback } from "./ImageWithFallback";
 
 const SWATCH_COLORS: Record<string, string> = {
@@ -23,6 +24,7 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
   const { formatPrice } = useSettings();
+  const { t } = useLanguage();
   const [isHovered, setIsHovered] = useState(false);
   const [selectedFinish, setSelectedFinish] = useState(
     product.finishes && product.finishes.length > 0 ? product.finishes[0] : ""
@@ -41,6 +43,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     setTimeout(() => setAdded(false), 1500);
   };
 
+  const getConditionLabel = (cond?: string) => {
+    if (!cond) return "";
+    const upper = cond.toUpperCase();
+    if (upper === "NEW") return t("product.conditionNew");
+    if (upper === "REFURBISHED") return t("product.conditionRefurbished");
+    if (upper === "USED") return t("product.conditionUsed");
+    return cond;
+  };
+
   return (
     <div
       className="group relative bg-white border border-[#e4e7ed] rounded-lg overflow-hidden flex flex-col justify-between hover:shadow-xl transition-all duration-300"
@@ -48,19 +59,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Badges */}
-      <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
+      <div className="absolute top-3 left-3 rtl:left-auto rtl:right-3 z-10 flex flex-col gap-1">
         {product.stock <= 0 ? (
           <span className="bg-gray-800 text-white text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider rounded">
-            Out of Stock
+            {t("shop.outOfStock")}
           </span>
         ) : product.compare && product.compare > product.price ? (
           <span className="bg-[#d10024] text-white text-[11px] font-bold px-2.5 py-1 uppercase tracking-wider rounded">
-            Sale
+            {t("shop.sale")}
           </span>
         ) : null}
         {product.condition && product.condition !== "NEW" && (
           <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider rounded">
-            {product.condition}
+            {getConditionLabel(product.condition)}
           </span>
         )}
       </div>
@@ -79,7 +90,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="absolute inset-x-4 bottom-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           {product.stock <= 0 ? (
             <div className="w-full py-2.5 px-4 rounded font-bold text-xs uppercase tracking-wider flex items-center justify-center bg-gray-300 text-gray-600 shadow cursor-not-allowed">
-              Out of Stock
+              {t("shop.outOfStock")}
             </div>
           ) : (
             <button
@@ -92,11 +103,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             >
               {added ? (
                 <>
-                  <Check className="w-4 h-4" /> Added
+                  <Check className="w-4 h-4" /> {t("common.added")}
                 </>
               ) : (
                 <>
-                  <ShoppingBag className="w-4 h-4" /> Quick Add
+                  <ShoppingBag className="w-4 h-4" /> {t("shop.addToCart")}
                 </>
               )}
             </button>

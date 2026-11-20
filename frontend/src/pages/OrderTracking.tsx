@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { SEO } from "../components/SEO";
 import { useSettings } from "../context/SettingsContext";
+import { useLanguage } from "../context/LanguageContext";
 
 interface TrackedOrderItem {
   id: string;
@@ -42,12 +43,34 @@ interface TrackedOrder {
 
 export const OrderTracking: React.FC = () => {
   const { settings, formatPrice } = useSettings();
+  const { t, language } = useLanguage();
   const [searchParams] = useSearchParams();
   const [orderId, setOrderId] = useState(searchParams.get("id") || "");
   const [contact, setContact] = useState(searchParams.get("email") || searchParams.get("phone") || "");
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState<TrackedOrder | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case "PENDING":
+        return t("tracking.statusPending");
+      case "CONFIRMED":
+        return t("tracking.statusConfirmed");
+      case "PROCESSING":
+        return t("tracking.statusProcessing");
+      case "SHIPPED":
+        return t("tracking.statusShipped");
+      case "DELIVERED":
+        return t("tracking.statusDelivered");
+      case "CANCELLED":
+        return t("tracking.statusCancelled");
+      case "RETURNED":
+        return t("tracking.statusReturned");
+      default:
+        return status;
+    }
+  };
 
   // Auto-search if URL contains order ID and contact params
   useEffect(() => {
@@ -125,13 +148,13 @@ export const OrderTracking: React.FC = () => {
       {/* Header */}
       <div className="text-center space-y-3">
         <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
-          Live Order Status
+          {t("tracking.title")}
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-[#15161d] tracking-tight uppercase">
-          Track Your Order
+          {t("tracking.title")}
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 max-w-lg mx-auto">
-          Enter your Order Reference (e.g. <code>JP-2611-1001</code>) and your checkout email or phone number to view real-time fulfillment progress.
+          {t("tracking.subtitle")}
         </p>
       </div>
 
@@ -141,7 +164,7 @@ export const OrderTracking: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-700 mb-1">
-                Order Reference / Number *
+                {t("tracking.orderNumber")} *
               </label>
               <input
                 type="text"
@@ -154,14 +177,14 @@ export const OrderTracking: React.FC = () => {
             </div>
             <div>
               <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-700 mb-1">
-                Checkout Email or Phone *
+                {t("tracking.contact")} *
               </label>
               <input
                 type="text"
                 required
                 value={contact}
                 onChange={(e) => setContact(e.target.value)}
-                placeholder="The email or phone number you entered at checkout"
+                placeholder={t("tracking.contactPlaceholder")}
                 className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
               />
             </div>
@@ -176,7 +199,7 @@ export const OrderTracking: React.FC = () => {
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               <>
-                <Search className="w-4 h-4" /> Track Order Status
+                <Search className="w-4 h-4" /> {t("tracking.searchBtn")}
               </>
             )}
           </button>
@@ -188,7 +211,7 @@ export const OrderTracking: React.FC = () => {
         <div className="p-5 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 text-red-800 text-xs">
           <AlertCircle className="w-5 h-5 flex-shrink-0 text-red-600 mt-0.5" />
           <div>
-            <p className="font-bold">Lookup Error</p>
+            <p className="font-bold">{t("tracking.lookupError")}</p>
             <p className="mt-1 leading-relaxed">{error}</p>
           </div>
         </div>
@@ -201,7 +224,7 @@ export const OrderTracking: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-gray-200 gap-4">
             <div>
               <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                Order Found
+                {t("tracking.orderFound")}
               </span>
               <h2 className="text-xl font-black text-[#15161d] font-mono">
                 {order.orderNumber || order.id}
@@ -209,7 +232,7 @@ export const OrderTracking: React.FC = () => {
               <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
                 <span className="flex items-center gap-1">
                   <Calendar className="w-3.5 h-3.5" />
-                  {new Date(order.createdAt).toLocaleDateString("en-US", {
+                  {new Date(order.createdAt).toLocaleDateString(language === "ar" ? "ar-MA" : "fr-FR", {
                     year: "numeric",
                     month: "long",
                     day: "numeric"
@@ -217,7 +240,7 @@ export const OrderTracking: React.FC = () => {
                 </span>
                 <span>·</span>
                 <span className="font-bold text-[#d10024]">
-                  {formatPrice(order.totalAmount)} ({order.paymentMethod === "CARD" ? "Card on Delivery" : "Cash on Delivery"})
+                  {formatPrice(order.totalAmount)} ({order.paymentMethod === "CARD" ? "Card on Delivery" : t("checkout.codTitle")})
                 </span>
               </div>
             </div>
@@ -237,15 +260,15 @@ export const OrderTracking: React.FC = () => {
               ) : (
                 <Package className="w-4 h-4" />
               )}
-              Status: {order.status}
+              {t("tracking.status")}: {getStatusLabel(order.status)}
             </div>
           </div>
 
           {/* Cancellation Alert if applicable */}
           {isCancelled && (
             <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-xs text-red-800 space-y-1">
-              <p className="font-bold">This order has been cancelled.</p>
-              <p>All items have been restored to inventory. If you have questions, please contact our support team on WhatsApp.</p>
+              <p className="font-bold">{t("tracking.orderCancelledAlert")}</p>
+              <p>{t("tracking.orderCancelledHelp")}</p>
             </div>
           )}
 

@@ -13,7 +13,7 @@ interface LanguageContextType {
 
 const STORAGE_KEY = "jabour-lang";
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<SupportedLanguage>(() => {
@@ -127,7 +127,35 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 export const useLanguage = (): LanguageContextType => {
   const context = useContext(LanguageContext);
   if (!context) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
+    return {
+      language: "fr",
+      direction: "ltr",
+      isRTL: false,
+      setLanguage: () => {},
+      toggleLanguage: () => {},
+      t: (key: string, params?: Record<string, string | number>) => {
+        const parts = key.split(".");
+        let val: any = translations.fr;
+        for (const part of parts) {
+          if (val && typeof val === "object" && part in val) {
+            val = val[part];
+          } else {
+            val = undefined;
+            break;
+          }
+        }
+        if (typeof val !== "string") return key;
+        if (params) {
+          let res = val;
+          for (const [pk, pv] of Object.entries(params)) {
+            res = res.replace(new RegExp(`\\{${pk}\\}`, "g"), String(pv));
+          }
+          return res;
+        }
+        return val;
+      },
+      currencySymbol: "DH"
+    };
   }
   return context;
 };

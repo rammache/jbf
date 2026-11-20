@@ -16,6 +16,7 @@ import {
 import { Product } from "../types";
 import { useCart } from "../context/CartContext";
 import { useSettings } from "../context/SettingsContext";
+import { useLanguage } from "../context/LanguageContext";
 import { ProductCard } from "../components/ProductCard";
 import { ImageWithFallback } from "../components/ImageWithFallback";
 import { SEO } from "../components/SEO";
@@ -42,6 +43,7 @@ export const ProductDetail: React.FC = () => {
   const { handle } = useParams<{ handle: string }>();
   const { addToCart } = useCart();
   const { settings, formatPrice } = useSettings();
+  const { t, language } = useLanguage();
   const [product, setProduct] = useState<Product | null>(null);
   const [related, setRelated] = useState<Product[]>([]);
   const [activeImage, setActiveImage] = useState<string>("");
@@ -49,6 +51,15 @@ export const ProductDetail: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(1);
   const [loading, setLoading] = useState(true);
   const [addedSuccess, setAddedSuccess] = useState(false);
+
+  const getConditionLabel = (cond?: string) => {
+    if (!cond) return "";
+    const upper = cond.toUpperCase();
+    if (upper === "NEW") return t("product.conditionNew");
+    if (upper === "REFURBISHED") return t("product.conditionRefurbished");
+    if (upper === "USED") return t("product.conditionUsed");
+    return cond;
+  };
 
   // Reviews state
   const [reviews, setReviews] = useState<ReviewItem[]>([]);
@@ -244,12 +255,12 @@ export const ProductDetail: React.FC = () => {
                     ))}
                   </div>
                   <span className="text-xs font-bold text-gray-700">
-                    {product.rating} ({product.reviews} verified {product.reviews === 1 ? "review" : "reviews"})
+                    {product.rating} ({product.reviews} {t("product.verifiedReviews")})
                   </span>
                 </>
               ) : (
                 <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                  <ShieldCheck className="w-3.5 h-3.5 text-green-600" /> 100% Genuine Device · No customer reviews yet
+                  <ShieldCheck className="w-3.5 h-3.5 text-green-600" /> {t("product.genuinePromise")}
                 </span>
               )}
             </div>
@@ -266,30 +277,30 @@ export const ProductDetail: React.FC = () => {
                   {formatPrice(product.compare)}
                 </span>
                 <span className="text-xs font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded">
-                  Save {formatPrice(product.compare - product.price)}
+                  {t("common.save")} {formatPrice(product.compare - product.price)}
                 </span>
               </>
             )}
           </div>
 
           {/* Stock Status Indicator */}
-          <div className="flex items-center space-x-2 text-xs">
+          <div className="flex items-center space-x-2 rtl:space-x-reverse text-xs">
             {product.stock <= 0 ? (
               <span className="inline-flex items-center rounded-full bg-red-100 px-3 py-1 font-bold text-red-700">
-                Out of Stock
+                {t("shop.outOfStock")}
               </span>
             ) : product.stock <= (product.lowStockThreshold ?? 5) ? (
               <span className="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 font-bold text-amber-800">
-                Low Stock: Only {product.stock} left in stock - order soon!
+                {t("product.onlyLeft", { count: product.stock })}
               </span>
             ) : (
               <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 font-bold text-green-800">
-                In Stock ({product.stock} available)
+                {t("product.inStockCount", { count: product.stock })}
               </span>
             )}
             {product.condition && (
               <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 font-semibold text-gray-700 uppercase text-[10px]">
-                Condition: {product.condition}
+                {t("product.condition")}: {getConditionLabel(product.condition)}
               </span>
             )}
           </div>
@@ -298,7 +309,7 @@ export const ProductDetail: React.FC = () => {
           {product.finishes && product.finishes.length > 0 && (
             <div className="space-y-2">
               <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
-                Finish: <span className="text-[#15161d]">{selectedFinish}</span>
+                {t("product.color")}: <span className="text-[#15161d]">{selectedFinish}</span>
               </label>
               <div className="flex items-center gap-3">
                 {product.finishes.map((finish) => (
@@ -353,7 +364,7 @@ export const ProductDetail: React.FC = () => {
                   disabled
                   className="flex-1 py-3.5 px-6 rounded font-bold text-xs uppercase tracking-wider bg-gray-300 text-gray-600 cursor-not-allowed shadow-none"
                 >
-                  Out of Stock
+                  {t("shop.outOfStock")}
                 </button>
               ) : (
                 <button
@@ -366,10 +377,10 @@ export const ProductDetail: React.FC = () => {
                 >
                   {addedSuccess ? (
                     <>
-                      <CheckCircle className="w-4 h-4" /> Added to Cart
+                      <CheckCircle className="w-4 h-4" /> {t("product.addedToCart")}
                     </>
                   ) : (
-                    `Add to Cart · ${formatPrice(product.price * quantity)}`
+                    `${t("shop.addToCart")} · ${formatPrice(product.price * quantity)}`
                   )}
                 </button>
               )}
@@ -377,17 +388,20 @@ export const ProductDetail: React.FC = () => {
 
             {/* Direct WhatsApp Order Option */}
             <a
-              href={`https://wa.me/${(settings.whatsapp || "96170123456").replace(/[^\d]/g, "")}?text=${encodeURIComponent(
-                `Hello ${settings.storeName}! I would like to order "${product.title}" for ${formatPrice(
-                  product.price * quantity
-                )}. Finish: ${selectedFinish || "Standard"}, Quantity: ${quantity}. Store Link: ${typeof window !== "undefined" ? window.location.href : ""
-                }`
+              href={`https://wa.me/${(settings.whatsapp || "212661123456").replace(/[^\d]/g, "")}?text=${encodeURIComponent(
+                language === "ar"
+                  ? `مرحباً ${settings.storeName}! أود طلب "${product.title}" بسعر ${formatPrice(
+                      product.price * quantity
+                    )}. اللون: ${selectedFinish || "قياسي"}، الكمية: ${quantity}. رابط المتجر: ${typeof window !== "undefined" ? window.location.href : ""}`
+                  : `Bonjour ${settings.storeName} ! Je souhaite commander "${product.title}" pour ${formatPrice(
+                      product.price * quantity
+                    )}. Finition: ${selectedFinish || "Standard"}, Quantité: ${quantity}. Lien boutique: ${typeof window !== "undefined" ? window.location.href : ""}`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-3.5 px-6 rounded font-bold text-xs uppercase tracking-wider bg-[#25D366] hover:bg-[#128C7E] text-white transition shadow flex items-center justify-center gap-2 cursor-pointer"
             >
-              <MessageCircle className="w-4 h-4" /> Order via WhatsApp (Direct Message)
+              <MessageCircle className="w-4 h-4" /> {t("product.orderOnWhatsapp")}
             </a>
           </div>
 
@@ -395,15 +409,15 @@ export const ProductDetail: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 border-t border-gray-200 text-xs text-gray-600">
             <div className="flex items-center gap-2">
               <Truck className="w-4 h-4 text-[#d10024]" />
-              <span>Fast Express Delivery</span>
+              <span>{t("product.fastDelivery")}</span>
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-[#d10024]" />
-              <span>{product.warranty || "1-Year Official Warranty"}</span>
+              <span>{product.warranty || t("product.officialWarranty")}</span>
             </div>
             <div className="flex items-center gap-2">
               <RotateCcw className="w-4 h-4 text-[#d10024]" />
-              <span>14-Day Defect Exchange</span>
+              <span>{t("product.freeReturnSupport")}</span>
             </div>
           </div>
         </div>
@@ -413,7 +427,7 @@ export const ProductDetail: React.FC = () => {
       {product.description && (
         <section className="bg-white border border-[#e4e7ed] rounded-xl p-8 space-y-4">
           <h2 className="text-xl font-bold text-[#15161d] uppercase tracking-tight">
-            Product Overview
+            {t("product.description")}
           </h2>
           <div className="prose text-sm text-gray-700 leading-relaxed max-w-none whitespace-pre-line">
             {product.description}
@@ -424,16 +438,16 @@ export const ProductDetail: React.FC = () => {
       {/* Technical Specifications Table */}
       <section className="bg-white border border-[#e4e7ed] rounded-xl p-8 space-y-6">
         <h2 className="text-xl font-bold text-[#15161d] uppercase tracking-tight">
-          Technical Specifications
+          {t("product.specifications")}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-4 bg-gray-50 rounded border flex justify-between">
-            <span className="font-semibold text-gray-500">Brand</span>
+            <span className="font-semibold text-gray-500">{t("shop.brands")}</span>
             <span className="font-bold text-gray-900">{product.brand}</span>
           </div>
           <div className="p-4 bg-gray-50 rounded border flex justify-between">
-            <span className="font-semibold text-gray-500">Category</span>
+            <span className="font-semibold text-gray-500">{t("shop.categories")}</span>
             <span className="font-bold text-gray-900">{categoryName}</span>
           </div>
           {product.sku && (
@@ -444,55 +458,55 @@ export const ProductDetail: React.FC = () => {
           )}
           {product.condition && (
             <div className="p-4 bg-gray-50 rounded border flex justify-between">
-              <span className="font-semibold text-gray-500">Condition</span>
-              <span className="font-bold text-gray-900">{product.condition}</span>
+              <span className="font-semibold text-gray-500">{t("product.condition")}</span>
+              <span className="font-bold text-gray-900">{getConditionLabel(product.condition)}</span>
             </div>
           )}
           {product.storage && (
             <div className="p-4 bg-gray-50 rounded border flex justify-between">
-              <span className="font-semibold text-gray-500">Internal Storage</span>
+              <span className="font-semibold text-gray-500">{t("product.storage")}</span>
               <span className="font-bold text-gray-900">{product.storage}</span>
             </div>
           )}
           {product.ram && (
             <div className="p-4 bg-gray-50 rounded border flex justify-between">
-              <span className="font-semibold text-gray-500">RAM</span>
+              <span className="font-semibold text-gray-500">{t("product.ram")}</span>
               <span className="font-bold text-gray-900">{product.ram}</span>
             </div>
           )}
           {product.screen && (
             <div className="p-4 bg-gray-50 rounded border flex justify-between">
-              <span className="font-semibold text-gray-500">Display / Screen</span>
+              <span className="font-semibold text-gray-500">{t("product.screen")}</span>
               <span className="font-bold text-gray-900">{product.screen}</span>
             </div>
           )}
           {product.battery && (
             <div className="p-4 bg-gray-50 rounded border flex justify-between">
-              <span className="font-semibold text-gray-500">Battery & Charging</span>
+              <span className="font-semibold text-gray-500">{t("product.battery")}</span>
               <span className="font-bold text-gray-900">{product.battery}</span>
             </div>
           )}
           {product.camera && (
             <div className="p-4 bg-gray-50 rounded border flex justify-between">
-              <span className="font-semibold text-gray-500">Camera System</span>
+              <span className="font-semibold text-gray-500">{t("product.camera")}</span>
               <span className="font-bold text-gray-900">{product.camera}</span>
             </div>
           )}
           {product.processor && (
             <div className="p-4 bg-gray-50 rounded border flex justify-between">
-              <span className="font-semibold text-gray-500">Processor / Chipset</span>
+              <span className="font-semibold text-gray-500">{t("product.processor")}</span>
               <span className="font-bold text-gray-900">{product.processor}</span>
             </div>
           )}
           {product.network && (
             <div className="p-4 bg-gray-50 rounded border flex justify-between">
-              <span className="font-semibold text-gray-500">Network Connectivity</span>
+              <span className="font-semibold text-gray-500">{t("product.network")}</span>
               <span className="font-bold text-gray-900">{product.network}</span>
             </div>
           )}
           {product.warranty && (
             <div className="p-4 bg-gray-50 rounded border flex justify-between">
-              <span className="font-semibold text-gray-500">Warranty</span>
+              <span className="font-semibold text-gray-500">{t("product.warranty")}</span>
               <span className="font-bold text-gray-900">{product.warranty}</span>
             </div>
           )}
@@ -504,10 +518,10 @@ export const ProductDetail: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-gray-200 gap-4">
           <div>
             <h2 className="text-xl font-black text-[#15161d] uppercase tracking-tight flex items-center gap-2">
-              <MessageSquareQuote className="w-5 h-5 text-[#d10024]" /> Customer Reviews
+              <MessageSquareQuote className="w-5 h-5 text-[#d10024]" /> {t("product.reviews")}
             </h2>
             <p className="text-xs text-gray-500 mt-1">
-              Verified feedback from customers who received and tested this hardware.
+              {t("product.verifiedReviews")}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -522,7 +536,7 @@ export const ProductDetail: React.FC = () => {
               ))}
             </div>
             <span className="text-xs text-gray-500">
-              ({reviews.length} {reviews.length === 1 ? "review" : "reviews"})
+              ({reviews.length} {t("product.verifiedReviews")})
             </span>
           </div>
         </div>
@@ -532,13 +546,13 @@ export const ProductDetail: React.FC = () => {
           <div className="lg:col-span-2 space-y-4">
             {reviewsLoading ? (
               <div className="flex items-center justify-center p-8 text-gray-400">
-                <Loader2 className="w-6 h-6 animate-spin mr-2" /> Loading reviews...
+                <Loader2 className="w-6 h-6 animate-spin mr-2" /> {t("common.loading")}
               </div>
             ) : reviews.length === 0 ? (
               <div className="p-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200 space-y-2">
-                <p className="text-sm font-bold text-gray-700">No reviews yet for this model</p>
+                <p className="text-sm font-bold text-gray-700">{t("product.noReviewsYet")}</p>
                 <p className="text-xs text-gray-500">
-                  Be the first to share your experience with this device!
+                  {t("product.submitReview")}
                 </p>
               </div>
             ) : (
@@ -570,7 +584,7 @@ export const ProductDetail: React.FC = () => {
 
           {/* Write a Review Form */}
           <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 space-y-4">
-            <h3 className="text-sm font-black uppercase text-[#15161d]">Leave a Review</h3>
+            <h3 className="text-sm font-black uppercase text-[#15161d]">{t("product.submitReview")}</h3>
             {reviewSuccessMessage && (
               <div className="p-3 bg-green-50 text-green-700 border border-green-200 rounded text-xs flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 flex-shrink-0" /> {reviewSuccessMessage}
@@ -585,7 +599,7 @@ export const ProductDetail: React.FC = () => {
             <form onSubmit={handleSubmitReview} className="space-y-3">
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-600 mb-1">
-                  Rating (1 to 5 Stars)
+                  {t("product.yourRating")}
                 </label>
                 <div className="flex items-center gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -603,13 +617,13 @@ export const ProductDetail: React.FC = () => {
                       />
                     </button>
                   ))}
-                  <span className="text-xs font-bold text-gray-700 ml-1">{reviewRating} / 5</span>
+                  <span className="text-xs font-bold text-gray-700 ml-1 rtl:ml-0 rtl:mr-1">{reviewRating} / 5</span>
                 </div>
               </div>
 
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-600 mb-1">
-                  Your Name
+                  {t("product.yourName")}
                 </label>
                 <input
                   type="text"
@@ -623,7 +637,7 @@ export const ProductDetail: React.FC = () => {
 
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-600 mb-1">
-                  Your Review
+                  {t("product.yourComment")}
                 </label>
                 <textarea
                   required
@@ -644,7 +658,7 @@ export const ProductDetail: React.FC = () => {
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
-                    <Send className="w-3.5 h-3.5" /> Submit Verified Review
+                    <Send className="w-3.5 h-3.5 rtl:rotate-180" /> {t("product.submitBtn")}
                   </>
                 )}
               </button>
@@ -658,10 +672,10 @@ export const ProductDetail: React.FC = () => {
         <section className="space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-gray-200">
             <h2 className="text-xl font-black text-[#15161d] uppercase tracking-tight">
-              Related Hardware
+              {t("product.relatedDevices")}
             </h2>
             <Link to={`/shop?category=${encodeURIComponent(categoryName)}`} className="text-xs font-bold uppercase text-[#d10024]">
-              See all in {categoryName}
+              {categoryName}
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

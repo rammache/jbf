@@ -4,13 +4,13 @@ import { Filter, X, SlidersHorizontal } from "lucide-react";
 import { Product } from "../types";
 import { ProductCard } from "../components/ProductCard";
 import { useCategories } from "../context/CategoryContext";
-import { useSettings } from "../context/SettingsContext";
+import { useLanguage } from "../context/LanguageContext";
 import { SEO } from "../components/SEO";
 
 export const Shop: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { categories } = useCategories();
-  const { settings } = useSettings();
+  const { t, currencySymbol } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -91,7 +91,7 @@ export const Shop: React.FC = () => {
       c.slug.toLowerCase() === currentCategory.toLowerCase() ||
       c.name.toLowerCase() === currentCategory.toLowerCase()
   );
-  const displayCategoryTitle = activeCategoryObj ? activeCategoryObj.name : currentCategory || "All Hardware";
+  const displayCategoryTitle = activeCategoryObj ? activeCategoryObj.name : currentCategory || t("shop.title");
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -106,7 +106,7 @@ export const Shop: React.FC = () => {
             {displayCategoryTitle}
           </h1>
           <p className="text-xs text-gray-500 mt-1">
-            {totalCount} products available in store catalog.
+            {totalCount} {t("shop.productsCount")}
           </p>
         </div>
 
@@ -116,22 +116,22 @@ export const Shop: React.FC = () => {
             onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
             className="md:hidden flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded text-xs font-bold uppercase tracking-wider text-gray-700"
           >
-            <SlidersHorizontal className="w-4 h-4" /> Filters
+            <SlidersHorizontal className="w-4 h-4" /> {t("shop.filters")}
           </button>
 
           {/* Sort selection */}
           <div className="flex items-center gap-2 text-xs font-semibold text-gray-600">
-            <span className="hidden sm:inline">Sort:</span>
+            <span className="hidden sm:inline">{t("shop.sortBy")}:</span>
             <select
               value={currentSort}
               onChange={(e) => updateFilter("sort", e.target.value)}
               className="bg-white border border-gray-300 rounded px-3 py-2 text-xs font-medium focus:outline-none focus:border-[#d10024]"
             >
-              <option value="featured">Featured First</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="rating-desc">Highest Rated</option>
-              <option value="title-asc">Alphabetical</option>
+              <option value="featured">{t("shop.sortFeatured")}</option>
+              <option value="price-asc">{t("shop.sortPriceAsc")}</option>
+              <option value="price-desc">{t("shop.sortPriceDesc")}</option>
+              <option value="rating-desc">{t("shop.sortRating")}</option>
+              <option value="title-asc">{t("shop.sortAlpha")}</option>
             </select>
           </div>
         </div>
@@ -143,13 +143,13 @@ export const Shop: React.FC = () => {
           {hasActiveFilters && (
             <div className="flex items-center justify-between p-3 bg-red-50 border border-red-100 rounded">
               <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
-                Filters Active
+                {t("shop.filtersActive")}
               </span>
               <button
                 onClick={clearFilters}
                 className="text-xs text-gray-600 hover:text-red-700 font-bold flex items-center gap-1"
               >
-                Clear all <X className="w-3.5 h-3.5" />
+                {t("shop.clearFilters")} <X className="w-3.5 h-3.5" />
               </button>
             </div>
           )}
@@ -157,7 +157,7 @@ export const Shop: React.FC = () => {
           {/* Department Filter */}
           <div>
             <h3 className="text-xs font-bold uppercase tracking-wider text-[#15161d] mb-3">
-              Department
+              {t("shop.categories")}
             </h3>
             <div className="space-y-2 text-xs">
               <label className="flex items-center gap-2 cursor-pointer">
@@ -168,7 +168,7 @@ export const Shop: React.FC = () => {
                   onChange={() => updateFilter("category", "")}
                   className="accent-[#d10024]"
                 />
-                <span className="text-gray-700 font-medium">All Departments</span>
+                <span className="text-gray-700 font-medium">{t("shop.allDepartments")}</span>
               </label>
               {categories.map((cat) => {
                 const isSelected =
@@ -203,7 +203,7 @@ export const Shop: React.FC = () => {
           {/* Brand Filter */}
           <div>
             <h3 className="text-xs font-bold uppercase tracking-wider text-[#15161d] mb-3">
-              Brand
+              {t("shop.brands")}
             </h3>
             <div className="space-y-2 text-xs">
               <label className="flex items-center gap-2 cursor-pointer">
@@ -214,7 +214,7 @@ export const Shop: React.FC = () => {
                   onChange={() => updateFilter("brand", "")}
                   className="accent-[#d10024]"
                 />
-                <span className="text-gray-700 font-medium">All Brands</span>
+                <span className="text-gray-700 font-medium">{t("shop.allBrands")}</span>
               </label>
               {brands.map((b) => (
                 <label key={b} className="flex items-center gap-2 cursor-pointer">
@@ -234,12 +234,12 @@ export const Shop: React.FC = () => {
           {/* Price Range */}
           <div>
             <h3 className="text-xs font-bold uppercase tracking-wider text-[#15161d] mb-3">
-              Price Range ({settings.currencySymbol || "$"})
+              {t("shop.priceRange")} ({currencySymbol})
             </h3>
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                placeholder="Min"
+                placeholder={t("shop.minPrice")}
                 value={currentMin}
                 onChange={(e) => updateFilter("minPrice", e.target.value)}
                 className="w-full px-2 py-1.5 text-xs border rounded bg-white"
@@ -247,7 +247,7 @@ export const Shop: React.FC = () => {
               <span className="text-gray-400">-</span>
               <input
                 type="number"
-                placeholder="Max"
+                placeholder={t("shop.maxPrice")}
                 value={currentMax}
                 onChange={(e) => updateFilter("maxPrice", e.target.value)}
                 className="w-full px-2 py-1.5 text-xs border rounded bg-white"
@@ -267,15 +267,15 @@ export const Shop: React.FC = () => {
           ) : products.length === 0 ? (
             <div className="text-center py-20 bg-white rounded-lg border border-dashed border-gray-300 p-8 space-y-4">
               <Filter className="w-10 h-10 text-gray-400 mx-auto" />
-              <h3 className="text-lg font-bold text-gray-800">No matching hardware found</h3>
+              <h3 className="text-lg font-bold text-gray-800">{t("shop.noProducts")}</h3>
               <p className="text-xs text-gray-500 max-w-sm mx-auto">
-                Try widening your price range or clearing selected brand/category filters.
+                {t("shop.subtitle")}
               </p>
               <button
                 onClick={clearFilters}
                 className="px-5 py-2 bg-[#15161d] text-white text-xs font-bold uppercase tracking-wider rounded hover:bg-[#d10024] transition"
               >
-                Reset Filters
+                {t("shop.clearFilters")}
               </button>
             </div>
           ) : (

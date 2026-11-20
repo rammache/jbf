@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Phone, Mail, MapPin, Clock, MessageCircle, Send, CheckCircle } from "lucide-react";
 import { SEO } from "../components/SEO";
 import { useSettings } from "../context/SettingsContext";
+import { useLanguage } from "../context/LanguageContext";
 
 export const Contact: React.FC = () => {
   const { settings } = useSettings();
+  const { t } = useLanguage();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -26,20 +28,20 @@ export const Contact: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <SEO
-        title="Contact Us"
-        description="Get in touch with Jabour Phone. Phone, WhatsApp, direct email, location, and dedicated customer support."
+        title={t("pages.contact.title")}
+        description={t("pages.contact.subtitle")}
       />
 
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
-          Direct Customer Service
+          {t("pages.contact.badge")}
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-[#15161d] tracking-tight uppercase">
-          Speak With Our Team
+          {t("pages.contact.title")}
         </h1>
         <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
-          Questions about phone specifications, stock availability, warranty details, or custom orders? Reach out directly.
+          {t("pages.contact.subtitle")}
         </p>
       </div>
 
@@ -49,8 +51,8 @@ export const Contact: React.FC = () => {
           <div className="w-10 h-10 rounded-lg bg-red-50 text-[#d10024] flex items-center justify-center">
             <Phone className="w-5 h-5" />
           </div>
-          <h2 className="text-sm font-black uppercase text-[#15161d]">Phone Support</h2>
-          <p className="text-xs text-gray-500">Direct phone line for quick stock inquiries and orders.</p>
+          <h2 className="text-sm font-black uppercase text-[#15161d]">{t("pages.contact.phoneTitle")}</h2>
+          <p className="text-xs text-gray-500">{t("pages.contact.phoneDesc")}</p>
           <a
             href={`tel:${settings.phone.replace(/\s+/g, "")}`}
             className="block text-sm font-bold text-[#15161d] hover:text-[#d10024] transition font-mono"
@@ -63,15 +65,15 @@ export const Contact: React.FC = () => {
           <div className="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center">
             <MessageCircle className="w-5 h-5" />
           </div>
-          <h2 className="text-sm font-black uppercase text-[#15161d]">WhatsApp Chat</h2>
-          <p className="text-xs text-gray-500">Instant answers, photo requests, and direct chat orders.</p>
+          <h2 className="text-sm font-black uppercase text-[#15161d]">{t("pages.contact.whatsappTitle")}</h2>
+          <p className="text-xs text-gray-500">{t("pages.contact.whatsappDesc")}</p>
           <a
             href={`https://wa.me/${settings.whatsapp.replace(/[^\d]/g, "")}?text=Hello%20${encodeURIComponent(settings.storeName)},%20I%20have%20an%20inquiry.`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-sm font-bold text-green-600 hover:text-green-700 transition"
           >
-            Chat On WhatsApp &rarr;
+            {t("pages.contact.whatsappTitle")} &rarr;
           </a>
         </div>
 
@@ -79,8 +81,8 @@ export const Contact: React.FC = () => {
           <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
             <Mail className="w-5 h-5" />
           </div>
-          <h2 className="text-sm font-black uppercase text-[#15161d]">Direct Email</h2>
-          <p className="text-xs text-gray-500">Warranty inquiries, business requests, and general support.</p>
+          <h2 className="text-sm font-black uppercase text-[#15161d]">{t("pages.contact.emailTitle")}</h2>
+          <p className="text-xs text-gray-500">{t("pages.contact.emailDesc")}</p>
           <a
             href={`mailto:${settings.email}`}
             className="block text-sm font-bold text-[#15161d] hover:text-[#d10024] transition"
@@ -93,11 +95,13 @@ export const Contact: React.FC = () => {
           <div className="w-10 h-10 rounded-lg bg-gray-100 text-gray-800 flex items-center justify-center">
             <Clock className="w-5 h-5" />
           </div>
-          <h2 className="text-sm font-black uppercase text-[#15161d]">Working Hours</h2>
-          <p className="text-xs text-gray-500">Showroom &amp; dispatch center schedule.</p>
+          <h2 className="text-sm font-black uppercase text-[#15161d]">{t("pages.contact.hoursTitle")}</h2>
+          <p className="text-xs text-gray-500">
+            {settings.workingHours || t("pages.contact.hoursWeekdays")}
+          </p>
           <p className="text-xs font-semibold text-gray-800">
-            {settings.workingHours}<br />
-            Sunday: Closed
+            {t("pages.contact.hoursWeekdays")}<br />
+            {t("pages.contact.hoursSunday")}
           </p>
         </div>
       </div>
@@ -108,26 +112,23 @@ export const Contact: React.FC = () => {
         <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm space-y-6">
           <div>
             <h2 className="text-xl font-black uppercase tracking-tight text-[#15161d]">
-              Send Us a Message
+              {t("pages.contact.formTitle")}
             </h2>
             <p className="text-xs text-gray-500 mt-1">
-              We respond to inquiries within 2 hours during store hours.
+              {t("pages.contact.formSubtitle")}
             </p>
           </div>
 
           {submitted ? (
             <div className="p-6 bg-green-50 border border-green-200 rounded-xl text-center space-y-3">
               <CheckCircle className="w-12 h-12 text-green-600 mx-auto" />
-              <h3 className="text-base font-bold text-green-900">Message Received!</h3>
-              <p className="text-xs text-green-800 leading-relaxed max-w-sm mx-auto">
-                Thank you for reaching out to Jabour Phone. Our team will review your inquiry and contact you shortly.
-              </p>
+              <h3 className="text-base font-bold text-green-900">{t("pages.contact.successMsg")}</h3>
               <button
                 type="button"
                 onClick={() => setSubmitted(false)}
                 className="mt-2 text-xs font-bold uppercase tracking-wider text-green-900 underline"
               >
-                Send Another Inquiry
+                {t("pages.contact.formTitle")}
               </button>
             </div>
           ) : (
@@ -135,27 +136,27 @@ export const Contact: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-700 mb-1">
-                    Your Full Name *
+                    {t("pages.contact.nameLabel")}
                   </label>
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Sami Jabour"
+                    placeholder="e.g. Alex M."
                     className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
                   />
                 </div>
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-700 mb-1">
-                    Email Address *
+                    {t("pages.contact.emailLabel")}
                   </label>
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="sami@example.com"
+                    placeholder="client@example.com"
                     className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
                   />
                 </div>
@@ -164,19 +165,19 @@ export const Contact: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-700 mb-1">
-                    Phone / WhatsApp Number
+                    {t("pages.contact.phoneLabel")}
                   </label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+961 70 000 000"
+                    placeholder="+212 6 00 00 00 00"
                     className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
                   />
                 </div>
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-700 mb-1">
-                    Subject
+                    {t("pages.contact.subjectLabel")}
                   </label>
                   <input
                     type="text"
@@ -190,7 +191,7 @@ export const Contact: React.FC = () => {
 
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-700 mb-1">
-                  Your Message *
+                  {t("pages.contact.messageLabel")}
                 </label>
                 <textarea
                   required
@@ -206,7 +207,7 @@ export const Contact: React.FC = () => {
                 type="submit"
                 className="w-full py-3 bg-[#15161d] hover:bg-[#d10024] text-white text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-2 shadow"
               >
-                <Send className="w-4 h-4" /> Send Message
+                <Send className="w-4 h-4 rtl:rotate-180" /> {t("pages.contact.sendBtn")}
               </button>
             </form>
           )}
@@ -220,19 +221,19 @@ export const Contact: React.FC = () => {
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-lg font-black uppercase text-[#15161d]">Store Showroom &amp; Pickup</h2>
-                <p className="text-xs text-gray-500">{settings.address || "Main Street, Lebanon"}</p>
+                <h2 className="text-lg font-black uppercase text-[#15161d]">{t("pages.contact.showroomTitle")}</h2>
+                <p className="text-xs text-gray-500">{settings.address || "Casablanca, Morocco"}</p>
               </div>
             </div>
 
             <p className="text-xs text-gray-600 leading-relaxed">
-              Visit our showroom to inspect devices in person before purchase. We keep popular smartphone and accessory models on display for tactile evaluation, display inspection, and battery health verification.
+              {t("pages.about.pillar2Desc")}
             </p>
 
             <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 text-xs space-y-2">
-              <p className="font-bold text-gray-800">Delivery &amp; Courier Coverage:</p>
+              <p className="font-bold text-gray-800">{t("features.shippingTitle")}:</p>
               <p className="text-gray-600">
-                All regions covered with Cash on Delivery (COD). Inspection of package condition is welcomed prior to payment.
+                {t("features.shippingDesc")}
               </p>
             </div>
 
@@ -243,7 +244,7 @@ export const Contact: React.FC = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold uppercase tracking-wider rounded-lg transition"
               >
-                <MapPin className="w-3.5 h-3.5" /> View on Google Maps
+                <MapPin className="w-3.5 h-3.5" /> Google Maps
               </a>
             </div>
           </div>

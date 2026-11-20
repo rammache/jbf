@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import { Search, X, Loader2 } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useSettings } from "../context/SettingsContext";
+import { useLanguage } from "../context/LanguageContext";
 import { Product } from "../types";
 
 export const SearchModal: React.FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useCart();
   const { formatPrice } = useSettings();
+  const { t } = useLanguage();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
@@ -83,23 +85,23 @@ export const SearchModal: React.FC = () => {
       <div className="relative max-w-2xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden z-10 border border-gray-200">
         {/* Search Input bar */}
         <div className="flex items-center px-4 py-3.5 border-b border-gray-200">
-          <Search className="w-5 h-5 text-gray-400 mr-3" aria-hidden="true" />
+          <Search className="w-5 h-5 text-gray-400 mr-3 rtl:mr-0 rtl:ml-3" aria-hidden="true" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search phones, laptops, audio, accessories or brands..."
+            placeholder={t("header.searchPlaceholder")}
             className="flex-1 bg-transparent text-sm sm:text-base text-gray-800 placeholder-gray-400 focus:outline-none"
             autoFocus
-            aria-label="Search query"
+            aria-label={t("header.searchPlaceholder")}
           />
           {loading ? (
-            <Loader2 className="w-5 h-5 text-gray-400 animate-spin mr-2" aria-hidden="true" />
+            <Loader2 className="w-5 h-5 text-gray-400 animate-spin mr-2 rtl:mr-0 rtl:ml-2" aria-hidden="true" />
           ) : query ? (
             <button
               type="button"
               onClick={() => setQuery("")}
-              className="p-1 text-gray-400 hover:text-gray-600 mr-2"
+              className="p-1 text-gray-400 hover:text-gray-600 mr-2 rtl:mr-0 rtl:ml-2"
               aria-label="Clear query"
             >
               <X className="w-4 h-4" />
@@ -108,10 +110,10 @@ export const SearchModal: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsSearchOpen(false)}
-            className="text-xs font-bold uppercase text-gray-500 hover:text-gray-800 ml-2"
-            aria-label="Close search (Esc)"
+            className="text-xs font-bold uppercase text-gray-500 hover:text-gray-800 ml-2 rtl:ml-0 rtl:mr-2"
+            aria-label="Close search"
           >
-            Esc
+            {t("header.searchEsc")}
           </button>
         </div>
 
@@ -119,14 +121,14 @@ export const SearchModal: React.FC = () => {
         <div className="max-h-96 overflow-y-auto p-4">
           {query.trim().length >= 2 && results.length === 0 && !loading && (
             <div className="text-center py-10 text-gray-500 text-sm">
-              No products found for "<span className="font-semibold text-gray-800">{query}</span>"
+              {t("header.noResults")} "<span className="font-semibold text-gray-800">{query}</span>"
             </div>
           )}
 
           {results.length > 0 && (
             <div className="space-y-2">
               <p className="text-xs font-bold uppercase text-gray-400 px-2 tracking-wider">
-                Matching Products ({results.length})
+                {t("header.matchingProducts")} ({results.length})
               </p>
               {results.map((product) => (
                 <Link
@@ -146,7 +148,7 @@ export const SearchModal: React.FC = () => {
                     </p>
                     <p className="text-xs text-gray-500 truncate">{product.spec}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right rtl:text-left">
                     <span className="text-sm font-extrabold text-[#d10024]">
                       {formatPrice(product.price)}
                     </span>
@@ -158,7 +160,7 @@ export const SearchModal: React.FC = () => {
 
           {query.trim().length < 2 && (
             <div className="py-6 px-2 text-center text-xs text-gray-400">
-              Type at least 2 characters to trigger instant predictive search.
+              {t("header.typeMinChars")}
             </div>
           )}
         </div>
