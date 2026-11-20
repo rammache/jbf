@@ -12,6 +12,7 @@
     "lint": "npm run lint --prefix backend && npm run lint --prefix frontend",
     "prod:init": "npm run prod:init --prefix backend",
     "admin:create": "npm run admin:create --prefix backend",
+    "admin:reset": "npm run admin:reset --prefix backend",
     "db:backup": "npm run db:backup --prefix backend",
     "db:restore": "npm run db:restore --prefix backend"
   }
