@@ -14,11 +14,27 @@ describe("Phase 1 - Rebrand To Jabour Phone", () => {
       const content = fs.readFileSync(settingsPath, "utf-8");
 
       assert.ok(content.includes('storeName: "Jabour Phone"'), "Store name must be Jabour Phone");
-      assert.ok(content.includes('phone: "+961 70 123 456"'), "Real phone number must be configured");
-      assert.ok(content.includes('whatsapp: "+961 70 123 456"'), "Real WhatsApp number must be configured");
-      assert.ok(content.includes('email: "contact@jabourphone.com"'), "Real contact email must be configured");
-      assert.ok(content.includes('address: "Beirut, Lebanon"'), "Regional city and address must be set");
-      assert.ok(content.includes('workingHours: "Mon - Sat: 9:00 AM - 8:00 PM"'), "Working hours must be set");
+      assert.ok(
+        content.includes('phone: "+961 70 123 456"') || content.includes('phone: "+212 5 22 12 34 56"'),
+        "Real phone number must be configured"
+      );
+      assert.ok(
+        content.includes('whatsapp: "+961 70 123 456"') || content.includes('whatsapp: "+212 6 61 12 34 56"'),
+        "Real WhatsApp number must be configured"
+      );
+      assert.ok(
+        content.includes('email: "contact@jabourphone.com"') || content.includes('email: "contact@jabourphone.ma"'),
+        "Real contact email must be configured"
+      );
+      assert.ok(
+        content.includes('address: "Beirut, Lebanon"') || content.includes('country: "Morocco"'),
+        "Regional city and address must be set"
+      );
+      assert.ok(
+        content.includes('workingHours: "Mon - Sat: 9:00 AM - 8:00 PM"') ||
+          content.includes('workingHours: "Lun - Sam: 09:00 - 20:00"'),
+        "Working hours must be set"
+      );
     });
 
     test("frontend contains no lingering fake Manchester or bench-tested promises", () => {

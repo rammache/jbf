@@ -281,13 +281,13 @@ The WORK files must carry enough context for any agent to continue without guess
 
 ## Phase 11 - Moroccan Dirham (MAD) Currency Localization
 
-- [ ] Update default store settings to Moroccan Dirham: currency code `MAD`, symbol `DH` (or `د.م.` in Arabic), country Morocco, and realistic MAD delivery thresholds. **P0**
-- [ ] Update frontend currency utility (`formatPrice`) and settings context to format prices cleanly in Moroccan Dirham (e.g. `1,299.00 DH` or `1 299 DH`). **P0**
-- [ ] Update backend `DEFAULT_SETTINGS` in `backend/src/controllers/settingsController.ts` and `demo-seed.ts` to use MAD defaults (currency `MAD`, symbol `DH`, shippingFee `35.0`, freeShippingThreshold `300.0`). **P0**
-- [ ] Audit and adapt all prices, demo seed product prices, shipping calculations, and coupon thresholds to realistic Moroccan Dirham values. **P0**
-- [ ] Verify consistent MAD formatting across all storefront views: Home, Shop, Product Detail, Cart Drawer, Checkout Modal, Order Confirmation, and Order Tracking. **P0**
-- [ ] Verify consistent MAD formatting across all admin views: Dashboard metrics (revenue), Products table, Orders table, and Store Settings editor. **P1**
-- [ ] Add automated test suite for MAD currency formatting, thresholds, and calculations. **P1**
+- [x] Update default store settings to Moroccan Dirham: currency code `MAD`, symbol `DH` (or `د.م.` in Arabic), country Morocco, and realistic MAD delivery thresholds. **P0**
+- [x] Update frontend currency utility (`formatPrice`) and settings context to format prices cleanly in Moroccan Dirham (e.g. `1,299.00 DH` or `1 299 DH`). **P0**
+- [x] Update backend `DEFAULT_SETTINGS` in `backend/src/controllers/settingsController.ts` and `demo-seed.ts` to use MAD defaults (currency `MAD`, symbol `DH`, shippingFee `35.0`, freeShippingThreshold `300.0`). **P0**
+- [x] Audit and adapt all prices, demo seed product prices, shipping calculations, and coupon thresholds to realistic Moroccan Dirham values. **P0**
+- [x] Verify consistent MAD formatting across all storefront views: Home, Shop, Product Detail, Cart Drawer, Checkout Modal, Order Confirmation, and Order Tracking. **P0**
+- [x] Verify consistent MAD formatting across all admin views: Dashboard metrics (revenue), Products table, Orders table, and Store Settings editor. **P1**
+- [x] Add automated test suite for MAD currency formatting, thresholds, and calculations. **P1**
 
 ---
 
@@ -322,4 +322,4 @@ The WORK files must carry enough context for any agent to continue without guess
 10. Phase 11: Moroccan Dirham (MAD) currency localization.
 11. Phase 12: Bilingual Arabic & French language switcher with RTL support.
 
-Phases 0 through 10 are 100% complete and verified. Phases 11 and 12 are queued for implementation.
+Phases 0 through 11 are 100% complete and verified. Storefront and backend fully localized in Moroccan Dirham (MAD). Phase 12 (Bilingual Arabic/French with RTL) is queued for implementation.

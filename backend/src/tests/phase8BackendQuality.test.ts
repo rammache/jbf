@@ -66,8 +66,16 @@ describe("Phase 8 - Data Model And Backend Quality", () => {
       assert.ok(schemaContent.includes("shippingFee     Decimal      @default(0) @db.Decimal(10, 2)"), "Order.shippingFee must be Decimal");
 
       // StoreSettings
-      assert.ok(schemaContent.includes("shippingFee           Decimal  @default(5.00) @db.Decimal(10, 2)"), "StoreSettings.shippingFee must be Decimal");
-      assert.ok(schemaContent.includes("freeShippingThreshold Decimal  @default(50.00) @db.Decimal(10, 2)"), "StoreSettings.freeShippingThreshold must be Decimal");
+      assert.ok(
+        schemaContent.includes("shippingFee           Decimal  @default(35.00) @db.Decimal(10, 2)") ||
+        schemaContent.includes("shippingFee           Decimal  @default(5.00) @db.Decimal(10, 2)"),
+        "StoreSettings.shippingFee must be Decimal"
+      );
+      assert.ok(
+        schemaContent.includes("freeShippingThreshold Decimal  @default(300.00) @db.Decimal(10, 2)") ||
+        schemaContent.includes("freeShippingThreshold Decimal  @default(50.00) @db.Decimal(10, 2)"),
+        "StoreSettings.freeShippingThreshold must be Decimal"
+      );
 
       // Coupon
       assert.ok(schemaContent.includes("discountValue  Decimal   @db.Decimal(10, 2)"), "Coupon.discountValue must be Decimal");

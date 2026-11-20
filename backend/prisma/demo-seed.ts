@@ -11,8 +11,8 @@ const PRODUCTS = [
   {
     handle: "kestrel-14-ultrabook",
     title: "Kestrel 14 Ultrabook",
-    price: 1199,
-    compare: 1399,
+    price: 11999,
+    compare: 13999,
     category: "Laptops",
     brand: "Kestrel",
     spec: "14in 2.8K OLED · 16GB · 1TB",
@@ -28,7 +28,7 @@ const PRODUCTS = [
   {
     handle: "kestrel-16-studio",
     title: "Kestrel 16 Studio",
-    price: 1849,
+    price: 18499,
     compare: null,
     category: "Laptops",
     brand: "Kestrel",
@@ -45,8 +45,8 @@ const PRODUCTS = [
   {
     handle: "nord-flex-convertible",
     title: "Nord Flex Convertible",
-    price: 899,
-    compare: 1050,
+    price: 8999,
+    compare: 10500,
     category: "Laptops",
     brand: "Nord",
     spec: "13in touch · 16GB · 512GB",
@@ -62,7 +62,7 @@ const PRODUCTS = [
   {
     handle: "nord-air-13",
     title: "Nord Air 13",
-    price: 749,
+    price: 7499,
     compare: null,
     category: "Laptops",
     brand: "Nord",
@@ -79,8 +79,8 @@ const PRODUCTS = [
   {
     handle: "kestrel-15-everyday",
     title: "Kestrel 15 Everyday",
-    price: 649,
-    compare: 749,
+    price: 6499,
+    compare: 7499,
     category: "Laptops",
     brand: "Kestrel",
     spec: "15in FHD+ · 16GB · 512GB",
@@ -96,8 +96,8 @@ const PRODUCTS = [
   {
     handle: "meridian-over-ear",
     title: "Meridian Studio Over-Ear",
-    price: 329,
-    compare: 399,
+    price: 3299,
+    compare: 3999,
     category: "Audio",
     brand: "Meridian",
     spec: "40h battery · ANC",
@@ -113,7 +113,7 @@ const PRODUCTS = [
   {
     handle: "meridian-lite",
     title: "Meridian Lite On-Ear",
-    price: 149,
+    price: 1499,
     compare: null,
     category: "Audio",
     brand: "Meridian",
@@ -130,7 +130,7 @@ const PRODUCTS = [
   {
     handle: "meridian-buds-pro",
     title: "Meridian Buds Pro",
-    price: 179,
+    price: 1799,
     compare: null,
     category: "Audio",
     brand: "Meridian",
@@ -147,7 +147,7 @@ const PRODUCTS = [
   {
     handle: "nord-mech-75",
     title: "Nord Mechanical 75",
-    price: 139,
+    price: 1390,
     compare: null,
     category: "Keyboards & mice",
     brand: "Nord",
@@ -164,8 +164,8 @@ const PRODUCTS = [
   {
     handle: "nord-mech-colour",
     title: "Nord Mechanical Colour",
-    price: 159,
-    compare: 189,
+    price: 1590,
+    compare: 1890,
     category: "Keyboards & mice",
     brand: "Nord",
     spec: "65% · gasket mount · RGB",
@@ -181,7 +181,7 @@ const PRODUCTS = [
   {
     handle: "nord-slim-board",
     title: "Nord Slim Board",
-    price: 89,
+    price: 890,
     compare: null,
     category: "Keyboards & mice",
     brand: "Nord",
@@ -198,8 +198,8 @@ const PRODUCTS = [
   {
     handle: "nord-precision-mouse",
     title: "Nord Precision Mouse",
-    price: 79,
-    compare: 95,
+    price: 790,
+    compare: 950,
     category: "Keyboards & mice",
     brand: "Nord",
     spec: "26K DPI · 70h · 58g",
@@ -215,8 +215,8 @@ const PRODUCTS = [
   {
     handle: "kestrel-27-monitor",
     title: "Kestrel 27 4K Monitor",
-    price: 549,
-    compare: 649,
+    price: 5490,
+    compare: 6490,
     category: "Desktops & displays",
     brand: "Kestrel",
     spec: "27in 4K · 144Hz · USB-C",
@@ -225,14 +225,14 @@ const PRODUCTS = [
     finishes: ["Silver", "Graphite"],
     images: [
       "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1585792180666-f7347c490ee2?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1585770000000-f7347c490ee2?auto=format&fit=crop&w=900&q=80"
     ],
     featured: true
   },
   {
     handle: "torus-tower-rx",
     title: "Torus Tower RX",
-    price: 1299,
+    price: 12999,
     compare: null,
     category: "Desktops & displays",
     brand: "Torus",
@@ -249,8 +249,8 @@ const PRODUCTS = [
   {
     handle: "torus-vision-headset",
     title: "Torus Vision Headset",
-    price: 399,
-    compare: 459,
+    price: 3990,
+    compare: 4590,
     category: "Desktops & displays",
     brand: "Torus",
     spec: "2160x2160 per eye · 120Hz",

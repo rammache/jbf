@@ -5,17 +5,21 @@ import { useCart } from "../context/CartContext";
 import { useSettings } from "../context/SettingsContext";
 
 const CITIES = [
-  "Beirut",
-  "Tripoli",
-  "Saida (Sidon)",
-  "Jounieh",
-  "Byblos (Jbeil)",
-  "Zahle",
-  "Nabatieh",
-  "Batroun",
-  "Aley",
-  "Broummana",
-  "Other Area"
+  "Casablanca",
+  "Rabat",
+  "Marrakech",
+  "Tanger",
+  "Fès",
+  "Agadir",
+  "Meknès",
+  "Oujda",
+  "Kénitra",
+  "Tétouan",
+  "Safi",
+  "El Jadida",
+  "Nador",
+  "Mohammédia",
+  "Autre ville / Other City"
 ];
 
 export const CheckoutModal: React.FC = () => {
@@ -35,7 +39,7 @@ export const CheckoutModal: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [city, setCity] = useState("Beirut");
+  const [city, setCity] = useState("Casablanca");
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "CARD">("COD");
@@ -300,7 +304,7 @@ export const CheckoutModal: React.FC = () => {
                       required
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      placeholder="+961 70 123 456"
+                      placeholder="+212 6 12 34 56 78"
                       className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
                     />
                   </div>

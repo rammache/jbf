@@ -156,22 +156,22 @@ model StoreSettings {
   id                    Int      @id @default(1)
   storeName             String   @default("Jabour Phone")
   logo                  String?
-  phone                 String   @default("+961 70 123 456")
-  whatsapp              String   @default("+961 70 123 456")
-  email                 String   @default("contact@jabourphone.com")
-  address               String   @default("Beirut, Lebanon")
-  city                  String   @default("Beirut")
-  country               String   @default("Lebanon")
-  currency              String   @default("USD")
-  currencySymbol        String   @default("$")
-  shippingFee           Decimal  @default(5.00) @db.Decimal(10, 2)
-  freeShippingThreshold Decimal  @default(50.00) @db.Decimal(10, 2)
-  announcement          String   @default("Free express delivery on orders over $50 | 100% Genuine phones guaranteed")
+  phone                 String   @default("+212 5 22 12 34 56")
+  whatsapp              String   @default("+212 6 61 12 34 56")
+  email                 String   @default("contact@jabourphone.ma")
+  address               String   @default("Boulevard Al Massira Al Khadra, Maarif")
+  city                  String   @default("Casablanca")
+  country               String   @default("Morocco")
+  currency              String   @default("MAD")
+  currencySymbol        String   @default("DH")
+  shippingFee           Decimal  @default(35.00) @db.Decimal(10, 2)
+  freeShippingThreshold Decimal  @default(300.00) @db.Decimal(10, 2)
+  announcement          String   @default("Livraison express gratuite partout au Maroc dès 300 DH | 100% Authentique")
   facebook              String?
   instagram             String?
   tiktok                String?
   twitter               String?
-  workingHours          String   @default("Mon - Sat: 9:00 AM - 8:00 PM")
+  workingHours          String   @default("Lun - Sam: 09:00 - 20:00")
   aboutText             String?
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt

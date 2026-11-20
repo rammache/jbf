@@ -109,23 +109,22 @@ describe("Phase 6 - Orders And Checkout", () => {
   });
 
   describe("Shipping Fee Rules & Calculations (Task #11)", () => {
-    it("applies standard $5 fee when subtotal is under $50 threshold", () => {
-      const fee = calculateShippingFee(49.99);
+    it("applies standard fee when subtotal is under threshold", () => {
+      const fee = calculateShippingFee(STORE_CONFIG.freeShippingThreshold - 0.01);
       assert.strictEqual(fee, STORE_CONFIG.standardShippingFee);
-      assert.strictEqual(fee, 5.0);
 
       const totals = calculateOrderTotals(40);
       assert.strictEqual(totals.subtotal, 40);
-      assert.strictEqual(totals.shippingFee, 5);
-      assert.strictEqual(totals.totalAmount, 45);
+      assert.strictEqual(totals.shippingFee, STORE_CONFIG.standardShippingFee);
+      assert.strictEqual(totals.totalAmount, 40 + STORE_CONFIG.standardShippingFee);
     });
 
-    it("applies free delivery when subtotal meets or exceeds $50 threshold", () => {
-      const feeAt50 = calculateShippingFee(50);
-      assert.strictEqual(feeAt50, 0);
+    it("applies free delivery when subtotal meets or exceeds threshold", () => {
+      const feeAtThreshold = calculateShippingFee(STORE_CONFIG.freeShippingThreshold);
+      assert.strictEqual(feeAtThreshold, 0);
 
-      const feeOver50 = calculateShippingFee(1200);
-      assert.strictEqual(feeOver50, 0);
+      const feeOverThreshold = calculateShippingFee(1200);
+      assert.strictEqual(feeOverThreshold, 0);
 
       const totals = calculateOrderTotals(1199);
       assert.strictEqual(totals.subtotal, 1199);
@@ -264,8 +263,8 @@ describe("Phase 6 - Orders And Checkout", () => {
         await createOrder(req, res);
 
         assert.strictEqual(orderPayload.subtotal, 20);
-        assert.strictEqual(orderPayload.shippingFee, 5);
-        assert.strictEqual(orderPayload.totalAmount, 25);
+        assert.strictEqual(orderPayload.shippingFee, STORE_CONFIG.standardShippingFee);
+        assert.strictEqual(orderPayload.totalAmount, 20 + STORE_CONFIG.standardShippingFee);
       } finally {
         prisma.product.findUnique = origFindUnique;
         prisma.$transaction = origTransaction;

@@ -7,23 +7,23 @@ const DEFAULT_SETTINGS = {
   id: 1,
   storeName: "Jabour Phone",
   logo: null as string | null,
-  phone: "+961 70 123 456",
-  whatsapp: "+961 70 123 456",
-  email: "contact@jabourphone.com",
-  address: "Beirut, Lebanon",
-  city: "Beirut",
-  country: "Lebanon",
-  currency: "USD",
-  currencySymbol: "$",
-  shippingFee: 5.0,
-  freeShippingThreshold: 50.0,
-  announcement: "Free express delivery on orders over $50 | 100% Genuine phones guaranteed",
-  workingHours: "Mon - Sat: 9:00 AM - 8:00 PM",
-  facebook: "https://facebook.com",
-  instagram: "https://instagram.com",
-  tiktok: "https://tiktok.com",
-  twitter: "https://twitter.com",
-  aboutText: "Jabour Phone is your trusted destination for genuine smartphones, premium accessories, and certified electronics in Lebanon."
+  phone: "+212 5 22 12 34 56",
+  whatsapp: "+212 6 61 12 34 56",
+  email: "contact@jabourphone.ma",
+  address: "Boulevard Al Massira Al Khadra, Maarif",
+  city: "Casablanca",
+  country: "Morocco",
+  currency: "MAD",
+  currencySymbol: "DH",
+  shippingFee: 35.0, // Historical reference: shippingFee: 5.0
+  freeShippingThreshold: 300.0, // Historical reference: freeShippingThreshold: 50.0
+  announcement: "Livraison express gratuite partout au Maroc dès 300 DH | Téléphones 100% garantis",
+  workingHours: "Lun - Sam: 09:00 - 20:00",
+  facebook: "https://facebook.com/jabourphone",
+  instagram: "https://instagram.com/jabourphone",
+  tiktok: "https://tiktok.com/@jabourphone",
+  twitter: "https://twitter.com/jabourphone",
+  aboutText: "Jabour Phone est votre destination de confiance au Maroc pour les smartphones authentiques, accessoires certifiés et électronique d'origine avec garantie officielle."
 };
 
 export async function getOrCreateStoreSettings(): Promise<StoreSettings> {

@@ -77,7 +77,10 @@ describe("Phase 10 - Launch Readiness & Verification Automated Test Suite", () =
       const tasksContent = fs.readFileSync(tasksPath, "utf-8");
       const progContent = fs.readFileSync(progPath, "utf-8");
 
-      assert.ok(!tasksContent.includes("- [ ]"), "No unchecked tasks should remain in tasks.md");
+      assert.ok(
+        !tasksContent.slice(0, tasksContent.indexOf("## Phase 11")).includes("- [ ]"),
+        "Phases 0 through 10 must have no unchecked tasks in tasks.md"
+      );
       assert.ok(progContent.includes("Phase 9"), "progression.md must document Phase 9");
       assert.ok(progContent.includes("Phase 10"), "progression.md must document Phase 10");
     });

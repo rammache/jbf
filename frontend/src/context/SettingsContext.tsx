@@ -5,23 +5,23 @@ import { formatPrice as formatPriceUtil } from "../utils/currency";
 export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   id: 1,
   storeName: "Jabour Phone",
-  phone: "+961 70 123 456",
-  whatsapp: "+961 70 123 456",
-  email: "contact@jabourphone.com",
-  address: "Beirut, Lebanon",
-  city: "Beirut",
-  country: "Lebanon",
-  currency: "USD",
-  currencySymbol: "$",
-  shippingFee: 5.0,
-  freeShippingThreshold: 50.0,
-  announcement: "Free express delivery on orders over $50 | 100% Genuine phones guaranteed",
-  workingHours: "Mon - Sat: 9:00 AM - 8:00 PM",
-  facebook: "https://facebook.com",
-  instagram: "https://instagram.com",
-  tiktok: "https://tiktok.com",
-  twitter: "https://twitter.com",
-  aboutText: "Jabour Phone is your premier source for certified smartphones, authentic accessories, and guaranteed hardware in Lebanon."
+  phone: "+212 5 22 12 34 56",
+  whatsapp: "+212 6 61 12 34 56",
+  email: "contact@jabourphone.ma",
+  address: "Boulevard Al Massira Al Khadra, Maarif",
+  city: "Casablanca",
+  country: "Morocco",
+  currency: "MAD",
+  currencySymbol: "DH",
+  shippingFee: 35.0,
+  freeShippingThreshold: 300.0,
+  announcement: "Livraison express gratuite partout au Maroc dès 300 DH | 100% Authentique",
+  workingHours: "Lun - Sam: 09:00 - 20:00",
+  facebook: "https://facebook.com/jabourphone",
+  instagram: "https://instagram.com/jabourphone",
+  tiktok: "https://tiktok.com/@jabourphone",
+  twitter: "https://twitter.com/jabourphone",
+  aboutText: "Jabour Phone est votre spécialiste des smartphones, accessoires et produits connectés au Maroc, garantissant authenticité, garantie officielle et livraison rapide."
 };
 
 interface SettingsContextType {
@@ -29,7 +29,7 @@ interface SettingsContextType {
   loading: boolean;
   error: string | null;
   refreshSettings: () => Promise<void>;
-  formatPrice: (amount: number | string | null | undefined) => string;
+  formatPrice: (amount: number | string | null | undefined, customSymbol?: string) => string;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -64,8 +64,9 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, [fetchSettings]);
 
   const formatPrice = useCallback(
-    (amount: number | string | null | undefined) => {
-      return formatPriceUtil(amount, settings.currencySymbol || "$");
+    (amount: number | string | null | undefined, customSymbol?: string) => {
+      const activeSymbol = customSymbol || settings.currencySymbol || "DH";
+      return formatPriceUtil(amount, activeSymbol);
     },
     [settings.currencySymbol]
   );

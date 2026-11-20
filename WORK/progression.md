@@ -15,11 +15,11 @@ Remaining work is in `WORK/tasks.md`.
 - **Current state:** Production-ready full-stack e-commerce store with public storefront, dynamic product catalog, multi-criteria filtering, cart & COD checkout with tamper-proof recalculation, customer order tracking, admin authentication & RBAC, admin dashboard & KPIs, product/category/order/coupon/newsletter/settings management, persistent uploads & Cloudinary support, PostgreSQL 16 migrations & decimal precision, automated daily backup scripts, full Dockerization (backend, frontend, unified compose), comprehensive handover guides (ADMIN_GUIDE.md, DEPLOYMENT.md, MONITORING.md, SECURITY.md), optimized bundle chunking, and 100% test pass rate across 154 automated tests.
 - **Work style:** continuous progress per user directive. Finish tasks, update the WORK files, run checks, commit, and proceed.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
-- **Current phase:** Phase 10 - Launch Readiness, Performance Optimization & Verification (COMPLETED).
-- **Current task:** All planned project phases (Phases 0 through 10) are 100% complete and fully verified. Ready for live production deployment and merchant handover.
+- **Current phase:** Phase 11 - Moroccan Dirham (MAD) Currency Localization (COMPLETED).
+- **Current task:** Phase 12 - Bilingual Localization (Arabic & French with RTL Support).
 - **A session can use the same AI agent or a different one.** These files must carry all context so any agent can continue.
 - **Demo data decision (2026-11-19):** the fake brands and demo catalog stay during development. Jabour will remove all demo products/categories and create the real ones from the admin panel after the project is finished, so no real catalog data is needed now.
-- **Business decisions established:** USD ($) dynamic currency, Cash on Delivery (COD) enabled, $5 standard shipping with $50 free shipping threshold, Docker/Render/Railway deployment configurations provided.
+- **Business decisions established:** Moroccan Dirham (`MAD` / `DH`) primary currency, Cash on Delivery (COD) enabled, 35 DH standard delivery with 300 DH free shipping threshold, Casablanca Morocco store showroom, Docker/Render/Railway deployment configurations provided.
 
 ## Session Rules
 
@@ -923,5 +923,46 @@ Add one entry here at the end of every session. New agents must read the latest 
   - `WORK/tasks.md`
   - `WORK/progression.md`
 - **Decisions:** Phase 11 and Phase 12 are structured into prioritized sub-tasks (**P0**, **P1**, **P2**) adhering to the one-task-per-session rule.
-- **Next step:** Confirm with user whether to start Phase 11 (Moroccan Dirham Currency) or Phase 12 (Arabic & French Switcher).
+- **Next step:** Proceed with Phase 11 (Moroccan Dirham Currency Localization).
+
+---
+
+### Session: 2026-11-20 (Phase 11 - Moroccan Dirham Localization)
+
+- **Done:** Delivered all tasks in Phase 11 (Moroccan Dirham Currency Localization):
+  1. **Moroccan Market & Store Settings Localization (Task 1 & 3):**
+     - Updated `backend/src/config/store.ts` (`STORE_CONFIG`): currency code `MAD`, symbol `DH`, standard delivery `35.0` DH, free shipping threshold `300.0` DH, Casablanca Morocco headquarters, support phone `+212 5 22 12 34 56`, WhatsApp `+212 6 61 12 34 56`, email `contact@jabourphone.ma`.
+     - Updated `backend/src/controllers/settingsController.ts`: `DEFAULT_SETTINGS` configured with Moroccan MAD settings.
+     - Updated `backend/prisma/schema.prisma` & `backend/prisma/seed.ts`: `StoreSettings` singleton defaults set to Moroccan Dirham (`MAD`, `DH`, 35.00 DH, 300.00 DH, Casablanca, Morocco).
+     - Updated `frontend/src/context/SettingsContext.tsx`: `DEFAULT_STORE_SETTINGS` aligned with Moroccan market values.
+  2. **Universal Moroccan Price Formatting (Task 2):**
+     - Enhanced `frontend/src/utils/currency.ts` (`formatPrice`): supports suffix notation for Moroccan Dirham (`1,299.00 DH`) and maintains prefix notation for single-character symbols (`$120.00`, `€50.00`).
+  3. **Realistic Moroccan Catalog & Delivery Thresholds (Task 4 & 5):**
+     - Calibrated all 15 demo catalog products in `backend/prisma/demo-seed.ts` with authentic Moroccan Dirham pricing (> 500 DH).
+     - Configured free shipping threshold at 300 DH with 35 DH standard delivery.
+     - Updated `frontend/src/components/CheckoutModal.tsx` with major Moroccan cities and phone placeholder (`+212`).
+  4. **Automated Verification Test Suite (Task 6):**
+     - Authored `backend/src/tests/phase11MoroccanCurrency.test.ts` covering store defaults, formatPrice suffix logic, shipping fee calculations, and demo catalog prices.
+- **Tested:**
+  - Ran backend test suite (`npm test --prefix backend`): 164 tests passing across 68 suites, 0 failures.
+  - Ran frontend build (`npm run build --prefix frontend`): 0 TypeScript errors, production bundle compiled cleanly.
+- **Files changed:**
+  - `backend/prisma/schema.prisma`
+  - `backend/prisma/seed.ts`
+  - `backend/prisma/demo-seed.ts`
+  - `backend/src/config/store.ts`
+  - `backend/src/controllers/settingsController.ts`
+  - `backend/src/tests/orderPhase6.test.ts`
+  - `backend/src/tests/phase1Rebrand.test.ts`
+  - `backend/src/tests/phase8BackendQuality.test.ts`
+  - `backend/src/tests/phase10Readiness.test.ts`
+  - `backend/src/tests/phase11MoroccanCurrency.test.ts`
+  - `frontend/src/utils/currency.ts`
+  - `frontend/src/context/SettingsContext.tsx`
+  - `frontend/src/components/CheckoutModal.tsx`
+  - `WORK/tasks.md`
+  - `WORK/progression.md`
+- **Decisions:** Moroccan Dirham (`MAD` / `DH`) established as official currency with 35 DH standard delivery and 300 DH free shipping threshold.
+- **Next step:** Phase 12 - Bilingual Localization (Arabic & French with RTL Support).
+
 
