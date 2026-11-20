@@ -52,6 +52,26 @@ const uploadsDir = getUploadsDir();
   app.get("/health/ping", getPing);
   app.get("/api/health/ping", getPing);
 
+  // Root welcome & API status endpoint
+  app.get("/", (_req, res, next) => {
+    if (shouldServeFrontend && fs.existsSync(frontendDist)) {
+      return next();
+    }
+    res.json({
+      success: true,
+      name: "Jabour Phone REST API",
+      status: "online",
+      message: "Jabour Phone Backend is active on Vercel.",
+      endpoints: {
+        health: "/api/health",
+        products: "/api/products",
+        categories: "/api/categories",
+        orders: "/api/orders",
+        auth: "/api/auth/me"
+      }
+    });
+  });
+
   // API Routes
   app.use("/api", apiRoutes);
 
