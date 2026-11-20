@@ -16,37 +16,37 @@
     {
       "source": "/api",
       "destination": {
-        "service": "backend"
+        "path": "/api"
       }
     },
     {
       "source": "/api/(.*)",
       "destination": {
-        "service": "backend"
+        "path": "/api/$1"
       }
     },
     {
       "source": "/health",
       "destination": {
-        "service": "backend"
+        "path": "/health"
       }
     },
     {
       "source": "/health/(.*)",
       "destination": {
-        "service": "backend"
+        "path": "/health/$1"
       }
     },
     {
       "source": "/uploads/(.*)",
       "destination": {
-        "service": "backend"
+        "path": "/uploads/$1"
       }
     },
     {
       "source": "/(.*)",
       "destination": {
-        "service": "frontend"
+        "path": "/$1"
       }
     }
   ]
