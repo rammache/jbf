@@ -21,108 +21,108 @@ try {
 }
 
 const uploadsDir = getUploadsDir();
-  try {
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
-    }
-  } catch (_err) {
-    // Gracefully handle read-only environments
+try {
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
   }
+} catch (_err) {
+  // Gracefully handle read-only environments
+}
 
-  export const app = express();
-  const PORT = process.env.PORT || 5000;
+export const app = express();
+const PORT = process.env.PORT || 5000;
 
-  // Enable trust proxy for reverse proxies (Nginx, Caddy, Cloudflare, Railway, Render)
-  app.set("trust proxy", 1);
+// Enable trust proxy for reverse proxies (Nginx, Caddy, Cloudflare, Railway, Render)
+app.set("trust proxy", 1);
 
-  // Security & Header Policies
-  app.use(securityHeaders());
-  app.use(cors(getCorsOptions()));
+// Security & Header Policies
+app.use(securityHeaders());
+app.use(cors(getCorsOptions()));
 
-  // Request logging
-  app.use(requestLogger);
+// Request logging
+app.use(requestLogger);
 
-  // Body Parsing with strict size limits
-  app.use(express.json({ limit: "1mb" }));
-  app.use(express.urlencoded({ extended: true, limit: "1mb" }));
-  app.use(cookieParser() as any);
+// Body Parsing with strict size limits
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+app.use(cookieParser() as any);
 
-  // Serve uploaded assets statically
-  app.use("/uploads", express.static(uploadsDir));
+// Serve uploaded assets statically
+app.use("/uploads", express.static(uploadsDir));
 
-  // API Health Check & Lightweight Ping (root and /api mounted)
-  app.get("/health", getHealthCheck);
-  app.get("/api/health", getHealthCheck);
-  app.get("/health/ping", getPing);
-  app.get("/api/health/ping", getPing);
+// API Health Check & Lightweight Ping (root and /api mounted)
+app.get("/health", getHealthCheck);
+app.get("/api/health", getHealthCheck);
+app.get("/health/ping", getPing);
+app.get("/api/health/ping", getPing);
 
-  // Root welcome & API status endpoint
-  app.get("/", (_req, res, next) => {
-    if (shouldServeFrontend && fs.existsSync(frontendDist)) {
+// Root welcome & API status endpoint
+app.get("/", (_req, res, next) => {
+  if (shouldServeFrontend && fs.existsSync(frontendDist)) {
+    return next();
+  }
+  res.json({
+    success: true,
+    name: "Jabour Phone REST API",
+    status: "online",
+    message: "Jabour Phone Backend is active on Vercel.",
+    endpoints: {
+      health: "/api/health",
+      products: "/api/products",
+      categories: "/api/categories",
+      orders: "/api/orders",
+      auth: "/api/auth/me"
+    }
+  });
+});
+
+// API Routes
+app.use("/api", apiRoutes);
+
+// Single-domain unified deployment: serve frontend static build if enabled or present
+const frontendDist = process.env.FRONTEND_DIST_PATH
+  ? path.resolve(process.env.FRONTEND_DIST_PATH)
+  : path.resolve(__dirname, "../../frontend/dist");
+
+const shouldServeFrontend =
+  process.env.SERVE_FRONTEND === "true" ||
+  (process.env.NODE_ENV === "production" && fs.existsSync(frontendDist));
+
+if (shouldServeFrontend && fs.existsSync(frontendDist)) {
+  // Serve static assets from frontend build
+  app.use(express.static(frontendDist));
+
+  // SPA history fallback: serve index.html for browser routes that don't match API
+  app.get("*", (req, res, next) => {
+    if (
+      req.path.startsWith("/api") ||
+      req.path.startsWith("/health") ||
+      req.path.startsWith("/uploads")
+    ) {
       return next();
     }
-    res.json({
-      success: true,
-      name: "Jabour Phone REST API",
-      status: "online",
-      message: "Jabour Phone Backend is active on Vercel.",
-      endpoints: {
-        health: "/api/health",
-        products: "/api/products",
-        categories: "/api/categories",
-        orders: "/api/orders",
-        auth: "/api/auth/me"
-      }
-    });
+    res.sendFile(path.join(frontendDist, "index.html"));
   });
+}
 
-  // API Routes
-  app.use("/api", apiRoutes);
+// 404 Route Not Found for unhandled API and resource endpoints
+app.use(notFoundHandler);
 
-  // Single-domain unified deployment: serve frontend static build if enabled or present
-  const frontendDist = process.env.FRONTEND_DIST_PATH
-    ? path.resolve(process.env.FRONTEND_DIST_PATH)
-    : path.resolve(__dirname, "../../frontend/dist");
+// Centralized Error Handling
+app.use(errorHandler);
 
-  const shouldServeFrontend =
-    process.env.SERVE_FRONTEND === "true" ||
-    (process.env.NODE_ENV === "production" && fs.existsSync(frontendDist));
+let server: ReturnType<typeof app.listen> | null = null;
+const isServerless =
+  Boolean(process.env.VERCEL) ||
+  Boolean(process.env.VERCEL_ENV) ||
+  Boolean(process.env.NOW_REGION) ||
+  Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
 
-  if (shouldServeFrontend && fs.existsSync(frontendDist)) {
-    // Serve static assets from frontend build
-    app.use(express.static(frontendDist));
+if (process.env.NODE_ENV !== "test" && !isServerless) {
+  server = app.listen(PORT, () => {
+    console.log(`Jabour Phone Express Server running on http://localhost:${PORT}`);
+  });
+  setupGracefulShutdown(server);
+}
 
-    // SPA history fallback: serve index.html for browser routes that don't match API
-    app.get("*", (req, res, next) => {
-      if (
-        req.path.startsWith("/api") ||
-        req.path.startsWith("/health") ||
-        req.path.startsWith("/uploads")
-      ) {
-        return next();
-      }
-      res.sendFile(path.join(frontendDist, "index.html"));
-    });
-  }
-
-  // 404 Route Not Found for unhandled API and resource endpoints
-  app.use(notFoundHandler);
-
-  // Centralized Error Handling
-  app.use(errorHandler);
-
-  let server: ReturnType<typeof app.listen> | null = null;
-  const isServerless =
-    Boolean(process.env.VERCEL) ||
-    Boolean(process.env.VERCEL_ENV) ||
-    Boolean(process.env.NOW_REGION) ||
-    Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
-
-  if (process.env.NODE_ENV !== "test" && !isServerless) {
-    server = app.listen(PORT, () => {
-      console.log(`Jabour Phone Express Server running on http://localhost:${PORT}`);
-    });
-    setupGracefulShutdown(server);
-  }
-
-  export default app;
+export default app;

@@ -13,6 +13,8 @@
     "build:backend": "npm run build --prefix backend",
     "build:frontend": "npm run build --prefix frontend",
     "start": "npm run start --prefix backend",
+    "seed": "npm run prisma:seed --prefix backend",
+    "seed:demo": "npm run prisma:seed:demo --prefix backend",
     "test": "npm run test --prefix backend && npm run test --prefix frontend",
     "lint": "npm run lint --prefix backend && npm run lint --prefix frontend",
     "prod:init": "npm run prod:init --prefix backend",

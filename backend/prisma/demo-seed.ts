@@ -270,7 +270,7 @@ const CATEGORIES = [
     name: "Laptops",
     slug: "laptops",
     description: "High-performance laptops and mobile workstations.",
-    image: null,
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=900&q=80",
     sortOrder: 1,
     isActive: true
   },
@@ -278,7 +278,7 @@ const CATEGORIES = [
     name: "Audio",
     slug: "audio",
     description: "Studio monitors, reference headphones, and sound accessories.",
-    image: null,
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=80",
     sortOrder: 2,
     isActive: true
   },
@@ -286,7 +286,7 @@ const CATEGORIES = [
     name: "Keyboards & mice",
     slug: "keyboards-mice",
     description: "Precision mechanical keyboards and ergonomic pointing devices.",
-    image: null,
+    image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=900&q=80",
     sortOrder: 3,
     isActive: true
   },
@@ -294,7 +294,7 @@ const CATEGORIES = [
     name: "Desktops & displays",
     slug: "desktops-displays",
     description: "Pro desktop towers and calibrated high-resolution displays.",
-    image: null,
+    image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=900&q=80",
     sortOrder: 4,
     isActive: true
   }
