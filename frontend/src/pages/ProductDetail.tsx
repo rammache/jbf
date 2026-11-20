@@ -43,7 +43,7 @@ export const ProductDetail: React.FC = () => {
   const { handle } = useParams<{ handle: string }>();
   const { addToCart } = useCart();
   const { settings, formatPrice } = useSettings();
-  const { t, language } = useLanguage();
+  const { t, tCategory, language } = useLanguage();
   const [product, setProduct] = useState<Product | null>(null);
   const [related, setRelated] = useState<Product[]>([]);
   const [activeImage, setActiveImage] = useState<string>("");
@@ -110,7 +110,7 @@ export const ProductDetail: React.FC = () => {
     e.preventDefault();
     if (!product) return;
     if (!reviewAuthor.trim() || !reviewComment.trim()) {
-      setReviewErrorMessage("Please enter both your name and review comment.");
+      setReviewErrorMessage(t("product.reviewErrorRequired"));
       return;
     }
 
@@ -131,7 +131,7 @@ export const ProductDetail: React.FC = () => {
 
       const json = await res.json();
       if (json.success) {
-        setReviewSuccessMessage("Thank you! Your verified review has been posted.");
+        setReviewSuccessMessage(t("product.reviewSuccess"));
         setReviewAuthor("");
         setReviewComment("");
         setReviewRating(5);
@@ -139,10 +139,10 @@ export const ProductDetail: React.FC = () => {
           loadReviews(handle);
         }
       } else {
-        setReviewErrorMessage(json.error || "Failed to submit review.");
+        setReviewErrorMessage(json.error || t("product.reviewNetworkError"));
       }
     } catch {
-      setReviewErrorMessage("Network error while submitting review.");
+      setReviewErrorMessage(t("product.reviewNetworkError"));
     } finally {
       setSubmittingReview(false);
     }
@@ -159,10 +159,10 @@ export const ProductDetail: React.FC = () => {
   if (!product) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-20 text-center space-y-4">
-        <h2 className="text-2xl font-bold">Product Not Found</h2>
-        <p className="text-gray-500 text-sm">We couldn't locate this product in our catalog.</p>
+        <h2 className="text-2xl font-bold">{t("product.notFoundTitle")}</h2>
+        <p className="text-gray-500 text-sm">{t("product.notFoundDesc")}</p>
         <Link to="/shop" className="inline-block px-5 py-2.5 bg-[#15161d] text-white text-xs font-bold uppercase rounded">
-          Browse Catalog
+          {t("product.browseCatalog")}
         </Link>
       </div>
     );
@@ -188,10 +188,10 @@ export const ProductDetail: React.FC = () => {
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs text-gray-500">
-        <Link to="/" className="hover:text-gray-900">Home</Link>
+        <Link to="/" className="hover:text-gray-900">{t("nav.home")}</Link>
         <span>/</span>
         <Link to={`/shop?category=${encodeURIComponent(categoryName)}`} className="hover:text-gray-900">
-          {categoryName}
+          {tCategory(categoryName)}
         </Link>
         <span>/</span>
         <span className="text-gray-900 font-medium truncate">{product.title}</span>
@@ -232,7 +232,7 @@ export const ProductDetail: React.FC = () => {
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#d10024] mb-2">
               <span>{product.brand}</span>
               <span>·</span>
-              <span>{categoryName}</span>
+              <span>{tCategory(categoryName)}</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-black text-[#15161d] tracking-tight">

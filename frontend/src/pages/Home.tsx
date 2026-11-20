@@ -12,10 +12,19 @@ import { SEO } from "../components/SEO";
 export const Home: React.FC = () => {
   const { categories, loading: categoriesLoading } = useCategories();
   const { settings, formatPrice } = useSettings();
-  const { t } = useLanguage();
+  const { t, tCategory } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [loading, setLoading] = useState(true);
+
+  const getConditionLabel = (cond?: string) => {
+    if (!cond) return "";
+    const upper = cond.toUpperCase();
+    if (upper === "NEW") return t("product.conditionNew");
+    if (upper === "REFURBISHED") return t("product.conditionRefurbished");
+    if (upper === "USED") return t("product.conditionUsed");
+    return cond;
+  };
 
   // Sync selectedCategory when categories load
   useEffect(() => {
@@ -88,10 +97,10 @@ export const Home: React.FC = () => {
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-950/60 border border-[#d10024]/50 rounded-full text-xs font-bold uppercase text-[#d10024] tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
                 {heroProduct.condition && heroProduct.condition !== "NEW"
-                  ? `${heroProduct.condition} Hardware`
-                  : heroProduct.isFeatured || heroProduct.featured
-                    ? "Featured Arrival"
-                    : "Verified Authentic"}
+                    ? getConditionLabel(heroProduct.condition)
+                    : heroProduct.isFeatured || heroProduct.featured
+                ? t("hero.featuredArrival")
+                    : t("hero.verifiedAuthentic")}
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
@@ -101,7 +110,8 @@ export const Home: React.FC = () => {
               <p className="text-sm sm:text-base text-gray-300 max-w-xl font-normal leading-relaxed line-clamp-3">
                 {heroProduct.spec ||
                   heroProduct.description ||
-                  "Verified for authenticity and battery health. Ships with official warranty and Cash on Delivery."}
+                settings.aboutText ||
+                  t("hero.subtitle")}
               </p>
 
               <div className="flex flex-wrap gap-4 pt-2">
@@ -109,13 +119,13 @@ export const Home: React.FC = () => {
                   to={`/product/${heroProduct.handle}`}
                   className="px-6 py-3.5 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded shadow-lg transition flex items-center gap-2"
                 >
-                  View Product Details <ArrowRight className="w-4 h-4" />
+                  {t("hero.viewDetails")} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
                 </Link>
                 <Link
                   to="/shop"
                   className="px-6 py-3.5 bg-transparent hover:bg-white/10 text-white border border-gray-600 font-bold text-xs uppercase tracking-wider rounded transition"
                 >
-                  Shop All Products
+                  {t("hero.shopAll")}
                 </Link>
               </div>
             </div>
@@ -158,8 +168,8 @@ export const Home: React.FC = () => {
                   <div>
                     <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
                       {heroProduct.compare && heroProduct.compare > heroProduct.price
-                        ? "Special Offer"
-                        : "Verified Stock"}
+                      ? t("hero.specialOffer")
+                        : t("hero.verifiedStock")}
                     </span>
                     <p className="text-xl font-bold text-white">
                       {formatPrice(heroProduct.price)}
@@ -234,7 +244,7 @@ export const Home: React.FC = () => {
                   <div className="flex flex-1 flex-col justify-between p-4">
                     <div>
                       <h3 className="text-sm font-black uppercase tracking-tight text-[#15161d] group-hover:text-[#d10024] transition-colors">
-                        {cat.name}
+                        {tCategory(cat.name)}
                       </h3>
                       {cat.description && (
                         <p className="mt-1 line-clamp-2 text-xs text-gray-500 leading-relaxed">
@@ -291,7 +301,7 @@ export const Home: React.FC = () => {
                       : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
                       }`}
                   >
-                    {cat.name}
+                    {tCategory(cat.name)}
                   </button>
                 );
               })
@@ -309,15 +319,15 @@ export const Home: React.FC = () => {
         ) : filteredProducts.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-12 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
             <FolderTree className="h-10 w-10 text-gray-300 mb-2" />
-            <p className="text-sm font-bold text-gray-700">No products found in this department</p>
+            <p className="text-sm font-bold text-gray-700">{t("home.noProductsInDept")}</p>
             <p className="text-xs text-gray-400 mt-1">
-              Check back soon or explore our full catalog.
+              {t("home.checkBackSoon")}
             </p>
             <Link
               to="/shop"
               className="mt-4 inline-flex items-center gap-2 rounded bg-[#15161d] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#a7001d]"
             >
-              View All Products
+              {t("home.viewAllProducts")}
             </Link>
           </div>
         ) : (
@@ -334,7 +344,7 @@ export const Home: React.FC = () => {
               to={`/shop?category=${encodeURIComponent(selectedCategory)}`}
               className="inline-flex items-center gap-2 px-6 py-2.5 bg-white hover:bg-gray-100 border border-gray-300 text-xs font-bold uppercase tracking-wider text-gray-800 rounded transition"
             >
-              View all in {activeCategoryObj?.name || selectedCategory} <ArrowRight className="w-4 h-4" />
+              {t("home.viewAllIn", { category: tCategory(activeCategoryObj?.name || selectedCategory) })} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
             </Link>
           </div>
         )}
@@ -353,24 +363,24 @@ export const Home: React.FC = () => {
 
           <div className="space-y-6">
             <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
-              Quality &amp; Authenticity Guarantee
+              {t("home.guaranteeBadge")}
             </span>
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
-              100% Genuine Devices.
+              {t("home.guaranteeTitle")}
             </h2>
             <div className="space-y-4 text-xs sm:text-sm text-gray-300 leading-relaxed font-normal">
               <p>
-                Every device we list is verified for authenticity, battery health, and network carrier compatibility. We source exclusively from authorized distributors so you receive authentic factory serial numbers and official warranties.
+                {t("home.guaranteeP1")}
               </p>
               <p>
-                Before any order leaves for delivery, our technicians inspect screen responsiveness, cameras, cellular connectivity, and packaging integrity. That is the cornerstone of why Jabour Phone exists.
+                {t("home.guaranteeP2")}
               </p>
             </div>
             <Link
               to="/about"
               className="inline-flex items-center gap-2 px-6 py-3 bg-[#d10024] hover:bg-[#a7001d] text-white text-xs font-bold uppercase tracking-wider rounded transition"
             >
-              Learn About Our Standards
+              {t("home.guaranteeCta")}
             </Link>
           </div>
         </div>

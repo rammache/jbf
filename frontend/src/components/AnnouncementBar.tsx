@@ -5,11 +5,13 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export const AnnouncementBar: React.FC = () => {
   const { settings, formatPrice } = useSettings();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [index, setIndex] = useState(0);
 
   const announcements = [
-    settings.announcement || `Livraison express gratuite dès ${formatPrice(settings.freeShippingThreshold)}`,
+    language === "ar"
+      ? t("announcements.freeShipping")
+      : (settings.announcement || `Livraison express gratuite dès ${formatPrice(settings.freeShippingThreshold)}`),
     t("announcements.genuine"),
     `${t("announcements.whatsapp")} ${settings.whatsapp}`
   ];
@@ -27,10 +29,11 @@ export const AnnouncementBar: React.FC = () => {
         <div className="flex-1 text-center transition-opacity duration-500 overflow-hidden text-ellipsis whitespace-nowrap">
           <span>{announcements[index]}</span>
         </div>
-        <div className="flex-shrink-0 ms-2">
-          <LanguageSwitcher variant="dark" />
+          {/* Hidden on desktop (lg:hidden) because Navbar header displays LanguageSwitcher */}
+          <div className="flex-shrink-0 ms-2 lg:hidden">
+            <LanguageSwitcher variant="dark" />
+          </div>
         </div>
       </div>
-    </div>
-  );
+      );
 };

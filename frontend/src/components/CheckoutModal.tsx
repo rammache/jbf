@@ -6,26 +6,26 @@ import { useSettings } from "../context/SettingsContext";
 import { useLanguage } from "../context/LanguageContext";
 
 const CITIES = [
-  "Casablanca",
-  "Rabat",
-  "Marrakech",
-  "Tanger",
-  "Fès",
-  "Agadir",
-  "Meknès",
-  "Oujda",
-  "Kénitra",
-  "Tétouan",
-  "Safi",
-  "El Jadida",
-  "Nador",
-  "Mohammédia",
-  "Autre ville / Other City"
+  { fr: "Casablanca", ar: "الدار البيضاء" },
+  { fr: "Rabat", ar: "الرباط" },
+  { fr: "Marrakech", ar: "مراكش" },
+  { fr: "Tanger", ar: "طنجة" },
+  { fr: "Fès", ar: "فاس" },
+  { fr: "Agadir", ar: "أكادير" },
+  { fr: "Meknès", ar: "مكناس" },
+  { fr: "Oujda", ar: "وجدة" },
+  { fr: "Kénitra", ar: "القنيطرة" },
+  { fr: "Tétouan", ar: "تطوان" },
+  { fr: "Safi", ar: "آسفي" },
+  { fr: "El Jadida", ar: "الجديدة" },
+  { fr: "Nador", ar: "الناظور" },
+  { fr: "Mohammédia", ar: "المحمدية" },
+  { fr: "Autre ville", ar: "مدينة أخرى / منطقة أخرى" }
 ];
 
 export const CheckoutModal: React.FC = () => {
   const { settings, formatPrice } = useSettings();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const {
     items,
     cartTotal,
@@ -76,12 +76,12 @@ export const CheckoutModal: React.FC = () => {
     e.preventDefault();
 
     if (!name.trim() || !email.trim() || !phone.trim() || !address.trim()) {
-      setError("Please fill out all required fields marked with an asterisk (*).");
+      setError(t("checkout.errorRequired"));
       return;
     }
 
     if (phone.trim().replace(/\D/g, "").length < 6) {
-      setError("Please provide a valid contact phone number with at least 6 digits.");
+      setError(t("checkout.errorPhone"));
       return;
     }
 
@@ -116,10 +116,10 @@ export const CheckoutModal: React.FC = () => {
         setConfirmedOrder(data.data);
         clearCart();
       } else {
-        setError(data.error || "Failed to place order. Please review your cart and details.");
+        setError(data.error || t("checkout.errorFailed"));
       }
     } catch (err: any) {
-      setError(err.message || "Failed to communicate with checkout service.");
+      setError(err.message || t("checkout.errorFailed"));
     } finally {
       setLoading(false);
     }
@@ -133,9 +133,12 @@ export const CheckoutModal: React.FC = () => {
 
   // WhatsApp confirmation message link
   const orderRef = confirmedOrder?.orderNumber || confirmedOrder?.id || "";
-  const whatsappText = encodeURIComponent(
-    `Hello ${settings.storeName}, I just placed order #${orderRef} for ${formatPrice(confirmedOrder?.totalAmount || grandTotal)}. Please confirm receipt and dispatch schedule.`
-  );
+  const totalStr = formatPrice(confirmedOrder?.totalAmount || grandTotal);
+  const whatsappMsg =
+    language === "ar"
+      ? `مرحباً ${settings.storeName}، لقد قمت للتو بتأكيد الطلب رقم #${orderRef} بقيمة ${totalStr}. يرجى تأكيد موعد التوصيل.`
+      : `Bonjour ${settings.storeName}, je viens de passer la commande #${orderRef} d'un montant de ${totalStr}. Merci de me confirmer la réception.`;
+  const whatsappText = encodeURIComponent(whatsappMsg);
   const cleanWhatsapp = (settings.whatsapp || "96170123456").replace(/[^\d]/g, "");
   const whatsappUrl = `https://wa.me/${cleanWhatsapp}?text=${whatsappText}`;
 
@@ -324,11 +327,11 @@ export const CheckoutModal: React.FC = () => {
                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none bg-white"
                 >
                   {CITIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c === "Autre ville / Other City" ? t("checkout.otherCity") : c}
-                    </option>
+                      <option key={c.fr} value={c.fr}>
+                        {language === "ar" ? c.ar : c.fr}
+                      </option>
                   ))}
-                </select>
+                    </select>
               </div>
 
               {/* Detailed Street Address */}
@@ -401,8 +404,8 @@ export const CheckoutModal: React.FC = () => {
                       className="text-[#d10024] focus:ring-[#d10024]"
                     />
                     <div>
-                      <p>Card on Delivery</p>
-                      <p className="text-[10px] text-gray-500 font-normal">POS terminal card</p>
+                      <p>{t("checkout.cardTitle")}</p>
+                      <p className="text-[10px] text-gray-500 font-normal">{t("checkout.cardDesc")}</p>
                     </div>
                   </label>
                 </div>

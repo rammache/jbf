@@ -124,7 +124,7 @@ export const CartDrawer: React.FC = () => {
                         <button
                           onClick={() => removeFromCart(item.key)}
                           className="text-gray-400 hover:text-red-600 transition ml-2 rtl:ml-0 rtl:mr-2"
-                          aria-label="Remove item"
+                          aria-label={t("cart.removeItem")}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -218,7 +218,7 @@ export const CartDrawer: React.FC = () => {
                       setApplyingCoupon(true);
                       const res = await applyCoupon(couponInput);
                       if (!res.success) {
-                        setCouponError(res.error || "Invalid coupon");
+                        setCouponError(res.error || t("cart.invalidCoupon"));
                       } else {
                         setCouponInput("");
                       }

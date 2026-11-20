@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { SupportedLanguage, translations } from "../i18n/translations";
+import { SupportedLanguage, translations, categoryTranslations } from "../i18n/translations";
 
 interface LanguageContextType {
   language: SupportedLanguage;
@@ -8,6 +8,7 @@ interface LanguageContextType {
   setLanguage: (lang: SupportedLanguage) => void;
   toggleLanguage: () => void;
   t: (key: string, params?: Record<string, string | number>) => string;
+  tCategory: (nameOrSlug: string) => string;
   currencySymbol: string;
 }
 
@@ -107,6 +108,18 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     [language]
   );
 
+  const tCategory = useCallback(
+    (nameOrSlug: string): string => {
+      if (!nameOrSlug) return "";
+      const langDict = categoryTranslations[language] || categoryTranslations.fr;
+      if (langDict[nameOrSlug]) return langDict[nameOrSlug];
+      const lower = nameOrSlug.toLowerCase().trim();
+      if (langDict[lower]) return langDict[lower];
+      return nameOrSlug;
+    },
+    [language]
+  );
+
   return (
     <LanguageContext.Provider
       value={{
@@ -116,6 +129,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setLanguage,
         toggleLanguage,
         t,
+        tCategory,
         currencySymbol
       }}
     >
@@ -153,6 +167,10 @@ export const useLanguage = (): LanguageContextType => {
           return res;
         }
         return val;
+      },
+      tCategory: (nameOrSlug: string) => {
+        if (!nameOrSlug) return "";
+        return categoryTranslations.fr[nameOrSlug] || nameOrSlug;
       },
       currencySymbol: "DH"
     };

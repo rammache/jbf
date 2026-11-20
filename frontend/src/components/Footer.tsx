@@ -9,7 +9,7 @@ import { BrandLogo } from "./BrandLogo";
 export const Footer: React.FC = () => {
   const { categories } = useCategories();
   const { settings } = useSettings();
-  const { t } = useLanguage();
+  const { t, tCategory } = useLanguage();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -28,7 +28,7 @@ export const Footer: React.FC = () => {
       const data = await res.json();
       if (data.success) {
         setStatus("success");
-        setMessage("Thanks for subscribing to Jabour Phone updates.");
+        setMessage(t("footer.newsletterSuccess"));
         setEmail("");
       } else {
         setStatus("error");
@@ -48,7 +48,7 @@ export const Footer: React.FC = () => {
           <div className="space-y-4">
             <BrandLogo variant="light" size="md" />
             <p className="text-xs text-gray-400 leading-relaxed">
-              {settings.aboutText || "Technology without the markup. Certified smartphones, authentic accessories, and guaranteed electronics in Lebanon."}
+              {t("footer.aboutStore")}
             </p>
             <div className="space-y-1.5 pt-1 text-xs text-gray-400">
               <div className="flex items-center gap-2">
@@ -77,7 +77,7 @@ export const Footer: React.FC = () => {
                       to={`/shop?category=${encodeURIComponent(cat.slug || cat.name)}`}
                       className="hover:text-[#d10024] transition"
                     >
-                      {cat.name}
+                      {tCategory(cat.name)}
                     </Link>
                   </li>
                 ))

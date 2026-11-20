@@ -1,5 +1,34 @@
 export type SupportedLanguage = "fr" | "ar";
 
+export const categoryTranslations: Record<SupportedLanguage, Record<string, string>> = {
+  fr: {
+    "Smart Phones": "Smartphones",
+    "smart-phones": "Smartphones",
+    "smartphones": "Smartphones",
+    "Tablets": "Tablettes",
+    "tablets": "Tablettes",
+    "Audio & Wearables": "Audio & Montres",
+    "audio-wearables": "Audio & Montres",
+    "Accessories": "Accessoires",
+    "accessories": "Accessoires",
+    "Laptops & MacBooks": "PC Portables & Mac",
+    "laptops-macbooks": "PC Portables & Mac"
+  },
+  ar: {
+    "Smart Phones": "الهواتف الذكية",
+    "smart-phones": "الهواتف الذكية",
+    "smartphones": "الهواتف الذكية",
+    "Tablets": "الأجهزة اللوحية",
+    "tablets": "الأجهزة اللوحية",
+    "Audio & Wearables": "السماعات والأجهزة الذكية",
+    "audio-wearables": "السماعات والأجهزة الذكية",
+    "Accessories": "الإكسسوارات",
+    "accessories": "الإكسسوارات",
+    "Laptops & MacBooks": "الحواسيب المحمولة",
+    "laptops-macbooks": "الحواسيب المحمولة"
+  }
+};
+
 export interface Translations {
   nav: {
     home: string;
@@ -45,6 +74,12 @@ export interface Translations {
     subtitle: string;
     ctaShop: string;
     ctaPromo: string;
+    featuredArrival: string;
+    verifiedAuthentic: string;
+    viewDetails: string;
+    shopAll: string;
+    specialOffer: string;
+    verifiedStock: string;
   };
   features: {
     shippingTitle: string;
@@ -65,6 +100,15 @@ export interface Translations {
     browseAll: string;
     explore: string;
     productsCount: string;
+    noProductsInDept: string;
+    checkBackSoon: string;
+    viewAllProducts: string;
+    viewAllIn: string;
+    guaranteeBadge: string;
+    guaranteeTitle: string;
+    guaranteeP1: string;
+    guaranteeP2: string;
+    guaranteeCta: string;
   };
   shop: {
     title: string;
@@ -129,6 +173,12 @@ export interface Translations {
     conditionNew: string;
     conditionRefurbished: string;
     conditionUsed: string;
+    notFoundTitle: string;
+    notFoundDesc: string;
+    browseCatalog: string;
+    reviewErrorRequired: string;
+    reviewSuccess: string;
+    reviewNetworkError: string;
   };
   cart: {
     title: string;
@@ -148,6 +198,8 @@ export interface Translations {
     removeCoupon: string;
     couponApplied: string;
     finish: string;
+    invalidCoupon: string;
+    removeItem: string;
   };
   checkout: {
     title: string;
@@ -161,6 +213,11 @@ export interface Translations {
     paymentMethod: string;
     codTitle: string;
     codDesc: string;
+    cardTitle: string;
+    cardDesc: string;
+    errorRequired: string;
+    errorPhone: string;
+    errorFailed: string;
     confirmOrder: string;
     orderSuccess: string;
     orderPlacedDesc: string;
@@ -196,8 +253,17 @@ export interface Translations {
     newsletterTitle: string;
     newsletterDesc: string;
     newsletterPlaceholder: string;
+    newsletterSuccess: string;
     subscribe: string;
     copyright: string;
+  };
+  notFound: {
+    badge: string;
+    title: string;
+    desc: string;
+    backHome: string;
+    browseCatalog: string;
+    contactUs: string;
   };
   pages: {
     about: {
@@ -350,7 +416,13 @@ export const translations: Record<SupportedLanguage, Translations> = {
       subtitle:
         "Découvrez notre sélection de smartphones certifiés, accessoires haut de gamme et produits technologiques au meilleur prix avec livraison express.",
       ctaShop: "Explorer le catalogue",
-      ctaPromo: "Offres du moment"
+      ctaPromo: "Offres du moment",
+      featuredArrival: "Arrivage Vedette",
+      verifiedAuthentic: "100% Authentique & Garanti",
+      viewDetails: "Voir fiche produit",
+      shopAll: "Toute la boutique",
+      specialOffer: "Offre Spéciale",
+      verifiedStock: "Stock Vérifié"
     },
     features: {
       shippingTitle: "Livraison Rapide",
@@ -370,7 +442,16 @@ export const translations: Record<SupportedLanguage, Translations> = {
       highestRatedDesc: "Les appareils les plus plébiscités par nos clients à travers le Maroc.",
       browseAll: "Tout Afficher",
       explore: "Découvrir",
-      productsCount: "produits"
+      productsCount: "produits",
+      noProductsInDept: "Aucun produit disponible dans ce rayon pour le moment.",
+      checkBackSoon: "Revenez bientôt ou parcourez notre catalogue complet.",
+      viewAllProducts: "Voir tous les produits",
+      viewAllIn: "Voir tout dans {category}",
+      guaranteeBadge: "Garantie Qualité & Authenticité",
+      guaranteeTitle: "Appareils 100% Authentiques.",
+      guaranteeP1: "Chaque appareil est vérifié pour son authenticité, la santé de sa batterie et sa compatibilité avec les réseaux marocains. Nous nous approvisionnons exclusivement auprès de distributeurs officiels certifiés avec numéros de série IMEI vérifiés.",
+      guaranteeP2: "Avant toute livraison, nos techniciens contrôlent minutieusement la réactivité tactile, les caméras, la charge rapide et l'intégrité de l'emballage. C'est l'engagement fondamental de Jabour Phone.",
+      guaranteeCta: "En savoir plus sur nos engagements"
     },
     shop: {
       title: "Notre Catalogue",
@@ -434,7 +515,13 @@ export const translations: Record<SupportedLanguage, Translations> = {
       freeReturnSupport: "Échange & SAV dédié",
       conditionNew: "Neuf scellé",
       conditionRefurbished: "Reconditionné certifié",
-      conditionUsed: "Occasion vérifiée"
+      conditionUsed: "Occasion vérifiée",
+      notFoundTitle: "Produit introuvable",
+      notFoundDesc: "Nous n'avons pas pu trouver cet appareil dans notre catalogue.",
+      browseCatalog: "Parcourir la boutique",
+      reviewErrorRequired: "Veuillez renseigner votre nom et votre commentaire.",
+      reviewSuccess: "Merci ! Votre avis vérifié a été publié avec succès.",
+      reviewNetworkError: "Erreur réseau lors de l'envoi de votre avis."
     },
     cart: {
       title: "Mon Panier",
@@ -453,7 +540,9 @@ export const translations: Record<SupportedLanguage, Translations> = {
       continueShopping: "Continuer mes achats",
       removeCoupon: "Retirer",
       couponApplied: "Code appliqué avec succès !",
-      finish: "Finition"
+      finish: "Finition",
+      invalidCoupon: "Code promo non valide.",
+      removeItem: "Retirer l'article"
     },
     checkout: {
       title: "Finaliser votre commande",
@@ -467,6 +556,11 @@ export const translations: Record<SupportedLanguage, Translations> = {
       paymentMethod: "Mode de règlement",
       codTitle: "Paiement à la livraison (Cash on Delivery)",
       codDesc: "Vous ne payez en espèces qu'après réception et vérification physique de votre colis.",
+      cardTitle: "Paiement par carte à la livraison",
+      cardDesc: "Réglez par carte bancaire auprès du livreur (TPE sans contact)",
+      errorRequired: "Veuillez remplir tous les champs obligatoires marqués d'un astérisque (*).",
+      errorPhone: "Veuillez entrer un numéro de téléphone valide d'au moins 6 chiffres.",
+      errorFailed: "Échec de l'enregistrement de la commande. Veuillez vérifier vos informations.",
       confirmOrder: "Confirmer ma commande",
       orderSuccess: "Merci pour votre commande !",
       orderPlacedDesc:
@@ -504,8 +598,17 @@ export const translations: Record<SupportedLanguage, Translations> = {
       newsletterTitle: "Restez Connecté",
       newsletterDesc: "Inscrivez-vous pour recevoir nos offres promotionnelles et nouveaux arrivages.",
       newsletterPlaceholder: "Votre adresse e-mail...",
+      newsletterSuccess: "Merci pour votre inscription aux nouveautés Jabour Phone.",
       subscribe: "S'inscrire",
       copyright: "Tous droits réservés. Spécialiste smartphone au Maroc."
+    },
+    notFound: {
+      badge: "Erreur 404",
+      title: "Page Introuvable",
+      desc: "La page ou le produit que vous recherchez n'existe pas dans notre catalogue, a été déplacé ou l'adresse est incorrecte.",
+      backHome: "Retour à l'accueil",
+      browseCatalog: "Explorer la boutique",
+      contactUs: "Contactez-nous"
     },
     pages: {
       about: {
@@ -661,7 +764,13 @@ export const translations: Record<SupportedLanguage, Translations> = {
       subtitle:
         "اكتشف تشكيلتنا المختارة من الهواتف الذكية المعتمدة، الإكسسوارات الأصلية والأجهزة الإلكترونية بأفضل الأسعار مع توصيل سريع.",
       ctaShop: "تصفح المنتجات",
-      ctaPromo: "عروض اليوم"
+      ctaPromo: "عروض اليوم",
+      featuredArrival: "وصل حديثاً ومميز",
+      verifiedAuthentic: "أصلي ومضمون 100%",
+      viewDetails: "عرض تفاصيل المنتج",
+      shopAll: "تصفح جميع المنتجات",
+      specialOffer: "عرض خاص",
+      verifiedStock: "مخزون موثق ومضمون"
     },
     features: {
       shippingTitle: "توصيل سريع",
@@ -681,7 +790,16 @@ export const translations: Record<SupportedLanguage, Translations> = {
       highestRatedDesc: "الأجهزة الإلكترونية الأكثر طلباً وإشادة من زبائننا في المغرب.",
       browseAll: "عرض الكل",
       explore: "استكشف",
-      productsCount: "منتج"
+      productsCount: "منتج",
+      noProductsInDept: "لا توجد أجهزة متوفرة في هذا القسم حالياً.",
+      checkBackSoon: "تفضل بزيارتنا قريباً أو استكشف تشكيلتنا الكاملة في المتجر.",
+      viewAllProducts: "عرض جميع المنتجات",
+      viewAllIn: "عرض كل منتجات {category}",
+      guaranteeBadge: "ضمان الجودة والأصالة المعتمد",
+      guaranteeTitle: "أجهزة أصلية 100% مضمونة.",
+      guaranteeP1: "كل جهاز معتمد ويتم فحصه بعناية للتأكد من أصالته، صحة البطارية وتوافقه التام مع شبكات الاتصال المغربية. نستورد حصرياً من الموزعين الرسميين بأرقام IMEI قانونية وضمانات معتمدة.",
+      guaranteeP2: "قبل تسليم أي طلب لشركة الشحن، يقوم خبراؤنا بفحص استجابة الشاشة، دقة الكاميرات، الشحن وسلامة العلبة. هذا هو عهد جبور فون لجميع زبائننا في المغرب.",
+      guaranteeCta: "تعرف على معايير الجودة لدينا"
     },
     shop: {
       title: "متجر جبور فون",
@@ -745,7 +863,13 @@ export const translations: Record<SupportedLanguage, Translations> = {
       freeReturnSupport: "إمكانية الاستبدال والدعم",
       conditionNew: "جديد أصلي بالعلبة",
       conditionRefurbished: "مجدد معتمد بحالة ممتازة",
-      conditionUsed: "مستعمل أصلي تم فحصه"
+      conditionUsed: "مستعمل أصلي تم فحصه",
+      notFoundTitle: "المنتج غير موجود",
+      notFoundDesc: "لم نتمكن من العثور على هذا الجهاز في متجرنا.",
+      browseCatalog: "تصفح المتجر",
+      reviewErrorRequired: "يرجى كتابة اسمك الكامل وملاحظاتك حول الجهاز.",
+      reviewSuccess: "شكراً لك ! تم نشر تقييمك الموثق بنجاح.",
+      reviewNetworkError: "حدث خطأ في الاتصال أثناء إرسال التقييم."
     },
     cart: {
       title: "سلة المشتريات",
@@ -764,7 +888,9 @@ export const translations: Record<SupportedLanguage, Translations> = {
       continueShopping: "مواصلة التسوق",
       removeCoupon: "حذف",
       couponApplied: "تم تفعيل كود الخصم بنجاح !",
-      finish: "اللون"
+      finish: "اللون",
+      invalidCoupon: "كود الخصم غير صالح.",
+      removeItem: "حذف المنتج"
     },
     checkout: {
       title: "إتمام عملية الشراء",
@@ -778,6 +904,11 @@ export const translations: Record<SupportedLanguage, Translations> = {
       paymentMethod: "طريقة الدفع",
       codTitle: "الدفع نقداً عند الاستلام (Cash on Delivery)",
       codDesc: "لا تدفع أي مبلغ حتى تستلم طلبك وتتحقق منه بنفسك عند باب بيتك.",
+      cardTitle: "الدفع بالبطاقة البنكية عند الاستلام",
+      cardDesc: "ادفع ببطاقتك البنكية لمندوب التوصيل عبر جهاز الدفع TPE",
+      errorRequired: "يرجى ملء جميع الحقول الإلزامية التي تحتوي على علامة (*).",
+      errorPhone: "يرجى إدخال رقم هاتف محمول صحيح مكون من 6 أرقام على الأقل.",
+      errorFailed: "تعذر تسجيل الطلب، يرجى مراجعة بياناتك والمحاولة مجدداً.",
       confirmOrder: "تأكيد الطلب الآن",
       orderSuccess: "شكراً لطلبك من جبور فون!",
       orderPlacedDesc:
@@ -815,8 +946,17 @@ export const translations: Record<SupportedLanguage, Translations> = {
       newsletterTitle: "النشرة البريدية",
       newsletterDesc: "اشترك لتصلك أحدث العروض الحصرية وتخفيضات الهواتف.",
       newsletterPlaceholder: "أدخل بريدك الإلكتروني...",
+      newsletterSuccess: "شكراً لاشتراكك في نشرة جبور فون البريدية.",
       subscribe: "اشتراك",
       copyright: "جميع الحقوق محفوظة. جبور فون المغرب."
+    },
+    notFound: {
+      badge: "خطأ 404",
+      title: "الصفحة غير موجودة",
+      desc: "الصفحة أو المنتج الذي تبحث عنه غير متوفر حالياً في متجرنا أو تم نقله إلى رابط آخر.",
+      backHome: "العودة للرئيسية",
+      browseCatalog: "تصفح المتجر",
+      contactUs: "تواصل معنا"
     },
     pages: {
       about: {

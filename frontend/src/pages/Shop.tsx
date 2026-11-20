@@ -10,7 +10,7 @@ import { SEO } from "../components/SEO";
 export const Shop: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { categories } = useCategories();
-  const { t, currencySymbol } = useLanguage();
+  const { t, tCategory, currencySymbol } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -91,7 +91,11 @@ export const Shop: React.FC = () => {
       c.slug.toLowerCase() === currentCategory.toLowerCase() ||
       c.name.toLowerCase() === currentCategory.toLowerCase()
   );
-  const displayCategoryTitle = activeCategoryObj ? activeCategoryObj.name : currentCategory || t("shop.title");
+  const displayCategoryTitle = activeCategoryObj
+    ? tCategory(activeCategoryObj.name)
+    : currentCategory
+      ? tCategory(currentCategory)
+      : t("shop.title");
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -186,7 +190,7 @@ export const Shop: React.FC = () => {
                         className="accent-[#d10024]"
                       />
                       <span className={`font-medium transition-colors ${isSelected ? "text-[#d10024] font-bold" : "text-gray-700 group-hover:text-black"}`}>
-                        {cat.name}
+                        {tCategory(cat.name)}
                       </span>
                     </span>
                     {cat._count?.products !== undefined && (

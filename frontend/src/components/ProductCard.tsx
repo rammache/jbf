@@ -24,7 +24,7 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
   const { formatPrice } = useSettings();
-  const { t } = useLanguage();
+  const { t, tCategory } = useLanguage();
   const [isHovered, setIsHovered] = useState(false);
   const [selectedFinish, setSelectedFinish] = useState(
     product.finishes && product.finishes.length > 0 ? product.finishes[0] : ""
@@ -120,7 +120,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div>
           <div className="flex items-center justify-between text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">
             <span>{product.brand}</span>
-            <span>{typeof product.category === "object" && product.category ? product.category.name : product.category}</span>
+            <span>{tCategory(typeof product.category === "object" && product.category ? product.category.name : product.category)}</span>
           </div>
 
           <h3 className="font-bold text-base text-[#15161d] group-hover:text-[#d10024] transition-colors line-clamp-1">
