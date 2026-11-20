@@ -147,7 +147,58 @@ Your store is now live with automatic HTTPS!
 
 ---
 
-## Option 4: Split Hosting (Vercel Frontend + Railway/Render Backend)
+## Option 4: Full-Stack Vercel Deployment (Frontend + Backend on Vercel)
+
+This project is pre-configured with Vercel Multi-Services (`vercel.json`), allowing both the **Vite React Frontend** and **Express REST API Backend** to run together on Vercel under a single domain.
+
+### 1. Database (Neon PostgreSQL)
+Vercel serverless functions require an external hosted PostgreSQL database. We use **Neon Serverless PostgreSQL**:
+- Ensure your Neon connection strings are ready (found in `backend/.env`):
+  - `DATABASE_URL`: Pooled connection string with `?sslmode=require&pgbouncer=true`.
+  - `DIRECT_URL`: Direct unpooled connection string with `?sslmode=require`.
+- Deploy the database schema before deploying:
+  ```bash
+  npm run prisma:deploy --prefix backend
+  # Optional: Seed initial categories and super admin
+  npm run prisma:seed --prefix backend
+  ```
+
+### 2. Connect Repository to Vercel
+1. Push your repository to GitHub:
+   ```bash
+   git push origin main
+   ```
+2. Go to the [Vercel Dashboard](https://vercel.com/new) and click **"Add New..." -> "Project"**.
+3. Import your GitHub repository (`jbf`).
+4. Keep the **Root Directory** as `./` (Root). Vercel reads `vercel.json` and automatically builds both `frontend` and `backend`.
+
+### 3. Configure Environment Variables in Vercel
+In the Vercel project configuration screen (under **Environment Variables**), add the following:
+```env
+DATABASE_URL=your_pooled_neon_connection_string
+DIRECT_URL=your_direct_neon_connection_string
+JWT_SECRET=your_32_plus_char_random_jwt_secret
+NODE_ENV=production
+ADMIN_EMAIL=jabour@jabourphone.com
+ADMIN_PASSWORD=YourStrongAdminPassword2026!
+```
+
+> **Note on Image Uploads:** Because Vercel functions have an ephemeral filesystem (`/tmp`), local uploads are not permanent. For persistent product/category photos, add your free **Cloudinary** credentials:
+> ```env
+> CLOUDINARY_CLOUD_NAME=your_cloud_name
+> CLOUDINARY_API_KEY=your_api_key
+> CLOUDINARY_API_SECRET=your_api_secret
+> ```
+
+### 4. Deploy
+Click **Deploy**. Vercel will build both services:
+- `/` and all storefront routes are served instantly by the fast Vite static CDN.
+- `/api/*`, `/health`, and `/uploads/*` are automatically routed to the Express API.
+- Zero CORS or third-party cookie issues because frontend and backend run on the exact same domain!
+
+---
+
+## Option 5: Split Hosting (Vercel Frontend + Railway/Render Backend)
 
 1. **Deploy Backend on Railway or Render:**
    - Configure `FRONTEND_URL=https://jabourphone.com`.
