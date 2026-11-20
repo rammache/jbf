@@ -112,11 +112,17 @@ const uploadsDir = getUploadsDir();
   app.use(errorHandler);
 
   let server: ReturnType<typeof app.listen> | null = null;
-    if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) {
-      server = app.listen(PORT, () => {
-        console.log(`Jabour Phone Express Server running on http://localhost:${PORT}`);
-      });
-      setupGracefulShutdown(server);
-    }
+  const isServerless =
+    Boolean(process.env.VERCEL) ||
+    Boolean(process.env.VERCEL_ENV) ||
+    Boolean(process.env.NOW_REGION) ||
+    Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
 
-    export default app;
+  if (process.env.NODE_ENV !== "test" && !isServerless) {
+    server = app.listen(PORT, () => {
+      console.log(`Jabour Phone Express Server running on http://localhost:${PORT}`);
+    });
+    setupGracefulShutdown(server);
+  }
+
+  export default app;

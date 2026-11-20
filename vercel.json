@@ -8,7 +8,8 @@
     "backend": {
       "root": "backend",
       "framework": "express",
-      "buildCommand": "npm run build"
+      "entrypoint": "index.js",
+      "buildCommand": "prisma generate && tsc"
     }
   },
   "rewrites": [
