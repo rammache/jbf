@@ -19,7 +19,7 @@ const CITIES = [
   "El Jadida",
   "Nador",
   "Mohammédia",
-  "Autre ville / Other City"
+  "Autre ville / مدينة أخرى"
 ];
 
 export const CheckoutModal: React.FC = () => {
@@ -379,8 +379,8 @@ export const CheckoutModal: React.FC = () => {
                       className="text-[#d10024] focus:ring-[#d10024]"
                     />
                     <div>
-                      <p>Cash on Delivery</p>
-                      <p className="text-[10px] text-gray-500 font-normal">Pay cash to courier</p>
+                      <p>Paiement à la livraison / الدفع عند الاستلام</p>
+                      <p className="text-[10px] text-gray-500 font-normal">Pay cash upon receipt & inspection</p>
                     </div>
                   </label>
 

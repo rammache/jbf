@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { LanguageProvider } from "./context/LanguageContext";
 import { AuthProvider } from "./context/AuthContext";
 import { SettingsProvider } from "./context/SettingsContext";
 import { CategoryProvider } from "./context/CategoryContext";
@@ -33,9 +34,10 @@ export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <ErrorBoundary>
-        <AuthProvider>
-          <SettingsProvider>
-            <CategoryProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <SettingsProvider>
+              <CategoryProvider>
               <Routes>
                 <Route element={<GuestOnlyRoute />}>
                   <Route path="/admin/login" element={<AdminLogin />} />
@@ -72,8 +74,9 @@ export const App: React.FC = () => {
             </CategoryProvider>
           </SettingsProvider>
         </AuthProvider>
-      </ErrorBoundary>
-    </BrowserRouter>
+      </LanguageProvider>
+    </ErrorBoundary>
+  </BrowserRouter>
   );
 };
 

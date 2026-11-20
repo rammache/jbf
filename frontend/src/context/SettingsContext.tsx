@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { StoreSettings } from "../types";
 import { formatPrice as formatPriceUtil } from "../utils/currency";
+import { useLanguage } from "./LanguageContext";
 
 export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   id: 1,
@@ -63,12 +64,21 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     fetchSettings();
   }, [fetchSettings]);
 
+  const { language, currencySymbol: langCurrencySymbol } = useLanguage();
+
   const formatPrice = useCallback(
     (amount: number | string | null | undefined, customSymbol?: string) => {
-      const activeSymbol = customSymbol || settings.currencySymbol || "DH";
-      return formatPriceUtil(amount, activeSymbol);
+      let activeSymbol = customSymbol;
+      if (!activeSymbol) {
+        if (!settings.currencySymbol || settings.currencySymbol === "DH" || settings.currencySymbol === "MAD") {
+          activeSymbol = langCurrencySymbol;
+        } else {
+          activeSymbol = settings.currencySymbol;
+        }
+      }
+      return formatPriceUtil(amount, activeSymbol || "DH", language);
     },
-    [settings.currencySymbol]
+    [settings.currencySymbol, langCurrencySymbol, language]
   );
 
   return (

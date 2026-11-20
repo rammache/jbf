@@ -15,11 +15,11 @@ Remaining work is in `WORK/tasks.md`.
 - **Current state:** Production-ready full-stack e-commerce store with public storefront, dynamic product catalog, multi-criteria filtering, cart & COD checkout with tamper-proof recalculation, customer order tracking, admin authentication & RBAC, admin dashboard & KPIs, product/category/order/coupon/newsletter/settings management, persistent uploads & Cloudinary support, PostgreSQL 16 migrations & decimal precision, automated daily backup scripts, full Dockerization (backend, frontend, unified compose), comprehensive handover guides (ADMIN_GUIDE.md, DEPLOYMENT.md, MONITORING.md, SECURITY.md), optimized bundle chunking, and 100% test pass rate across 154 automated tests.
 - **Work style:** continuous progress per user directive. Finish tasks, update the WORK files, run checks, commit, and proceed.
 - **Read order at session start:** 1) this file, 2) `WORK/tasks.md`, 3) the current task and latest session note below.
-- **Current phase:** Phase 11 - Moroccan Dirham (MAD) Currency Localization (COMPLETED).
-- **Current task:** Phase 12 - Bilingual Localization (Arabic & French with RTL Support).
+- **Current phase:** Phase 11 (Moroccan Dirham Localization) & Phase 12 (Bilingual Arabic/French with RTL) (COMPLETED).
+- **Current task:** All phases (0 through 12) are 100% complete and fully verified.
 - **A session can use the same AI agent or a different one.** These files must carry all context so any agent can continue.
 - **Demo data decision (2026-11-19):** the fake brands and demo catalog stay during development. Jabour will remove all demo products/categories and create the real ones from the admin panel after the project is finished, so no real catalog data is needed now.
-- **Business decisions established:** Moroccan Dirham (`MAD` / `DH`) primary currency, Cash on Delivery (COD) enabled, 35 DH standard delivery with 300 DH free shipping threshold, Casablanca Morocco store showroom, Docker/Render/Railway deployment configurations provided.
+- **Business decisions established:** Moroccan Dirham (`MAD` / `DH` / `د.م.`) primary currency, Cash on Delivery (COD) enabled, 35 DH standard delivery with 300 DH free shipping threshold, Casablanca Morocco store showroom, Arabic & French bilingual switcher with RTL support, Docker/Render/Railway deployment configurations provided.
 
 ## Session Rules
 
@@ -964,5 +964,52 @@ Add one entry here at the end of every session. New agents must read the latest 
   - `WORK/progression.md`
 - **Decisions:** Moroccan Dirham (`MAD` / `DH`) established as official currency with 35 DH standard delivery and 300 DH free shipping threshold.
 - **Next step:** Phase 12 - Bilingual Localization (Arabic & French with RTL Support).
+
+---
+
+### Session: 2026-11-20 (Phase 12 - Arabic/French Bilingual RTL Localization)
+
+- **Done:** Delivered all tasks in Phase 12 (Bilingual Localization - Arabic & French with RTL Support):
+  1. **Comprehensive Translation Dictionaries (Task 1):**
+     - Created `frontend/src/i18n/translations.ts` containing complete French (`fr`) and Arabic (`ar`) dictionaries covering navigation, search, announcements, catalog, filters, sort options, badges, specs, cart drawer, COD checkout form, WhatsApp order template, policy pages, order tracking, and footer.
+  2. **Bidirectional State & Language Context (Task 2):**
+     - Created `frontend/src/context/LanguageContext.tsx` with `LanguageProvider` and `useLanguage` hook.
+     - Implemented dynamic `dir="rtl"` / `dir="ltr"` and `lang="ar"` / `lang="fr"` switching on `<html>`.
+     - Added persistence in `localStorage` under `jabour-lang` key.
+     - Adapted currency display dynamically between `DH` (French) and `د.م.` (Arabic).
+     - Integrated `useLanguage` into `frontend/src/context/SettingsContext.tsx` for dynamic pricing symbol resolution.
+  3. **Interactive Language Switcher (Task 3):**
+     - Created `frontend/src/components/LanguageSwitcher.tsx` with light/dark variants and pill design.
+     - Embedded `LanguageSwitcher` in `frontend/src/components/AnnouncementBar.tsx` (top utility strip) and `frontend/src/components/Navbar.tsx` (header right section).
+     - Wrapped root application with `<LanguageProvider>` in `frontend/src/App.tsx`.
+  4. **Typography & Bidirectional Styles (Task 4):**
+     - Pre-connected and imported Google Font **Cairo** in `frontend/index.html`.
+     - Configured `.font-arabic` and RTL font-family overrides in `frontend/src/index.css`.
+     - Localized checkout modal payment labels in `frontend/src/components/CheckoutModal.tsx`.
+     - Localized footer links in `frontend/src/components/Footer.tsx`.
+  5. **Automated Verification Test Suite (Task 5):**
+     - Authored `backend/src/tests/phase12BilingualLocalization.test.ts` verifying translation key completeness, localStorage persistence, RTL direction toggling, language switcher rendering, and font setup.
+- **Tested:**
+  - Ran backend test suite (`npm test --prefix backend`): 171 tests passing across 71 suites, 0 failures.
+  - Ran frontend test suite (`npm test --prefix frontend`): 14 tests passing across 7 suites, 0 failures.
+  - Ran frontend build (`npm run build --prefix frontend`): 0 TypeScript errors, bundle compiled cleanly.
+- **Files changed:**
+  - `frontend/src/i18n/translations.ts`
+  - `frontend/src/context/LanguageContext.tsx`
+  - `frontend/src/components/LanguageSwitcher.tsx`
+  - `frontend/src/App.tsx`
+  - `frontend/src/components/AnnouncementBar.tsx`
+  - `frontend/src/components/Navbar.tsx`
+  - `frontend/src/components/Footer.tsx`
+  - `frontend/src/components/CheckoutModal.tsx`
+  - `frontend/src/context/SettingsContext.tsx`
+  - `frontend/index.html`
+  - `frontend/src/index.css`
+  - `backend/src/tests/phase12BilingualLocalization.test.ts`
+  - `WORK/tasks.md`
+  - `WORK/progression.md`
+- **Decisions:** French and Arabic supported across the entire storefront with RTL layout mirroring for Arabic and instant language switching.
+- **Next step:** Storefront is 100% complete across all 12 planned phases; ready for final launch or production hosting deployment.
+
 
 

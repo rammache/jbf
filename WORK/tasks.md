@@ -293,18 +293,18 @@ The WORK files must carry enough context for any agent to continue without guess
 
 ## Phase 12 - Bilingual Localization (Arabic & French with RTL Support)
 
-- [ ] Set up frontend internationalization (i18n) system supporting Arabic (`ar`) and French (`fr`), with language persistence in localStorage. **P0**
-- [ ] Implement language switcher component in Navbar / Top Bar allowing seamless toggle between "العربية" and "Français". **P0**
-- [ ] Implement bidirectional layout support: dynamic `dir="rtl"` attribute on `<html>` / root, font selection (e.g. Cairo or Tajawal for Arabic), and RTL-adapted Tailwind styles (spacing, alignment, chevron icons). **P0**
-- [ ] Create translation dictionaries for Arabic (`ar`) and French (`fr`) covering all storefront UI:
+- [x] Set up frontend internationalization (i18n) system supporting Arabic (`ar`) and French (`fr`), with language persistence in localStorage. **P0**
+- [x] Implement language switcher component in Navbar / Top Bar allowing seamless toggle between "العربية" and "Français". **P0**
+- [x] Implement bidirectional layout support: dynamic `dir="rtl"` attribute on `<html>` / root, font selection (e.g. Cairo or Tajawal for Arabic), and RTL-adapted Tailwind styles (spacing, alignment, chevron icons). **P0**
+- [x] Create translation dictionaries for Arabic (`ar`) and French (`fr`) covering all storefront UI:
   - Header, Navbar, Search Bar, Announcements, and Footer. **P0**
   - Product catalog, filters, sorting options, badge labels (Sale, Out of stock, New), and product detail specifications. **P0**
   - Cart drawer, empty states, and discount coupon messages. **P0**
   - Checkout form labels, payment method descriptions (Cash on Delivery / الدفع عند الاستلام), and WhatsApp order template. **P0**
   - Informational pages: About Us, Contact, FAQ, Shipping, Returns, Privacy, and Terms. **P1**
   - Order tracking page, order status badges, and error messages. **P1**
-- [ ] Adapt currency display based on active language (e.g., `DH` in French, `د.م.` in Arabic). **P1**
-- [ ] Add automated tests for language switching, translation key completeness, and RTL attribute toggling. **P1**
+- [x] Adapt currency display based on active language (e.g., `DH` in French, `د.م.` in Arabic). **P1**
+- [x] Add automated tests for language switching, translation key completeness, and RTL attribute toggling. **P1**
 
 ---
 
@@ -322,4 +322,4 @@ The WORK files must carry enough context for any agent to continue without guess
 10. Phase 11: Moroccan Dirham (MAD) currency localization.
 11. Phase 12: Bilingual Arabic & French language switcher with RTL support.
 
-Phases 0 through 11 are 100% complete and verified. Storefront and backend fully localized in Moroccan Dirham (MAD). Phase 12 (Bilingual Arabic/French with RTL) is queued for implementation.
+Phases 0 through 12 are 100% complete and verified. Storefront and backend fully localized in Moroccan Dirham (MAD) with Arabic/French bilingual and bidirectional (RTL) support.

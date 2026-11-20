@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import { Check, Loader2, Phone, Mail, MapPin } from "lucide-react";
 import { useCategories } from "../context/CategoryContext";
 import { useSettings } from "../context/SettingsContext";
+import { useLanguage } from "../context/LanguageContext";
 import { BrandLogo } from "./BrandLogo";
 
 export const Footer: React.FC = () => {
   const { categories } = useCategories();
   const { settings } = useSettings();
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -66,7 +68,7 @@ export const Footer: React.FC = () => {
 
           {/* Quick shop */}
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-4">Shop</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-4">{t("footer.quickLinks")}</h3>
             <ul className="space-y-2 text-xs">
               {categories.length > 0 ? (
                 categories.map((cat) => (
@@ -82,7 +84,7 @@ export const Footer: React.FC = () => {
               ) : (
                 <li>
                   <Link to="/shop" className="hover:text-[#d10024] transition">
-                    All Products
+                    {t("nav.shop")}
                   </Link>
                 </li>
               )}
@@ -91,36 +93,36 @@ export const Footer: React.FC = () => {
 
           {/* Customer Service & Policies */}
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-4">Customer Care</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-4">{t("footer.customerService")}</h3>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link to="/track" className="hover:text-[#d10024] transition font-semibold text-gray-200">
-                  Track Your Order
+                  {t("nav.track")}
                 </Link>
               </li>
               <li>
                 <Link to="/contact" className="hover:text-[#d10024] transition">
-                  Contact Us &amp; Location
+                  {t("nav.contact")}
                 </Link>
               </li>
               <li>
                 <Link to="/faq" className="hover:text-[#d10024] transition">
-                  Frequently Asked Questions
+                  {t("nav.faq")}
                 </Link>
               </li>
               <li>
                 <Link to="/shipping" className="hover:text-[#d10024] transition">
-                  Shipping &amp; Cash on Delivery
+                  {t("nav.shipping")}
                 </Link>
               </li>
               <li>
                 <Link to="/returns" className="hover:text-[#d10024] transition">
-                  14-Day Returns &amp; Warranty
+                  {t("nav.returns")}
                 </Link>
               </li>
               <li>
                 <Link to="/about" className="hover:text-[#d10024] transition">
-                  Quality Guarantee
+                  {t("nav.about")}
                 </Link>
               </li>
             </ul>
@@ -128,9 +130,9 @@ export const Footer: React.FC = () => {
 
           {/* Newsletter */}
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-4">Newsletter</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-4">{t("footer.newsletterTitle")}</h3>
             <p className="text-xs text-gray-400 mb-3">
-              Restocks, price drops and the occasional hardware teardown. No launch hype.
+              {t("footer.newsletterDesc")}
             </p>
 
             {status === "success" ? (
@@ -145,15 +147,15 @@ export const Footer: React.FC = () => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="w-full bg-[#1e1f29] text-xs px-3 py-2.5 rounded-l text-white placeholder-gray-500 border border-gray-700 focus:outline-none focus:border-[#d10024]"
+                    placeholder={t("footer.newsletterPlaceholder")}
+                    className="w-full bg-[#1e1f29] text-xs px-3 py-2.5 rounded-l rtl:rounded-l-none rtl:rounded-r text-white placeholder-gray-500 border border-gray-700 focus:outline-none focus:border-[#d10024]"
                   />
                   <button
                     type="submit"
                     disabled={status === "loading"}
-                    className="bg-[#d10024] hover:bg-[#a7001d] text-white text-xs font-bold uppercase px-4 py-2.5 rounded-r transition flex items-center justify-center"
+                    className="bg-[#d10024] hover:bg-[#a7001d] text-white text-xs font-bold uppercase px-4 py-2.5 rounded-r rtl:rounded-r-none rtl:rounded-l transition flex items-center justify-center"
                   >
-                    {status === "loading" ? <Loader2 className="w-4 h-4 animate-spin" /> : "Join"}
+                    {status === "loading" ? <Loader2 className="w-4 h-4 animate-spin" /> : t("footer.subscribe")}
                   </button>
                 </div>
                 {status === "error" && (
