@@ -593,7 +593,7 @@ export const AdminProducts: React.FC = () => {
           <button
             type="button"
             onClick={openCreateModal}
-            className="inline-flex items-center space-x-2 rounded bg-[#d10024] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm hover:bg-[#b0001e] transition-colors"
+            className="inline-flex items-center space-x-2 rounded bg-[#0077fe] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm hover:bg-[#b0001e] transition-colors"
           >
             <Plus className="h-4 w-4" />
             <span>Add Product</span>
@@ -646,7 +646,7 @@ export const AdminProducts: React.FC = () => {
                 setPage(1);
               }}
               placeholder="Search title, brand, SKU, or slug..."
-              className="w-full rounded border border-gray-300 pl-9 pr-4 py-2 text-xs focus:border-[#d10024] focus:outline-none"
+              className="w-full rounded border border-gray-300 pl-9 pr-4 py-2 text-xs focus:border-[#0077fe] focus:outline-none"
             />
           </div>
           {search && (
@@ -673,7 +673,7 @@ export const AdminProducts: React.FC = () => {
                 setCategoryFilter(e.target.value);
                 setPage(1);
               }}
-              className="rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs text-gray-700 focus:border-[#d10024] focus:outline-none"
+              className="rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs text-gray-700 focus:border-[#0077fe] focus:outline-none"
             >
               <option value="">All Categories</option>
               {categories.map((c) => (
@@ -691,7 +691,7 @@ export const AdminProducts: React.FC = () => {
               setStatusFilter(e.target.value);
               setPage(1);
             }}
-            className="rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs text-gray-700 focus:border-[#d10024] focus:outline-none"
+            className="rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs text-gray-700 focus:border-[#0077fe] focus:outline-none"
           >
             <option value="all">Status: All (Active & Draft)</option>
             <option value="active">Active Only</option>
@@ -710,7 +710,7 @@ export const AdminProducts: React.FC = () => {
               setSortOrder(so as "asc" | "desc");
               setPage(1);
             }}
-            className="rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs text-gray-700 focus:border-[#d10024] focus:outline-none"
+            className="rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs text-gray-700 focus:border-[#0077fe] focus:outline-none"
           >
             <option value="createdAt-desc">Newest First</option>
             <option value="createdAt-asc">Oldest First</option>
@@ -777,7 +777,7 @@ export const AdminProducts: React.FC = () => {
                     type="checkbox"
                     checked={products.length > 0 && selectedIds.length === products.length}
                     onChange={handleSelectAll}
-                    className="rounded border-gray-400 text-[#d10024] focus:ring-[#d10024]"
+                    className="rounded border-gray-400 text-[#0077fe] focus:ring-[#0077fe]"
                   />
                 </th>
                 <th scope="col" className="px-4 py-3.5">
@@ -807,7 +807,7 @@ export const AdminProducts: React.FC = () => {
               {loading ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-gray-500">
-                    <Loader2 className="mx-auto h-6 w-6 animate-spin text-[#d10024]" />
+                    <Loader2 className="mx-auto h-6 w-6 animate-spin text-[#0077fe]" />
                     <span className="mt-2 block font-medium">Loading products...</span>
                   </td>
                 </tr>
@@ -842,7 +842,7 @@ export const AdminProducts: React.FC = () => {
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => handleToggleSelect(product.id)}
-                          className="rounded border-gray-300 text-[#d10024] focus:ring-[#d10024]"
+                          className="rounded border-gray-300 text-[#0077fe] focus:ring-[#0077fe]"
                         />
                       </td>
 
@@ -927,7 +927,7 @@ export const AdminProducts: React.FC = () => {
                           type="button"
                           onClick={() => handleToggleActive(product)}
                           title={product.isActive ? "Click to deactivate" : "Click to activate"}
-                          className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${product.isActive ? "bg-[#d10024]" : "bg-gray-300"
+                          className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${product.isActive ? "bg-[#0077fe]" : "bg-gray-300"
                             }`}
                         >
                           <span
@@ -1053,7 +1053,7 @@ export const AdminProducts: React.FC = () => {
                   type="button"
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`border-b-2 px-4 py-3 text-xs font-bold uppercase tracking-wider transition-colors ${activeTab === tab.id
-                      ? "border-[#d10024] text-[#d10024]"
+                      ? "border-[#0077fe] text-[#0077fe]"
                       : "border-transparent text-gray-500 hover:text-gray-900"
                     }`}
                 >
@@ -1085,7 +1085,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.title}
                         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                         placeholder="e.g. Apple iPhone 15 Pro Max 256GB"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1099,7 +1099,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.brand}
                         onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
                         placeholder="e.g. Apple, Samsung, Xiaomi"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1111,7 +1111,7 @@ export const AdminProducts: React.FC = () => {
                         required
                         value={formData.categoryId}
                         onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       >
                         <option value="">Select Category</option>
                         {categories.map((c) => (
@@ -1131,7 +1131,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.sku}
                         onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
                         placeholder="e.g. JBF-IP15PM-256"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm font-mono focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm font-mono focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1142,7 +1142,7 @@ export const AdminProducts: React.FC = () => {
                       <select
                         value={formData.condition}
                         onChange={(e) => setFormData({ ...formData, condition: e.target.value as any })}
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       >
                         <option value="NEW">Brand New / Sealed</option>
                         <option value="REFURBISHED">Refurbished / Certified</option>
@@ -1159,7 +1159,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.handle}
                         onChange={(e) => setFormData({ ...formData, handle: e.target.value })}
                         placeholder="Leave blank to auto-generate from title"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm font-mono text-gray-600 focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm font-mono text-gray-600 focus:border-[#0077fe] focus:outline-none"
                       />
                       {formMode === "edit" && (
                         <label className="mt-1.5 flex items-center space-x-2 text-xs text-gray-600">
@@ -1167,7 +1167,7 @@ export const AdminProducts: React.FC = () => {
                             type="checkbox"
                             checked={formData.regenerateHandle}
                             onChange={(e) => setFormData({ ...formData, regenerateHandle: e.target.checked })}
-                            className="rounded text-[#d10024] focus:ring-[#d10024]"
+                            className="rounded text-[#0077fe] focus:ring-[#0077fe]"
                           />
                           <span>Regenerate handle from updated title (may change product URL)</span>
                         </label>
@@ -1182,7 +1182,7 @@ export const AdminProducts: React.FC = () => {
                         type="checkbox"
                         checked={formData.isActive}
                         onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                        className="rounded h-4 w-4 text-[#d10024] focus:ring-[#d10024]"
+                        className="rounded h-4 w-4 text-[#0077fe] focus:ring-[#0077fe]"
                       />
                       <span className="text-xs font-bold uppercase tracking-wider text-gray-800">
                         Active on Storefront
@@ -1194,7 +1194,7 @@ export const AdminProducts: React.FC = () => {
                         type="checkbox"
                         checked={formData.isFeatured}
                         onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                        className="rounded h-4 w-4 text-[#d10024] focus:ring-[#d10024]"
+                        className="rounded h-4 w-4 text-[#0077fe] focus:ring-[#0077fe]"
                       />
                       <span className="text-xs font-bold uppercase tracking-wider text-gray-800">
                         Featured on Home Page
@@ -1220,7 +1220,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.price}
                         onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                         placeholder="e.g. 999.00"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm font-bold focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm font-bold focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1235,7 +1235,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.compare}
                         onChange={(e) => setFormData({ ...formData, compare: e.target.value })}
                         placeholder="Must be greater than selling price, e.g. 1099.00"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                       {formData.compare && parseFloat(formData.compare) <= parseFloat(formData.price || "0") && (
                         <p className="mt-1 text-xs text-red-600 font-medium">
@@ -1255,7 +1255,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.costPrice}
                         onChange={(e) => setFormData({ ...formData, costPrice: e.target.value })}
                         placeholder="Cost to buy from supplier, e.g. 750.00"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1268,7 +1268,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.supplier}
                         onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
                         placeholder="e.g. Official Distributor, Dubai Tech Wholesaler"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1282,7 +1282,7 @@ export const AdminProducts: React.FC = () => {
                         required
                         value={formData.stock}
                         onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm font-bold focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm font-bold focus:border-[#0077fe] focus:outline-none"
                       />
                       <p className="mt-1 text-[11px] text-gray-500">
                         Orders will be blocked when stock reaches 0.
@@ -1299,7 +1299,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.lowStockThreshold}
                         onChange={(e) => setFormData({ ...formData, lowStockThreshold: e.target.value })}
                         placeholder="Default: 5"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
                   </div>
@@ -1310,7 +1310,7 @@ export const AdminProducts: React.FC = () => {
               {activeTab === "media" && (
                 <div className="space-y-4">
                   {/* Upload Controls */}
-                  <div className="rounded-lg border-2 border-dashed border-gray-300 p-6 text-center hover:border-[#d10024] transition-colors">
+                  <div className="rounded-lg border-2 border-dashed border-gray-300 p-6 text-center hover:border-[#0077fe] transition-colors">
                     <UploadCloud className="mx-auto h-8 w-8 text-gray-400" />
                     <p className="mt-2 text-xs font-bold uppercase tracking-wider text-gray-700">
                       Upload Photos from Computer
@@ -1337,7 +1337,7 @@ export const AdminProducts: React.FC = () => {
                       value={imageUrlInput}
                       onChange={(e) => setImageUrlInput(e.target.value)}
                       placeholder="Or paste an image URL (https://...)"
-                      className="flex-1 rounded border border-gray-300 px-3 py-1.5 text-xs focus:border-[#d10024] focus:outline-none"
+                      className="flex-1 rounded border border-gray-300 px-3 py-1.5 text-xs focus:border-[#0077fe] focus:outline-none"
                     />
                     <button
                       type="button"
@@ -1367,7 +1367,7 @@ export const AdminProducts: React.FC = () => {
                               className="h-full w-full object-cover"
                             />
                             {index === 0 && (
-                              <span className="absolute top-1.5 left-1.5 rounded bg-[#d10024] px-1.5 py-0.5 text-[9px] font-black uppercase text-white shadow">
+                              <span className="absolute top-1.5 left-1.5 rounded bg-[#0077fe] px-1.5 py-0.5 text-[9px] font-black uppercase text-white shadow">
                                 Cover Photo
                               </span>
                             )}
@@ -1436,7 +1436,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.storage}
                         onChange={(e) => setFormData({ ...formData, storage: e.target.value })}
                         placeholder="e.g. 128GB, 256GB, 512GB, 1TB"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1449,7 +1449,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.ram}
                         onChange={(e) => setFormData({ ...formData, ram: e.target.value })}
                         placeholder="e.g. 8GB, 12GB, 16GB"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1462,7 +1462,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.screen}
                         onChange={(e) => setFormData({ ...formData, screen: e.target.value })}
                         placeholder="e.g. 6.7in Super Retina XDR OLED 120Hz"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1475,7 +1475,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.battery}
                         onChange={(e) => setFormData({ ...formData, battery: e.target.value })}
                         placeholder="e.g. 4422 mAh, 29W Fast Charging"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1488,7 +1488,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.camera}
                         onChange={(e) => setFormData({ ...formData, camera: e.target.value })}
                         placeholder="e.g. 48MP Main + 12MP Ultra-Wide + 5x Telephoto"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1501,7 +1501,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.processor}
                         onChange={(e) => setFormData({ ...formData, processor: e.target.value })}
                         placeholder="e.g. Apple A17 Pro (3nm)"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1514,7 +1514,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.network}
                         onChange={(e) => setFormData({ ...formData, network: e.target.value })}
                         placeholder="e.g. 5G, Dual SIM (Nano-SIM + eSIM), Wi-Fi 6E"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1527,7 +1527,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.warranty}
                         onChange={(e) => setFormData({ ...formData, warranty: e.target.value })}
                         placeholder="e.g. 1 Year Official Jabour Warranty"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
 
@@ -1540,7 +1540,7 @@ export const AdminProducts: React.FC = () => {
                         value={formData.spec}
                         onChange={(e) => setFormData({ ...formData, spec: e.target.value })}
                         placeholder="e.g. 6.7in OLED · A17 Pro · 256GB · 5G"
-                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#d10024] focus:outline-none"
+                        className="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-[#0077fe] focus:outline-none"
                       />
                     </div>
                   </div>
@@ -1562,7 +1562,7 @@ export const AdminProducts: React.FC = () => {
                           }
                         }}
                         placeholder="e.g. Natural Titanium, Black, Blue"
-                        className="w-full max-w-xs rounded border border-gray-300 px-3 py-1.5 text-xs focus:border-[#d10024] focus:outline-none"
+                        className="w-full max-w-xs rounded border border-gray-300 px-3 py-1.5 text-xs focus:border-[#0077fe] focus:outline-none"
                       />
                       <button
                         type="button"
@@ -1606,14 +1606,14 @@ export const AdminProducts: React.FC = () => {
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       placeholder="Write comprehensive product description, highlights, box contents, and warranty details..."
-                      className="mt-1 w-full rounded border border-gray-300 p-3 text-sm focus:border-[#d10024] focus:outline-none"
+                      className="mt-1 w-full rounded border border-gray-300 p-3 text-sm focus:border-[#0077fe] focus:outline-none"
                     />
                   </div>
 
                   {/* LIVE PREVIEW OF PRODUCT CARD */}
                   <div className="mt-6 border-t border-gray-200 pt-4">
                     <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-gray-700 mb-3">
-                      <Eye className="h-4 w-4 text-[#d10024]" />
+                      <Eye className="h-4 w-4 text-[#0077fe]" />
                       <span>Live Storefront Card Preview</span>
                     </div>
 
@@ -1631,7 +1631,7 @@ export const AdminProducts: React.FC = () => {
                           </div>
                         )}
                         {formData.compare && parseFloat(formData.compare) > parseFloat(formData.price || "0") && (
-                          <span className="absolute top-2 left-2 rounded bg-[#d10024] px-2 py-0.5 text-[10px] font-black uppercase text-white shadow">
+                          <span className="absolute top-2 left-2 rounded bg-[#0077fe] px-2 py-0.5 text-[10px] font-black uppercase text-white shadow">
                             Sale
                           </span>
                         )}
@@ -1676,7 +1676,7 @@ export const AdminProducts: React.FC = () => {
                   <button
                     type="submit"
                     disabled={formSubmitting}
-                    className="inline-flex items-center space-x-1.5 rounded bg-[#d10024] px-5 py-2 text-xs font-bold uppercase tracking-wider text-white shadow hover:bg-[#b0001e] disabled:opacity-50"
+                    className="inline-flex items-center space-x-1.5 rounded bg-[#0077fe] px-5 py-2 text-xs font-bold uppercase tracking-wider text-white shadow hover:bg-[#b0001e] disabled:opacity-50"
                   >
                     {formSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
                     <span>{formMode === "create" ? "Create Product" : "Save Changes"}</span>

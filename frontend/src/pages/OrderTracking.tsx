@@ -147,7 +147,7 @@ export const OrderTracking: React.FC = () => {
 
       {/* Header */}
       <div className="text-center space-y-3">
-        <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
+        <span className="text-xs font-bold text-[#0077fe] uppercase tracking-wider">
           {t("tracking.title")}
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-[#15161d] tracking-tight uppercase">
@@ -172,7 +172,7 @@ export const OrderTracking: React.FC = () => {
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
                 placeholder="e.g. JP-2611-1001"
-                className="w-full px-3.5 py-2.5 text-xs font-mono border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
+                className="w-full px-3.5 py-2.5 text-xs font-mono border border-gray-300 rounded-lg focus:outline-none focus:border-[#0077fe] bg-white"
               />
             </div>
             <div>
@@ -185,7 +185,7 @@ export const OrderTracking: React.FC = () => {
                 value={contact}
                 onChange={(e) => setContact(e.target.value)}
                 placeholder={t("tracking.contactPlaceholder")}
-                className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
+                className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#0077fe] bg-white"
               />
             </div>
           </div>
@@ -193,7 +193,7 @@ export const OrderTracking: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-[#15161d] hover:bg-[#d10024] text-white text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-2 shadow"
+            className="w-full py-3 bg-[#15161d] hover:bg-[#0077fe] text-white text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-2 shadow"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -239,7 +239,7 @@ export const OrderTracking: React.FC = () => {
                   })}
                 </span>
                 <span>·</span>
-                <span className="font-bold text-[#d10024]">
+                <span className="font-bold text-[#0077fe]">
                   {formatPrice(order.totalAmount)} ({order.paymentMethod === "CARD" ? "Card on Delivery" : t("checkout.codTitle")})
                 </span>
               </div>
@@ -252,7 +252,7 @@ export const OrderTracking: React.FC = () => {
                   ? "bg-gray-100 border-gray-300 text-gray-700"
                   : order.status === "DELIVERED"
                     ? "bg-green-50 border-green-300 text-green-700"
-                    : "bg-red-50 border-red-200 text-[#d10024]"
+                    : "bg-blue-50 border-blue-200 text-[#0077fe]"
                 }`}
             >
               {isCancelled ? (

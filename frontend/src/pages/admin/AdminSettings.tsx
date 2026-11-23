@@ -241,7 +241,7 @@ export const AdminSettings: React.FC = () => {
     <div className="mx-auto max-w-5xl space-y-6">
       {/* Header */}
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-wider text-[#d10024]">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-[#0077fe]">
           Preferences & Configuration
         </p>
         <h1 className="mt-1 text-2xl font-black tracking-tight text-[#15161d]">
@@ -258,7 +258,7 @@ export const AdminSettings: React.FC = () => {
           onClick={() => setActiveTab("profile")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition whitespace-nowrap ${
             activeTab === "profile"
-              ? "border-[#d10024] text-[#d10024]"
+              ? "border-[#0077fe] text-[#0077fe]"
               : "border-transparent text-gray-500 hover:text-[#15161d]"
           }`}
         >
@@ -270,7 +270,7 @@ export const AdminSettings: React.FC = () => {
           onClick={() => setActiveTab("commerce")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition whitespace-nowrap ${
             activeTab === "commerce"
-              ? "border-[#d10024] text-[#d10024]"
+              ? "border-[#0077fe] text-[#0077fe]"
               : "border-transparent text-gray-500 hover:text-[#15161d]"
           }`}
         >
@@ -282,7 +282,7 @@ export const AdminSettings: React.FC = () => {
           onClick={() => setActiveTab("social")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition whitespace-nowrap ${
             activeTab === "social"
-              ? "border-[#d10024] text-[#d10024]"
+              ? "border-[#0077fe] text-[#0077fe]"
               : "border-transparent text-gray-500 hover:text-[#15161d]"
           }`}
         >
@@ -294,7 +294,7 @@ export const AdminSettings: React.FC = () => {
           onClick={() => setActiveTab("admins")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition whitespace-nowrap ${
             activeTab === "admins"
-              ? "border-[#d10024] text-[#d10024]"
+              ? "border-[#0077fe] text-[#0077fe]"
               : "border-transparent text-gray-500 hover:text-[#15161d]"
           }`}
         >
@@ -306,7 +306,7 @@ export const AdminSettings: React.FC = () => {
           onClick={() => setActiveTab("security")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition whitespace-nowrap ${
             activeTab === "security"
-              ? "border-[#d10024] text-[#d10024]"
+              ? "border-[#0077fe] text-[#0077fe]"
               : "border-transparent text-gray-500 hover:text-[#15161d]"
           }`}
         >
@@ -342,7 +342,7 @@ export const AdminSettings: React.FC = () => {
                   required
                   value={formData.storeName}
                   onChange={(e) => setFormData({ ...formData, storeName: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-bold focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-bold focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -353,7 +353,7 @@ export const AdminSettings: React.FC = () => {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
             </div>
@@ -366,7 +366,7 @@ export const AdminSettings: React.FC = () => {
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -378,7 +378,7 @@ export const AdminSettings: React.FC = () => {
                   value={formData.whatsapp}
                   onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                   placeholder="+961 70 123 456"
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
             </div>
@@ -391,7 +391,7 @@ export const AdminSettings: React.FC = () => {
                   required
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -402,7 +402,7 @@ export const AdminSettings: React.FC = () => {
                   required
                   value={formData.workingHours}
                   onChange={(e) => setFormData({ ...formData, workingHours: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
             </div>
@@ -415,7 +415,7 @@ export const AdminSettings: React.FC = () => {
                 type="text"
                 value={formData.announcement}
                 onChange={(e) => setFormData({ ...formData, announcement: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none"
+                className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none"
               />
             </div>
 
@@ -427,7 +427,7 @@ export const AdminSettings: React.FC = () => {
                 rows={3}
                 value={formData.aboutText || ""}
                 onChange={(e) => setFormData({ ...formData, aboutText: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none"
+                className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none"
               />
             </div>
 
@@ -435,7 +435,7 @@ export const AdminSettings: React.FC = () => {
               <button
                 type="submit"
                 disabled={savingSettings}
-                className="inline-flex items-center gap-2 rounded-lg bg-[#d10024] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#0077fe] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition disabled:opacity-50"
               >
                 {savingSettings && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 Save Changes
@@ -473,7 +473,7 @@ export const AdminSettings: React.FC = () => {
                   value={formData.currency}
                   onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
                   placeholder="USD, LBP, EUR"
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-bold focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-bold focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -485,7 +485,7 @@ export const AdminSettings: React.FC = () => {
                   value={formData.currencySymbol}
                   onChange={(e) => setFormData({ ...formData, currencySymbol: e.target.value })}
                   placeholder="$, L.L, €"
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-bold focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-bold focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
             </div>
@@ -502,7 +502,7 @@ export const AdminSettings: React.FC = () => {
                   required
                   value={formData.shippingFee}
                   onChange={(e) => setFormData({ ...formData, shippingFee: Number(e.target.value) })}
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-bold focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-bold focus:border-[#0077fe] focus:outline-none"
                 />
                 <p className="mt-1 text-[11px] text-gray-400">
                   Charged on customer orders below the free delivery threshold.
@@ -522,7 +522,7 @@ export const AdminSettings: React.FC = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, freeShippingThreshold: Number(e.target.value) })
                   }
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-bold focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-bold focus:border-[#0077fe] focus:outline-none"
                 />
                 <p className="mt-1 text-[11px] text-gray-400">
                   Orders equal to or exceeding this subtotal automatically receive free delivery.
@@ -534,7 +534,7 @@ export const AdminSettings: React.FC = () => {
               <button
                 type="submit"
                 disabled={savingSettings}
-                className="inline-flex items-center gap-2 rounded-lg bg-[#d10024] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#0077fe] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition disabled:opacity-50"
               >
                 {savingSettings && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 Save Shipping Rules
@@ -568,7 +568,7 @@ export const AdminSettings: React.FC = () => {
                   value={formData.facebook || ""}
                   onChange={(e) => setFormData({ ...formData, facebook: e.target.value })}
                   placeholder="https://facebook.com/jabourphone"
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -579,7 +579,7 @@ export const AdminSettings: React.FC = () => {
                   value={formData.instagram || ""}
                   onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
                   placeholder="https://instagram.com/jabourphone"
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
             </div>
@@ -592,7 +592,7 @@ export const AdminSettings: React.FC = () => {
                   value={formData.tiktok || ""}
                   onChange={(e) => setFormData({ ...formData, tiktok: e.target.value })}
                   placeholder="https://tiktok.com/@jabourphone"
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -603,7 +603,7 @@ export const AdminSettings: React.FC = () => {
                   value={formData.twitter || ""}
                   onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
                   placeholder="https://x.com/jabourphone"
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
             </div>
@@ -612,7 +612,7 @@ export const AdminSettings: React.FC = () => {
               <button
                 type="submit"
                 disabled={savingSettings}
-                className="inline-flex items-center gap-2 rounded-lg bg-[#d10024] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#0077fe] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition disabled:opacity-50"
               >
                 {savingSettings && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 Save Social Profiles
@@ -665,7 +665,7 @@ export const AdminSettings: React.FC = () => {
             <div className="divide-y divide-gray-100 rounded-lg border border-gray-100 overflow-hidden">
               {loadingUsers ? (
                 <div className="p-8 text-center text-xs text-gray-400">
-                  <Loader2 className="w-5 h-5 animate-spin mx-auto text-[#d10024] mb-2" />
+                  <Loader2 className="w-5 h-5 animate-spin mx-auto text-[#0077fe] mb-2" />
                   Loading accounts...
                 </div>
               ) : (
@@ -681,14 +681,14 @@ export const AdminSettings: React.FC = () => {
                   return (
                     <div key={user.id} className="p-4 flex items-center justify-between hover:bg-gray-50/50">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-red-50 text-[#d10024] font-black text-xs flex items-center justify-center">
+                        <div className="h-10 w-10 rounded-full bg-blue-50 text-[#0077fe] font-black text-xs flex items-center justify-center">
                           {user.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="font-bold text-xs text-[#15161d]">{user.name}</span>
                             {isCurrent && (
-                              <span className="rounded bg-red-100 px-1.5 py-0.2 text-[9px] font-bold text-[#d10024] uppercase">
+                              <span className="rounded bg-red-100 px-1.5 py-0.2 text-[9px] font-bold text-[#0077fe] uppercase">
                                 You
                               </span>
                             )}
@@ -749,7 +749,7 @@ export const AdminSettings: React.FC = () => {
                       value={newAdminName}
                       onChange={(e) => setNewAdminName(e.target.value)}
                       placeholder="e.g. Fadi Jabour"
-                      className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#d10024] focus:outline-none"
+                      className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#0077fe] focus:outline-none"
                     />
                   </div>
 
@@ -761,7 +761,7 @@ export const AdminSettings: React.FC = () => {
                       value={newAdminEmail}
                       onChange={(e) => setNewAdminEmail(e.target.value)}
                       placeholder="admin@jabourphone.com"
-                      className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#d10024] focus:outline-none"
+                      className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#0077fe] focus:outline-none"
                     />
                   </div>
 
@@ -772,7 +772,7 @@ export const AdminSettings: React.FC = () => {
                       onChange={(e) =>
                         setNewAdminRole(e.target.value as "SUPER_ADMIN" | "ADMIN" | "STAFF")
                       }
-                      className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#d10024] focus:outline-none"
+                      className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#0077fe] focus:outline-none"
                     >
                       <option value="ADMIN">Administrator (Full catalog & orders access)</option>
                       <option value="SUPER_ADMIN">Super Administrator (Full store + settings + users)</option>
@@ -791,7 +791,7 @@ export const AdminSettings: React.FC = () => {
                       value={newAdminPassword}
                       onChange={(e) => setNewAdminPassword(e.target.value)}
                       placeholder="At least 12 characters"
-                      className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none font-mono"
+                      className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none font-mono"
                     />
                   </div>
 
@@ -824,11 +824,11 @@ export const AdminSettings: React.FC = () => {
         <div className="space-y-6">
           <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8 shadow-sm">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-red-50 text-[#d10024]">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[#0077fe]">
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-[#d10024]">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#0077fe]">
                   Administrator Profile
                 </p>
                 <h2 className="mt-1 text-xl font-black tracking-tight text-[#15161d]">
@@ -851,7 +851,7 @@ export const AdminSettings: React.FC = () => {
           <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8 shadow-sm">
             <div className="max-w-xl">
               <div className="flex items-center gap-2">
-                <KeyRound className="h-5 w-5 text-[#d10024]" />
+                <KeyRound className="h-5 w-5 text-[#0077fe]" />
                 <h2 className="text-base font-black uppercase tracking-wide text-[#15161d]">
                   Change Password
                 </h2>
@@ -885,7 +885,7 @@ export const AdminSettings: React.FC = () => {
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       required
-                      className="w-full rounded-lg border border-gray-200 p-2.5 pr-10 text-xs focus:border-[#d10024] focus:outline-none"
+                      className="w-full rounded-lg border border-gray-200 p-2.5 pr-10 text-xs focus:border-[#0077fe] focus:outline-none"
                     />
                     <button
                       type="button"
@@ -908,7 +908,7 @@ export const AdminSettings: React.FC = () => {
                       onChange={(e) => setNewPassword(e.target.value)}
                       required
                       minLength={12}
-                      className="w-full rounded-lg border border-gray-200 p-2.5 pr-10 text-xs focus:border-[#d10024] focus:outline-none"
+                      className="w-full rounded-lg border border-gray-200 p-2.5 pr-10 text-xs focus:border-[#0077fe] focus:outline-none"
                     />
                     <button
                       type="button"
@@ -930,7 +930,7 @@ export const AdminSettings: React.FC = () => {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
-                      className="w-full rounded-lg border border-gray-200 p-2.5 pr-10 text-xs focus:border-[#d10024] focus:outline-none"
+                      className="w-full rounded-lg border border-gray-200 p-2.5 pr-10 text-xs focus:border-[#0077fe] focus:outline-none"
                     />
                     <button
                       type="button"
@@ -946,7 +946,7 @@ export const AdminSettings: React.FC = () => {
                   <button
                     type="submit"
                     disabled={submittingPassword}
-                    className="inline-flex items-center gap-2 rounded-lg bg-[#d10024] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition disabled:opacity-50"
+                    className="inline-flex items-center gap-2 rounded-lg bg-[#0077fe] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition disabled:opacity-50"
                   >
                     {submittingPassword && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                     Update Password

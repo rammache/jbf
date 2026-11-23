@@ -122,7 +122,7 @@ export const AdminNewsletter: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-wider text-[#d10024]">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-[#0077fe]">
             Audience & Marketing
           </p>
           <h1 className="mt-1 text-2xl font-black tracking-tight text-[#15161d]">
@@ -186,7 +186,7 @@ export const AdminNewsletter: React.FC = () => {
             <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
               Total Subscribers
             </span>
-            <div className="h-9 w-9 rounded-lg bg-red-50 text-[#d10024] flex items-center justify-center">
+            <div className="h-9 w-9 rounded-lg bg-blue-50 text-[#0077fe] flex items-center justify-center">
               <Users className="w-4 h-4" />
             </div>
           </div>
@@ -250,7 +250,7 @@ export const AdminNewsletter: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search subscribers by email address..."
-              className="w-full pl-10 pr-4 py-2.5 text-xs rounded-lg border border-gray-200 focus:outline-none focus:border-[#d10024] focus:ring-1 focus:ring-[#d10024]"
+              className="w-full pl-10 pr-4 py-2.5 text-xs rounded-lg border border-gray-200 focus:outline-none focus:border-[#0077fe] focus:ring-1 focus:ring-[#0077fe]"
             />
           </div>
           <button
@@ -290,7 +290,7 @@ export const AdminNewsletter: React.FC = () => {
               {loading && subscribers.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="py-12 text-center text-gray-500">
-                    <RefreshCw className="w-6 h-6 animate-spin mx-auto text-[#d10024] mb-2" />
+                    <RefreshCw className="w-6 h-6 animate-spin mx-auto text-[#0077fe] mb-2" />
                     Loading subscriber directory...
                   </td>
                 </tr>
@@ -330,7 +330,7 @@ export const AdminNewsletter: React.FC = () => {
                       </td>
                       <td className="py-3.5 px-5">
                         <div className="flex items-center gap-2">
-                          <div className="h-7 w-7 rounded-full bg-red-50 text-[#d10024] flex items-center justify-center font-bold text-[11px]">
+                          <div className="h-7 w-7 rounded-full bg-blue-50 text-[#0077fe] flex items-center justify-center font-bold text-[11px]">
                             {subscriber.email.charAt(0).toUpperCase()}
                           </div>
                           <span className="font-semibold text-[#15161d]">

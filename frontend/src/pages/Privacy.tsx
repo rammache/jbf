@@ -15,7 +15,7 @@ export const Privacy: React.FC = () => {
 
       {/* Header */}
       <div className="text-center space-y-3">
-        <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
+        <span className="text-xs font-bold text-[#0077fe] uppercase tracking-wider">
           {t("pages.privacy.badge")}
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-[#15161d] tracking-tight uppercase">
@@ -30,21 +30,21 @@ export const Privacy: React.FC = () => {
       <div className="bg-white border border-gray-200 rounded-2xl p-8 space-y-8 shadow-sm text-xs text-gray-600 leading-relaxed">
         <section className="space-y-3">
           <h2 className="text-base font-bold uppercase tracking-tight text-[#15161d] flex items-center gap-2">
-            <Shield className="w-4 h-4 text-[#d10024]" /> {t("pages.privacy.s1Title")}
+            <Shield className="w-4 h-4 text-[#0077fe]" /> {t("pages.privacy.s1Title")}
           </h2>
           <p>{t("pages.privacy.s1Desc")}</p>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-base font-bold uppercase tracking-tight text-[#15161d] flex items-center gap-2">
-            <Eye className="w-4 h-4 text-[#d10024]" /> {t("pages.privacy.s2Title")}
+            <Eye className="w-4 h-4 text-[#0077fe]" /> {t("pages.privacy.s2Title")}
           </h2>
           <p>{t("pages.privacy.s2Desc")}</p>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-base font-bold uppercase tracking-tight text-[#15161d] flex items-center gap-2">
-            <Lock className="w-4 h-4 text-[#d10024]" /> {t("pages.privacy.s3Title")}
+            <Lock className="w-4 h-4 text-[#0077fe]" /> {t("pages.privacy.s3Title")}
           </h2>
           <p>{t("pages.privacy.s3Desc")}</p>
         </section>

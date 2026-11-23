@@ -10,7 +10,7 @@ export const NotFound: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center space-y-6">
       <SEO title={t("notFound.title")} description={t("notFound.desc")} />
-      <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-red-200 rounded-full text-xs font-bold text-[#d10024] uppercase tracking-wider">
+      <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-blue-200 rounded-full text-xs font-bold text-[#0077fe] uppercase tracking-wider">
         <Compass className="w-4 h-4" /> {t("notFound.badge")}
       </div>
       <h1 className="text-5xl sm:text-6xl font-black text-[#15161d] tracking-tight">
@@ -28,7 +28,7 @@ export const NotFound: React.FC = () => {
         </Link>
         <Link
           to="/shop"
-          className="px-6 py-3 bg-[#d10024] hover:bg-[#a7001d] text-white text-xs font-bold uppercase tracking-wider rounded transition flex items-center gap-2"
+          className="px-6 py-3 bg-[#0077fe] hover:bg-[#005fc9] text-white text-xs font-bold uppercase tracking-wider rounded transition flex items-center gap-2"
         >
           {t("notFound.browseCatalog")} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
         </Link>

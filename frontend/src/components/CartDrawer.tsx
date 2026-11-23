@@ -70,7 +70,7 @@ export const CartDrawer: React.FC = () => {
           {/* Header */}
           <div className="p-5 border-b border-gray-200 flex items-center justify-between bg-[#15161d] text-white">
             <div className="flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-[#d10024]" />
+              <ShoppingBag className="w-5 h-5 text-[#0077fe]" />
               <h2 className="text-lg font-bold">{t("cart.title")} ({items.length})</h2>
             </div>
             <button
@@ -95,7 +95,7 @@ export const CartDrawer: React.FC = () => {
                 </p>
                 <button
                   onClick={() => setIsCartOpen(false)}
-                  className="inline-block mt-2 px-6 py-2.5 bg-[#15161d] hover:bg-[#d10024] text-white text-xs font-bold uppercase tracking-wider rounded transition"
+                  className="inline-block mt-2 px-6 py-2.5 bg-[#15161d] hover:bg-[#0077fe] text-white text-xs font-bold uppercase tracking-wider rounded transition"
                 >
                   {t("cart.startShopping")}
                 </button>
@@ -117,7 +117,7 @@ export const CartDrawer: React.FC = () => {
                         <Link
                           to={`/product/${item.handle}`}
                           onClick={() => setIsCartOpen(false)}
-                          className="font-bold text-sm text-[#15161d] hover:text-[#d10024] line-clamp-1"
+                          className="font-bold text-sm text-[#15161d] hover:text-[#0077fe] line-clamp-1"
                         >
                           {item.title}
                         </Link>
@@ -136,7 +136,7 @@ export const CartDrawer: React.FC = () => {
                         </p>
                       )}
 
-                      <p className="text-sm font-bold text-[#d10024] mt-1">
+                      <p className="text-sm font-bold text-[#0077fe] mt-1">
                         {formatPrice(item.price * item.quantity)}
                       </p>
                     </div>
@@ -191,7 +191,7 @@ export const CartDrawer: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-base font-black text-[#15161d] pt-2 border-t">
                   <span>{t("cart.total")}</span>
-                  <span className="text-[#d10024]">{formatPrice(grandTotal)}</span>
+                  <span className="text-[#0077fe]">{formatPrice(grandTotal)}</span>
                 </div>
               </div>
 
@@ -232,7 +232,7 @@ export const CartDrawer: React.FC = () => {
                         value={couponInput}
                         onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                         placeholder={t("cart.couponCode")}
-                        className="flex-1 rounded border border-gray-300 px-2.5 py-1.5 text-xs font-mono uppercase font-bold focus:border-[#d10024] focus:outline-none"
+                        className="flex-1 rounded border border-gray-300 px-2.5 py-1.5 text-xs font-mono uppercase font-bold focus:border-[#0077fe] focus:outline-none"
                       />
                       <button
                         type="submit"
@@ -263,7 +263,7 @@ export const CartDrawer: React.FC = () => {
                     setIsCartOpen(false);
                     setIsCheckoutOpen(true);
                   }}
-                  className="w-full py-3 bg-[#d10024] hover:bg-[#a7001d] text-white text-sm font-bold uppercase tracking-wider rounded shadow-md flex items-center justify-center gap-2 transition"
+                  className="w-full py-3 bg-[#0077fe] hover:bg-[#005fc9] text-white text-sm font-bold uppercase tracking-wider rounded shadow-md flex items-center justify-center gap-2 transition"
                 >
                   {t("cart.checkout")} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
                 </button>

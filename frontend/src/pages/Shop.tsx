@@ -129,7 +129,7 @@ export const Shop: React.FC = () => {
             <select
               value={currentSort}
               onChange={(e) => updateFilter("sort", e.target.value)}
-              className="bg-white border border-gray-300 rounded px-3 py-2 text-xs font-medium focus:outline-none focus:border-[#d10024]"
+              className="bg-white border border-gray-300 rounded px-3 py-2 text-xs font-medium focus:outline-none focus:border-[#0077fe]"
             >
               <option value="featured">{t("shop.sortFeatured")}</option>
               <option value="price-asc">{t("shop.sortPriceAsc")}</option>
@@ -145,8 +145,8 @@ export const Shop: React.FC = () => {
         {/* Desktop Sidebar Filters */}
         <aside className={`md:block space-y-8 ${mobileFilterOpen ? "block" : "hidden"}`}>
           {hasActiveFilters && (
-            <div className="flex items-center justify-between p-3 bg-red-50 border border-red-100 rounded">
-              <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
+            <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-100 rounded">
+              <span className="text-xs font-bold text-[#0077fe] uppercase tracking-wider">
                 {t("shop.filtersActive")}
               </span>
               <button
@@ -170,7 +170,7 @@ export const Shop: React.FC = () => {
                   name="cat"
                   checked={!currentCategory}
                   onChange={() => updateFilter("category", "")}
-                  className="accent-[#d10024]"
+                  className="accent-[#0077fe]"
                 />
                 <span className="text-gray-700 font-medium">{t("shop.allDepartments")}</span>
               </label>
@@ -187,9 +187,9 @@ export const Shop: React.FC = () => {
                         name="cat"
                         checked={isSelected}
                         onChange={() => updateFilter("category", cat.slug || cat.name)}
-                        className="accent-[#d10024]"
+                        className="accent-[#0077fe]"
                       />
-                      <span className={`font-medium transition-colors ${isSelected ? "text-[#d10024] font-bold" : "text-gray-700 group-hover:text-black"}`}>
+                      <span className={`font-medium transition-colors ${isSelected ? "text-[#0077fe] font-bold" : "text-gray-700 group-hover:text-black"}`}>
                         {tCategory(cat.name)}
                       </span>
                     </span>
@@ -216,7 +216,7 @@ export const Shop: React.FC = () => {
                   name="brand"
                   checked={!currentBrand}
                   onChange={() => updateFilter("brand", "")}
-                  className="accent-[#d10024]"
+                  className="accent-[#0077fe]"
                 />
                 <span className="text-gray-700 font-medium">{t("shop.allBrands")}</span>
               </label>
@@ -227,7 +227,7 @@ export const Shop: React.FC = () => {
                     name="brand"
                     checked={currentBrand.toLowerCase() === b.toLowerCase()}
                     onChange={() => updateFilter("brand", b)}
-                    className="accent-[#d10024]"
+                    className="accent-[#0077fe]"
                   />
                   <span className="text-gray-700 font-medium">{b}</span>
                 </label>
@@ -277,7 +277,7 @@ export const Shop: React.FC = () => {
               </p>
               <button
                 onClick={clearFilters}
-                className="px-5 py-2 bg-[#15161d] text-white text-xs font-bold uppercase tracking-wider rounded hover:bg-[#d10024] transition"
+                className="px-5 py-2 bg-[#15161d] text-white text-xs font-bold uppercase tracking-wider rounded hover:bg-[#0077fe] transition"
               >
                 {t("shop.clearFilters")}
               </button>

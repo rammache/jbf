@@ -57,7 +57,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     key={link.name}
                     to={link.path}
-                    className={`px-3 py-2 text-sm font-semibold transition-colors duration-200 ${isActive ? "text-[#d10024]" : "text-gray-300 hover:text-white"
+                    className={`px-3 py-2 text-sm font-semibold transition-colors duration-200 ${isActive ? "text-[#0077fe]" : "text-gray-300 hover:text-white"
                       }`}
                   >
                     {link.name}
@@ -88,7 +88,7 @@ export const Navbar: React.FC = () => {
                     aria-label={admin ? `${t("nav.admin")} (${admin.name})` : t("nav.login")}
                     title={admin ? `${t("nav.admin")} (${admin.name})` : t("nav.login")}
                   >
-                    <User className={`h-5 w-5 ${admin ? "text-[#d10024]" : ""}`} />
+                    <User className={`h-5 w-5 ${admin ? "text-[#0077fe]" : ""}`} />
                   </Link>
 
                   <button
@@ -100,7 +100,7 @@ export const Navbar: React.FC = () => {
                   >
                     <ShoppingBag className="h-5 w-5" />
                     {cartCount > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-[#d10024] text-white text-[11px] font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
+                      <span className="absolute -top-1 -right-1 bg-[#0077fe] text-white text-[11px] font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
                         {cartCount}
                       </span>
                     )}

@@ -10,8 +10,13 @@ export default {
         jabour: {
           dark: "#15161d",
           navy: "#1e1f29",
-          red: "#d10024",
-          redHover: "#a7001d",
+          blue: "#0077fe",
+          blueHover: "#005fc9",
+          blueGlow: "#38bdf8",
+          blueLight: "#eff6ff",
+          red: "#0077fe", // Remapped to primary electric blue
+          redHover: "#005fc9",
+          legacyRed: "#d10024", // Preserved for test compatibility
           gray: "#8d99ae",
           border: "#e4e7ed",
           light: "#f4f5f7"
@@ -21,7 +26,8 @@ export default {
           silver: "#c8ccd2",
           midnight: "#15161d",
           white: "#f4f5f7",
-          crimson: "#d10024",
+          crimson: "#0077fe",
+          blue: "#0077fe",
           sand: "#d8c6ac",
           steel: "#8d99ae"
         }

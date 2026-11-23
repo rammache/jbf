@@ -79,7 +79,7 @@ export const AdminOverview: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-[#d10024]">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-[#0077fe]">
               Executive Overview
             </p>
           </div>
@@ -188,7 +188,7 @@ export const AdminOverview: React.FC = () => {
             </span>
             <div
               className={`h-8 w-8 rounded-lg flex items-center justify-center ${(metrics?.lowStockCount ?? 0) > 0
-                  ? "bg-red-50 text-[#d10024]"
+                  ? "bg-blue-50 text-[#0077fe]"
                   : "bg-gray-100 text-gray-400"
                 }`}
             >
@@ -196,7 +196,7 @@ export const AdminOverview: React.FC = () => {
             </div>
           </div>
           <p
-            className={`mt-2 text-2xl font-black ${(metrics?.lowStockCount ?? 0) > 0 ? "text-[#d10024]" : "text-[#15161d]"
+            className={`mt-2 text-2xl font-black ${(metrics?.lowStockCount ?? 0) > 0 ? "text-[#0077fe]" : "text-[#15161d]"
               }`}
           >
             {metrics?.lowStockCount ?? 0}
@@ -295,7 +295,7 @@ export const AdminOverview: React.FC = () => {
                   <div className="w-full bg-gray-100 h-28 rounded-lg flex items-end p-1">
                     <div
                       style={{ height: `${heightPct}%` }}
-                      className="w-full bg-[#15161d] hover:bg-[#d10024] transition rounded-md"
+                      className="w-full bg-[#15161d] hover:bg-[#0077fe] transition rounded-md"
                       title={`${day.date}: ${formatPrice(day.revenue)} (${day.orders} orders)`}
                     />
                   </div>
@@ -317,7 +317,7 @@ export const AdminOverview: React.FC = () => {
             <h3 className="text-sm font-black text-[#15161d]">Top Selling Phones</h3>
             <Link
               to="/admin/products"
-              className="text-xs font-bold text-[#d10024] hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-[#0077fe] hover:underline flex items-center gap-1"
             >
               All products <ArrowRight className="w-3 h-3" />
             </Link>
@@ -341,7 +341,7 @@ export const AdminOverview: React.FC = () => {
                     <div>
                       <Link
                         to={`/product/${p.handle}`}
-                        className="text-xs font-bold text-[#15161d] hover:text-[#d10024] transition line-clamp-1"
+                        className="text-xs font-bold text-[#15161d] hover:text-[#0077fe] transition line-clamp-1"
                       >
                         {p.title}
                       </Link>
@@ -370,13 +370,13 @@ export const AdminOverview: React.FC = () => {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-black text-[#15161d]">Low Stock Alerts</h3>
-              <span className="rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-[#d10024]">
+              <span className="rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-[#0077fe]">
                 {metrics?.lowStockCount ?? 0}
               </span>
             </div>
             <Link
               to="/admin/products"
-              className="text-xs font-bold text-[#d10024] hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-[#0077fe] hover:underline flex items-center gap-1"
             >
               Restock <ArrowRight className="w-3 h-3" />
             </Link>
@@ -446,7 +446,7 @@ export const AdminOverview: React.FC = () => {
               {metrics?.recentOrders && metrics.recentOrders.length > 0 ? (
                 metrics.recentOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50 transition">
-                    <td className="py-3.5 px-5 font-mono font-bold text-[#d10024]">
+                    <td className="py-3.5 px-5 font-mono font-bold text-[#0077fe]">
                       {order.orderNumber}
                     </td>
                     <td className="py-3.5 px-5">

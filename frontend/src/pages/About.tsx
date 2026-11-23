@@ -18,7 +18,7 @@ export const About: React.FC = () => {
       />
 
       <div className="text-center space-y-4 max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-red-200 rounded-full text-xs font-bold text-[#d10024] uppercase tracking-wider">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-blue-200 rounded-full text-xs font-bold text-[#0077fe] uppercase tracking-wider">
           <Smartphone className="w-4 h-4" /> {t("pages.about.promiseBadge")}
         </div>
         <h1 className="text-4xl sm:text-5xl font-black text-[#15161d] tracking-tight">
@@ -39,7 +39,7 @@ export const About: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-xs sm:text-sm">
         <div className="p-6 bg-white rounded-xl border border-gray-200 shadow-sm space-y-3" data-guarantee="100% Genuine Guaranteed">
-          <ShieldCheck className="w-8 h-8 text-[#d10024]" />
+          <ShieldCheck className="w-8 h-8 text-[#0077fe]" />
           <h3 className="font-bold text-base text-[#15161d]">{t("pages.about.pillar1Title")}</h3>
           <p className="text-gray-500 leading-relaxed">
             {t("pages.about.pillar1Desc")}
@@ -47,7 +47,7 @@ export const About: React.FC = () => {
         </div>
 
         <div className="p-6 bg-white rounded-xl border border-gray-200 shadow-sm space-y-3" data-inspection="Multi-Point Quality Inspection">
-          <CheckCircle2 className="w-8 h-8 text-[#d10024]" />
+          <CheckCircle2 className="w-8 h-8 text-[#0077fe]" />
           <h3 className="font-bold text-base text-[#15161d]">{t("pages.about.pillar2Title")}</h3>
           <p className="text-gray-500 leading-relaxed">
             {t("pages.about.pillar2Desc")}
@@ -55,7 +55,7 @@ export const About: React.FC = () => {
         </div>
 
         <div className="p-6 bg-white rounded-xl border border-gray-200 shadow-sm space-y-3" data-warranty="Official Warranty">
-          <HeartHandshake className="w-8 h-8 text-[#d10024]" />
+          <HeartHandshake className="w-8 h-8 text-[#0077fe]" />
           <h3 className="font-bold text-base text-[#15161d]">{t("pages.about.pillar3Title")}</h3>
           <p className="text-gray-500 leading-relaxed">
             {t("pages.about.pillar3Desc")}
@@ -70,7 +70,7 @@ export const About: React.FC = () => {
         </div>
         <Link
           to="/shop"
-          className="px-6 py-3 bg-[#d10024] hover:bg-[#a7001d] text-white text-xs font-bold uppercase tracking-wider rounded transition flex items-center gap-2"
+          className="px-6 py-3 bg-[#0077fe] hover:bg-[#005fc9] text-white text-xs font-bold uppercase tracking-wider rounded transition flex items-center gap-2"
         >
           {t("pages.about.ctaButton")} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
         </Link>

@@ -81,11 +81,11 @@ export const AdminLogin: React.FC = () => {
         {/* Brand panel */}
         <div className="relative hidden lg:flex flex-col justify-between bg-[#15161d] text-white p-10 overflow-hidden">
           <div
-            className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-[#d10024]/20 blur-3xl"
+            className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-[#0077fe]/20 blur-3xl"
             aria-hidden="true"
           />
           <div
-            className="absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-[#d10024]/10 blur-3xl"
+            className="absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-[#0077fe]/10 blur-3xl"
             aria-hidden="true"
           />
 
@@ -93,7 +93,7 @@ export const AdminLogin: React.FC = () => {
 
           <div className="relative space-y-4 py-16">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/15 bg-white/5 text-[11px] font-bold uppercase tracking-wider text-gray-200">
-              <ShieldCheck className="h-4 w-4 text-[#d10024]" /> Store management
+              <ShieldCheck className="h-4 w-4 text-[#0077fe]" /> Store management
             </span>
             <h1 className="text-4xl font-black leading-tight tracking-tight">
               Sign in to run your store.
@@ -116,7 +116,7 @@ export const AdminLogin: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-[#d10024]">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-[#0077fe]">
               Admin area
             </p>
             <h2 className="text-2xl font-black text-[#15161d] tracking-tight">
@@ -146,7 +146,7 @@ export const AdminLogin: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={status === "loading"}
                   placeholder="you@example.com"
-                  className="w-full rounded border border-gray-300 bg-white py-3 pl-10 pr-3 text-sm text-[#15161d] placeholder-gray-400 focus:border-[#d10024] focus:outline-none focus:ring-1 focus:ring-[#d10024] disabled:bg-gray-50"
+                  className="w-full rounded border border-gray-300 bg-white py-3 pl-10 pr-3 text-sm text-[#15161d] placeholder-gray-400 focus:border-[#0077fe] focus:outline-none focus:ring-1 focus:ring-[#0077fe] disabled:bg-gray-50"
                 />
               </div>
             </div>
@@ -169,7 +169,7 @@ export const AdminLogin: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={status === "loading"}
                   placeholder="Enter your password"
-                  className="w-full rounded border border-gray-300 bg-white py-3 pl-10 pr-11 text-sm text-[#15161d] placeholder-gray-400 focus:border-[#d10024] focus:outline-none focus:ring-1 focus:ring-[#d10024] disabled:bg-gray-50"
+                  className="w-full rounded border border-gray-300 bg-white py-3 pl-10 pr-11 text-sm text-[#15161d] placeholder-gray-400 focus:border-[#0077fe] focus:outline-none focus:ring-1 focus:ring-[#0077fe] disabled:bg-gray-50"
                 />
                 <button
                   type="button"
@@ -198,7 +198,7 @@ export const AdminLogin: React.FC = () => {
             <button
               type="submit"
               disabled={status === "loading"}
-              className="flex w-full items-center justify-center gap-2 rounded bg-[#d10024] px-4 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#a7001d] disabled:cursor-not-allowed disabled:opacity-70"
+              className="flex w-full items-center justify-center gap-2 rounded bg-[#0077fe] px-4 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#005fc9] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {status === "loading" ? (
                 <>
@@ -215,7 +215,7 @@ export const AdminLogin: React.FC = () => {
           <div className="mt-8 flex items-center justify-between text-xs">
             <Link
               to="/"
-              className="inline-flex items-center gap-1.5 font-semibold text-gray-500 hover:text-[#d10024]"
+              className="inline-flex items-center gap-1.5 font-semibold text-gray-500 hover:text-[#0077fe]"
             >
               <ArrowLeft className="h-4 w-4" /> Back to store
             </Link>

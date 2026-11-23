@@ -12,7 +12,9 @@ const SWATCH_COLORS: Record<string, string> = {
   Silver: "#c8ccd2",
   Midnight: "#15161d",
   White: "#f4f5f7",
-  Crimson: "#d10024",
+  Crimson: "#0077fe",
+  Blue: "#0077fe",
+  Bleu: "#0077fe",
   Sand: "#d8c6ac",
   Steel: "#8d99ae"
 };
@@ -65,7 +67,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {t("shop.outOfStock")}
           </span>
         ) : product.compare && product.compare > product.price ? (
-          <span className="bg-[#d10024] text-white text-[11px] font-bold px-2.5 py-1 uppercase tracking-wider rounded">
+          <span className="bg-[#0077fe] text-white text-[11px] font-bold px-2.5 py-1 uppercase tracking-wider rounded">
             {t("shop.sale")}
           </span>
         ) : null}
@@ -98,7 +100,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               onClick={handleQuickAdd}
               className={`w-full py-2.5 px-4 rounded font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-colors ${added
                 ? "bg-green-600 text-white"
-                : "bg-[#15161d] hover:bg-[#d10024] text-white"
+                : "bg-[#15161d] hover:bg-[#0077fe] text-white"
                 }`}
             >
               {added ? (
@@ -123,7 +125,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <span>{tCategory(typeof product.category === "object" && product.category ? product.category.name : product.category)}</span>
           </div>
 
-          <h3 className="font-bold text-base text-[#15161d] group-hover:text-[#d10024] transition-colors line-clamp-1">
+          <h3 className="font-bold text-base text-[#15161d] group-hover:text-[#0077fe] transition-colors line-clamp-1">
             <Link to={`/product/${product.handle}`}>{product.title}</Link>
           </h3>
 
@@ -159,7 +161,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Price & Swatches footer */}
         <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
           <div className="flex items-baseline gap-2">
-            <span className="text-lg font-extrabold text-[#d10024]">
+            <span className="text-lg font-extrabold text-[#0077fe]">
               {formatPrice(product.price)}
             </span>
             {product.compare && product.compare > product.price && (
@@ -179,7 +181,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   title={finish}
                   onClick={() => setSelectedFinish(finish)}
                   className={`w-3.5 h-3.5 rounded-full border ${selectedFinish === finish
-                    ? "ring-2 ring-[#d10024] ring-offset-1"
+                    ? "ring-2 ring-[#0077fe] ring-offset-1"
                     : "border-gray-300"
                     }`}
                   style={{

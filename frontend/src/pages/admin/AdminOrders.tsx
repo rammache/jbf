@@ -233,7 +233,7 @@ export const AdminOrders: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-black text-gray-900 tracking-tight flex items-center gap-2">
-            <ShoppingCart className="w-6 h-6 text-[#d10024]" /> Order Management
+            <ShoppingCart className="w-6 h-6 text-[#0077fe]" /> Order Management
           </h1>
           <p className="text-xs text-gray-500 mt-1">
             Manage customer purchases, fulfillment stages, COD payments, and courier dispatch.
@@ -291,12 +291,12 @@ export const AdminOrders: React.FC = () => {
 
         <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-[#d10024] uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-[#0077fe] uppercase tracking-wider">
               COD Volume
             </span>
-            <DollarSign className="w-4 h-4 text-[#d10024]" />
+            <DollarSign className="w-4 h-4 text-[#0077fe]" />
           </div>
-          <p className="text-2xl font-black text-[#d10024] mt-1">{formatPrice(totalRevenue)}</p>
+          <p className="text-2xl font-black text-[#0077fe] mt-1">{formatPrice(totalRevenue)}</p>
           <span className="text-[10px] text-gray-500">Active order value</span>
         </div>
       </div>
@@ -327,7 +327,7 @@ export const AdminOrders: React.FC = () => {
                   setPage(1);
                 }}
                 className={`px-3 py-1.5 rounded-lg font-bold transition flex-shrink-0 flex items-center gap-1 ${selectedStatus === st
-                    ? "bg-[#d10024] text-white shadow-sm"
+                    ? "bg-[#0077fe] text-white shadow-sm"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
               >
@@ -348,7 +348,7 @@ export const AdminOrders: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by order number (e.g. JP-2611-1001), customer name, email, or phone..."
-                className="w-full pl-9 pr-4 py-2 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
+                className="w-full pl-9 pr-4 py-2 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#0077fe] bg-white"
               />
               {searchQuery && (
                 <button
@@ -394,7 +394,7 @@ export const AdminOrders: React.FC = () => {
               {loading ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-gray-400">
-                    <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#d10024]" />
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#0077fe]" />
                     <p className="mt-2 text-xs">Loading orders...</p>
                   </td>
                 </tr>
@@ -420,10 +420,10 @@ export const AdminOrders: React.FC = () => {
                       <td className="py-3.5 px-4 font-mono">
                         <button
                           onClick={() => setSelectedOrder(order)}
-                          className="font-bold text-[#15161d] hover:text-[#d10024] flex items-center gap-1 group"
+                          className="font-bold text-[#15161d] hover:text-[#0077fe] flex items-center gap-1 group"
                         >
                           <span>{order.orderNumber}</span>
-                          <Eye className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition text-[#d10024]" />
+                          <Eye className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition text-[#0077fe]" />
                         </button>
                       </td>
 
@@ -507,7 +507,7 @@ export const AdminOrders: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setSelectedOrder(order)}
-                            className="p-1.5 text-gray-500 hover:text-[#d10024] hover:bg-gray-100 rounded transition"
+                            className="p-1.5 text-gray-500 hover:text-[#0077fe] hover:bg-gray-100 rounded transition"
                             title="View Full Order Details"
                           >
                             <Eye className="w-4 h-4" />
@@ -628,7 +628,7 @@ export const AdminOrders: React.FC = () => {
                       handleUpdateStatus(selectedOrder.id, e.target.value as OrderStatus)
                     }
                     disabled={actionLoading}
-                    className="text-xs font-bold px-3 py-2 rounded-lg border border-gray-300 bg-white focus:outline-none focus:border-[#d10024]"
+                    className="text-xs font-bold px-3 py-2 rounded-lg border border-gray-300 bg-white focus:outline-none focus:border-[#0077fe]"
                   >
                     {STATUS_LIST.map((st) => (
                       <option key={st} value={st}>
@@ -682,7 +682,7 @@ export const AdminOrders: React.FC = () => {
                   </span>
                   <div className="space-y-1 text-gray-700">
                     <p className="font-bold flex items-center gap-1.5 text-gray-900">
-                      <MapPin className="w-3.5 h-3.5 text-[#d10024]" />
+                      <MapPin className="w-3.5 h-3.5 text-[#0077fe]" />
                       {selectedOrder.city || "Beirut"}, Lebanon
                     </p>
                     <p className="pl-5 text-gray-600">{selectedOrder.customerAddress}</p>
@@ -751,7 +751,7 @@ export const AdminOrders: React.FC = () => {
                 </div>
                 <div className="flex justify-between items-center text-sm pt-2 border-t font-black text-gray-900">
                   <span>Total Due (Cash on Delivery):</span>
-                  <span className="text-base text-[#d10024]">
+                  <span className="text-base text-[#0077fe]">
                     {formatPrice(selectedOrder.totalAmount)}
                   </span>
                 </div>

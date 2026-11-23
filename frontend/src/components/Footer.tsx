@@ -52,15 +52,15 @@ export const Footer: React.FC = () => {
             </p>
             <div className="space-y-1.5 pt-1 text-xs text-gray-400">
               <div className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-[#d10024]" />
+                <Phone className="w-3.5 h-3.5 text-[#0077fe]" />
                 <span>{settings.phone}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Mail className="w-3.5 h-3.5 text-[#d10024]" />
+                <Mail className="w-3.5 h-3.5 text-[#0077fe]" />
                 <span>{settings.email}</span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5 text-[#d10024]" />
+                <MapPin className="w-3.5 h-3.5 text-[#0077fe]" />
                 <span>{settings.address}</span>
               </div>
             </div>
@@ -75,7 +75,7 @@ export const Footer: React.FC = () => {
                   <li key={cat.id}>
                     <Link
                       to={`/shop?category=${encodeURIComponent(cat.slug || cat.name)}`}
-                      className="hover:text-[#d10024] transition"
+                      className="hover:text-[#0077fe] transition"
                     >
                       {tCategory(cat.name)}
                     </Link>
@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
                 ))
               ) : (
                 <li>
-                  <Link to="/shop" className="hover:text-[#d10024] transition">
+                  <Link to="/shop" className="hover:text-[#0077fe] transition">
                     {t("nav.shop")}
                   </Link>
                 </li>
@@ -96,32 +96,32 @@ export const Footer: React.FC = () => {
             <h3 className="text-sm font-bold uppercase tracking-wider text-white mb-4">{t("footer.customerService")}</h3>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link to="/track" className="hover:text-[#d10024] transition font-semibold text-gray-200">
+                <Link to="/track" className="hover:text-[#0077fe] transition font-semibold text-gray-200">
                   {t("nav.track")}
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-[#d10024] transition">
+                <Link to="/contact" className="hover:text-[#0077fe] transition">
                   {t("nav.contact")}
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="hover:text-[#d10024] transition">
+                <Link to="/faq" className="hover:text-[#0077fe] transition">
                   {t("nav.faq")}
                 </Link>
               </li>
               <li>
-                <Link to="/shipping" className="hover:text-[#d10024] transition">
+                <Link to="/shipping" className="hover:text-[#0077fe] transition">
                   {t("nav.shipping")}
                 </Link>
               </li>
               <li>
-                <Link to="/returns" className="hover:text-[#d10024] transition">
+                <Link to="/returns" className="hover:text-[#0077fe] transition">
                   {t("nav.returns")}
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-[#d10024] transition">
+                <Link to="/about" className="hover:text-[#0077fe] transition">
                   {t("nav.about")}
                 </Link>
               </li>
@@ -148,12 +148,12 @@ export const Footer: React.FC = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={t("footer.newsletterPlaceholder")}
-                    className="w-full bg-[#1e1f29] text-xs px-3 py-2.5 rounded-l rtl:rounded-l-none rtl:rounded-r text-white placeholder-gray-500 border border-gray-700 focus:outline-none focus:border-[#d10024]"
+                    className="w-full bg-[#1e1f29] text-xs px-3 py-2.5 rounded-l rtl:rounded-l-none rtl:rounded-r text-white placeholder-gray-500 border border-gray-700 focus:outline-none focus:border-[#0077fe]"
                   />
                   <button
                     type="submit"
                     disabled={status === "loading"}
-                    className="bg-[#d10024] hover:bg-[#a7001d] text-white text-xs font-bold uppercase px-4 py-2.5 rounded-r rtl:rounded-r-none rtl:rounded-l transition flex items-center justify-center"
+                    className="bg-[#0077fe] hover:bg-[#005fc9] text-white text-xs font-bold uppercase px-4 py-2.5 rounded-r rtl:rounded-r-none rtl:rounded-l transition flex items-center justify-center"
                   >
                     {status === "loading" ? <Loader2 className="w-4 h-4 animate-spin" /> : t("footer.subscribe")}
                   </button>

@@ -34,7 +34,9 @@ const SWATCH_COLORS: Record<string, string> = {
   Silver: "#c8ccd2",
   Midnight: "#15161d",
   White: "#f4f5f7",
-  Crimson: "#d10024",
+  Crimson: "#0077fe",
+  Blue: "#0077fe",
+  Bleu: "#0077fe",
   Sand: "#d8c6ac",
   Steel: "#8d99ae"
 };
@@ -216,7 +218,7 @@ export const ProductDetail: React.FC = () => {
                   key={i}
                   type="button"
                   onClick={() => setActiveImage(img)}
-                  className={`w-20 h-20 rounded-lg overflow-hidden border-2 bg-white transition ${activeImage === img ? "border-[#d10024] shadow-md" : "border-gray-200 opacity-70 hover:opacity-100"
+                  className={`w-20 h-20 rounded-lg overflow-hidden border-2 bg-white transition ${activeImage === img ? "border-[#0077fe] shadow-md" : "border-gray-200 opacity-70 hover:opacity-100"
                     }`}
                 >
                   <ImageWithFallback src={img} alt={`Thumbnail ${i}`} className="w-full h-full object-cover" />
@@ -229,7 +231,7 @@ export const ProductDetail: React.FC = () => {
         {/* Product Info */}
         <div className="space-y-6">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#d10024] mb-2">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0077fe] mb-2">
               <span>{product.brand}</span>
               <span>·</span>
               <span>{tCategory(categoryName)}</span>
@@ -268,7 +270,7 @@ export const ProductDetail: React.FC = () => {
 
           {/* Pricing */}
           <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 flex items-baseline gap-3">
-            <span className="text-3xl font-black text-[#d10024]">
+            <span className="text-3xl font-black text-[#0077fe]">
               {formatPrice(product.price)}
             </span>
             {product.compare && product.compare > product.price && (
@@ -318,7 +320,7 @@ export const ProductDetail: React.FC = () => {
                     type="button"
                     onClick={() => setSelectedFinish(finish)}
                     className={`flex items-center gap-2 px-3 py-1.5 rounded border text-xs font-medium transition ${selectedFinish === finish
-                      ? "border-[#d10024] bg-red-50 text-[#d10024] font-bold"
+                      ? "border-[#0077fe] bg-blue-50 text-[#0077fe] font-bold"
                       : "border-gray-300 hover:border-gray-400 text-gray-700"
                       }`}
                   >
@@ -372,7 +374,7 @@ export const ProductDetail: React.FC = () => {
                   onClick={handleAddToCart}
                   className={`flex-1 py-3.5 px-6 rounded font-bold text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 ${addedSuccess
                     ? "bg-green-600 text-white"
-                    : "bg-[#15161d] hover:bg-[#d10024] text-white"
+                    : "bg-[#15161d] hover:bg-[#0077fe] text-white"
                     }`}
                 >
                   {addedSuccess ? (
@@ -408,15 +410,15 @@ export const ProductDetail: React.FC = () => {
           {/* Value Props list */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 border-t border-gray-200 text-xs text-gray-600">
             <div className="flex items-center gap-2">
-              <Truck className="w-4 h-4 text-[#d10024]" />
+              <Truck className="w-4 h-4 text-[#0077fe]" />
               <span>{t("product.fastDelivery")}</span>
             </div>
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#d10024]" />
+              <ShieldCheck className="w-4 h-4 text-[#0077fe]" />
               <span>{product.warranty || t("product.officialWarranty")}</span>
             </div>
             <div className="flex items-center gap-2">
-              <RotateCcw className="w-4 h-4 text-[#d10024]" />
+              <RotateCcw className="w-4 h-4 text-[#0077fe]" />
               <span>{t("product.freeReturnSupport")}</span>
             </div>
           </div>
@@ -518,7 +520,7 @@ export const ProductDetail: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-gray-200 gap-4">
           <div>
             <h2 className="text-xl font-black text-[#15161d] uppercase tracking-tight flex items-center gap-2">
-              <MessageSquareQuote className="w-5 h-5 text-[#d10024]" /> {t("product.reviews")}
+              <MessageSquareQuote className="w-5 h-5 text-[#0077fe]" /> {t("product.reviews")}
             </h2>
             <p className="text-xs text-gray-500 mt-1">
               {t("product.verifiedReviews")}
@@ -631,7 +633,7 @@ export const ProductDetail: React.FC = () => {
                   value={reviewAuthor}
                   onChange={(e) => setReviewAuthor(e.target.value)}
                   placeholder="e.g. Alex M."
-                  className="w-full px-3 py-2 text-xs border border-gray-300 rounded bg-white focus:outline-none focus:border-[#d10024]"
+                  className="w-full px-3 py-2 text-xs border border-gray-300 rounded bg-white focus:outline-none focus:border-[#0077fe]"
                 />
               </div>
 
@@ -645,14 +647,14 @@ export const ProductDetail: React.FC = () => {
                   value={reviewComment}
                   onChange={(e) => setReviewComment(e.target.value)}
                   placeholder="Share details about performance, build quality, screen, battery..."
-                  className="w-full px-3 py-2 text-xs border border-gray-300 rounded bg-white focus:outline-none focus:border-[#d10024]"
+                  className="w-full px-3 py-2 text-xs border border-gray-300 rounded bg-white focus:outline-none focus:border-[#0077fe]"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={submittingReview}
-                className="w-full py-2.5 bg-[#15161d] hover:bg-[#d10024] text-white font-bold text-xs uppercase tracking-wider rounded transition flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-[#15161d] hover:bg-[#0077fe] text-white font-bold text-xs uppercase tracking-wider rounded transition flex items-center justify-center gap-2"
               >
                 {submittingReview ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -674,7 +676,7 @@ export const ProductDetail: React.FC = () => {
             <h2 className="text-xl font-black text-[#15161d] uppercase tracking-tight">
               {t("product.relatedDevices")}
             </h2>
-            <Link to={`/shop?category=${encodeURIComponent(categoryName)}`} className="text-xs font-bold uppercase text-[#d10024]">
+            <Link to={`/shop?category=${encodeURIComponent(categoryName)}`} className="text-xs font-bold uppercase text-[#0077fe]">
               {categoryName}
             </Link>
           </div>

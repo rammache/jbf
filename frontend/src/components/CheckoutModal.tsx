@@ -159,7 +159,7 @@ export const CheckoutModal: React.FC = () => {
         {/* Modal Header */}
         <div className="p-5 bg-[#15161d] text-white flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Truck className="w-5 h-5 text-[#d10024]" />
+            <Truck className="w-5 h-5 text-[#0077fe]" />
             <h2 id="checkout-modal-title" className="text-base sm:text-lg font-bold">
               {confirmedOrder ? t("checkout.orderSuccess") : t("checkout.title")}
             </h2>
@@ -192,7 +192,7 @@ export const CheckoutModal: React.FC = () => {
               <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 text-left rtl:text-right text-xs space-y-2">
                 <div className="flex justify-between items-center pb-2 border-b border-gray-200">
                   <span className="font-semibold text-gray-600">{t("tracking.orderNumber")}:</span>
-                  <code className="font-mono text-sm font-black text-[#d10024] bg-white px-2 py-0.5 border rounded">
+                  <code className="font-mono text-sm font-black text-[#0077fe] bg-white px-2 py-0.5 border rounded">
                     {confirmedOrder.orderNumber}
                   </code>
                 </div>
@@ -218,7 +218,7 @@ export const CheckoutModal: React.FC = () => {
                 </div>
                 <div className="flex justify-between items-center pt-2 border-t border-gray-200 text-sm">
                   <span className="font-bold text-gray-700">{t("cart.total")}:</span>
-                  <span className="font-black text-[#d10024]">
+                  <span className="font-black text-[#0077fe]">
                     {formatPrice(confirmedOrder.totalAmount)}
                   </span>
                 </div>
@@ -229,7 +229,7 @@ export const CheckoutModal: React.FC = () => {
                 <Link
                   to={`/track?id=${encodeURIComponent(confirmedOrder.orderNumber)}&email=${encodeURIComponent(confirmedOrder.customerEmail)}`}
                   onClick={handleClose}
-                  className="w-full py-3 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-1.5 shadow"
+                  className="w-full py-3 bg-[#0077fe] hover:bg-[#005fc9] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-1.5 shadow"
                 >
                   {t("tracking.title")} <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
                 </Link>
@@ -279,7 +279,7 @@ export const CheckoutModal: React.FC = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Alex M."
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -295,7 +295,7 @@ export const CheckoutModal: React.FC = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="client@example.com"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#0077fe] focus:outline-none"
                   />
                 </div>
 
@@ -310,7 +310,7 @@ export const CheckoutModal: React.FC = () => {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="+212 6 12 34 56 78"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#0077fe] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -324,7 +324,7 @@ export const CheckoutModal: React.FC = () => {
                 <select
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#0077fe] focus:outline-none bg-white"
                 >
                   {CITIES.map((c) => (
                       <option key={c.fr} value={c.fr}>
@@ -345,7 +345,7 @@ export const CheckoutModal: React.FC = () => {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="Quartier, Rue, N° d'immeuble, étage, appartement..."
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -359,7 +359,7 @@ export const CheckoutModal: React.FC = () => {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="e.g. Near pharmacy, ring bell 3"
-                  className="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#d10024] focus:outline-none"
+                  className="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -371,7 +371,7 @@ export const CheckoutModal: React.FC = () => {
                 <div className="grid grid-cols-2 gap-2">
                   <label
                     className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs ${paymentMethod === "COD"
-                      ? "border-[#d10024] bg-red-50/40 text-gray-900 font-bold"
+                      ? "border-[#0077fe] bg-blue-50/40 text-gray-900 font-bold"
                       : "border-gray-200 hover:border-gray-300 text-gray-600"
                       }`}
                   >
@@ -381,7 +381,7 @@ export const CheckoutModal: React.FC = () => {
                       value="COD"
                       checked={paymentMethod === "COD"}
                       onChange={() => setPaymentMethod("COD")}
-                      className="text-[#d10024] focus:ring-[#d10024]"
+                      className="text-[#0077fe] focus:ring-[#0077fe]"
                     />
                     <div>
                       <p>{t("checkout.codTitle")}</p>
@@ -391,7 +391,7 @@ export const CheckoutModal: React.FC = () => {
 
                   <label
                     className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs ${paymentMethod === "CARD"
-                      ? "border-[#d10024] bg-red-50/40 text-gray-900 font-bold"
+                      ? "border-[#0077fe] bg-blue-50/40 text-gray-900 font-bold"
                       : "border-gray-200 hover:border-gray-300 text-gray-600"
                       }`}
                   >
@@ -401,7 +401,7 @@ export const CheckoutModal: React.FC = () => {
                       value="CARD"
                       checked={paymentMethod === "CARD"}
                       onChange={() => setPaymentMethod("CARD")}
-                      className="text-[#d10024] focus:ring-[#d10024]"
+                      className="text-[#0077fe] focus:ring-[#0077fe]"
                     />
                     <div>
                       <p>{t("checkout.cardTitle")}</p>
@@ -431,7 +431,7 @@ export const CheckoutModal: React.FC = () => {
                 </div>
                 <div className="flex justify-between items-center text-sm pt-2 border-t font-black text-gray-900">
                   <span>{t("cart.total")}:</span>
-                  <span className="text-lg text-[#d10024]">{formatPrice(grandTotal)}</span>
+                  <span className="text-lg text-[#0077fe]">{formatPrice(grandTotal)}</span>
                 </div>
               </div>
 
@@ -439,7 +439,7 @@ export const CheckoutModal: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-[#d10024] hover:bg-[#a7001d] disabled:bg-gray-400 text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-md flex items-center justify-center gap-2 transition"
+                className="w-full py-3 bg-[#0077fe] hover:bg-[#005fc9] disabled:bg-gray-400 text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-md flex items-center justify-center gap-2 transition"
               >
                 {loading ? (
                   <>

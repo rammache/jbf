@@ -34,7 +34,7 @@ export const Contact: React.FC = () => {
 
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
+        <span className="text-xs font-bold text-[#0077fe] uppercase tracking-wider">
           {t("pages.contact.badge")}
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-[#15161d] tracking-tight uppercase">
@@ -48,14 +48,14 @@ export const Contact: React.FC = () => {
       {/* Contact Info Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-3">
-          <div className="w-10 h-10 rounded-lg bg-red-50 text-[#d10024] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-blue-50 text-[#0077fe] flex items-center justify-center">
             <Phone className="w-5 h-5" />
           </div>
           <h2 className="text-sm font-black uppercase text-[#15161d]">{t("pages.contact.phoneTitle")}</h2>
           <p className="text-xs text-gray-500">{t("pages.contact.phoneDesc")}</p>
           <a
             href={`tel:${settings.phone.replace(/\s+/g, "")}`}
-            className="block text-sm font-bold text-[#15161d] hover:text-[#d10024] transition font-mono"
+            className="block text-sm font-bold text-[#15161d] hover:text-[#0077fe] transition font-mono"
           >
             {settings.phone}
           </a>
@@ -85,7 +85,7 @@ export const Contact: React.FC = () => {
           <p className="text-xs text-gray-500">{t("pages.contact.emailDesc")}</p>
           <a
             href={`mailto:${settings.email}`}
-            className="block text-sm font-bold text-[#15161d] hover:text-[#d10024] transition"
+            className="block text-sm font-bold text-[#15161d] hover:text-[#0077fe] transition"
           >
             {settings.email}
           </a>
@@ -144,7 +144,7 @@ export const Contact: React.FC = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Alex M."
-                    className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
+                    className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#0077fe] bg-white"
                   />
                 </div>
                 <div>
@@ -157,7 +157,7 @@ export const Contact: React.FC = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="client@example.com"
-                    className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
+                    className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#0077fe] bg-white"
                   />
                 </div>
               </div>
@@ -172,7 +172,7 @@ export const Contact: React.FC = () => {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+212 6 00 00 00 00"
-                    className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
+                    className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#0077fe] bg-white"
                   />
                 </div>
                 <div>
@@ -184,7 +184,7 @@ export const Contact: React.FC = () => {
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     placeholder="e.g. Phone Availability"
-                    className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
+                    className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#0077fe] bg-white"
                   />
                 </div>
               </div>
@@ -199,13 +199,13 @@ export const Contact: React.FC = () => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="How can our team assist you today?"
-                  className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#d10024] bg-white"
+                  className="w-full px-3.5 py-2.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:border-[#0077fe] bg-white"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 bg-[#15161d] hover:bg-[#d10024] text-white text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-2 shadow"
+                className="w-full py-3 bg-[#15161d] hover:bg-[#0077fe] text-white text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-2 shadow"
               >
                 <Send className="w-4 h-4 rtl:rotate-180" /> {t("pages.contact.sendBtn")}
               </button>
@@ -217,7 +217,7 @@ export const Contact: React.FC = () => {
         <div className="space-y-6">
           <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm space-y-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-red-50 text-[#d10024] flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-blue-50 text-[#0077fe] flex items-center justify-center flex-shrink-0">
                 <MapPin className="w-5 h-5" />
               </div>
               <div>

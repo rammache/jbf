@@ -94,7 +94,7 @@ export const Home: React.FC = () => {
             </div>
           ) : heroProduct ? (
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-950/60 border border-[#d10024]/50 rounded-full text-xs font-bold uppercase text-[#d10024] tracking-wider">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-950/60 border border-[#0077fe]/50 rounded-full text-xs font-bold uppercase text-[#0077fe] tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
                 {heroProduct.condition && heroProduct.condition !== "NEW"
                     ? getConditionLabel(heroProduct.condition)
@@ -117,7 +117,7 @@ export const Home: React.FC = () => {
               <div className="flex flex-wrap gap-4 pt-2">
                 <Link
                   to={`/product/${heroProduct.handle}`}
-                  className="px-6 py-3.5 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded shadow-lg transition flex items-center gap-2"
+                  className="px-6 py-3.5 bg-[#0077fe] hover:bg-[#005fc9] text-white font-bold text-xs uppercase tracking-wider rounded shadow-lg transition flex items-center gap-2"
                 >
                   {t("hero.viewDetails")} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
                 </Link>
@@ -131,7 +131,7 @@ export const Home: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-950/60 border border-[#d10024]/50 rounded-full text-xs font-bold uppercase text-[#d10024] tracking-wider">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-950/60 border border-[#0077fe]/50 rounded-full text-xs font-bold uppercase text-[#0077fe] tracking-wider">
                 <Cpu className="w-3.5 h-3.5" /> {t("hero.badge")}
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
@@ -143,7 +143,7 @@ export const Home: React.FC = () => {
               <div className="flex flex-wrap gap-4 pt-2">
                 <Link
                   to="/shop"
-                  className="px-6 py-3.5 bg-[#d10024] hover:bg-[#a7001d] text-white font-bold text-xs uppercase tracking-wider rounded shadow-lg transition flex items-center gap-2"
+                  className="px-6 py-3.5 bg-[#0077fe] hover:bg-[#005fc9] text-white font-bold text-xs uppercase tracking-wider rounded shadow-lg transition flex items-center gap-2"
                 >
                   {t("hero.ctaShop")} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
                 </Link>
@@ -166,7 +166,7 @@ export const Home: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-6">
                   <div>
-                    <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
+                    <span className="text-xs font-bold text-[#0077fe] uppercase tracking-wider">
                       {heroProduct.compare && heroProduct.compare > heroProduct.price
                       ? t("hero.specialOffer")
                         : t("hero.verifiedStock")}
@@ -201,7 +201,7 @@ export const Home: React.FC = () => {
           <div className="flex items-end justify-between mb-8 pb-4 border-b border-gray-200">
             <div>
               <h2 className="text-2xl font-black text-[#15161d] tracking-tight uppercase flex items-center gap-2">
-                <FolderTree className="w-6 h-6 text-[#d10024]" /> {t("home.featuredCategories")}
+                <FolderTree className="w-6 h-6 text-[#0077fe]" /> {t("home.featuredCategories")}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
                 {t("home.shopByDepartmentDesc")}
@@ -209,7 +209,7 @@ export const Home: React.FC = () => {
             </div>
             <Link
               to="/shop"
-              className="hidden sm:inline-flex items-center gap-1 text-xs font-bold uppercase text-[#d10024] hover:underline"
+              className="hidden sm:inline-flex items-center gap-1 text-xs font-bold uppercase text-[#0077fe] hover:underline"
             >
               {t("home.browseAll")} <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
             </Link>
@@ -235,7 +235,7 @@ export const Home: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
                       <span className="inline-flex items-center gap-1 rounded bg-[#15161d]/80 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-xs">
-                        <Tag className="h-3 w-3 text-[#d10024]" />
+                        <Tag className="h-3 w-3 text-[#0077fe]" />
                         {productCount} {t("home.productsCount")}
                       </span>
                     </div>
@@ -243,7 +243,7 @@ export const Home: React.FC = () => {
 
                   <div className="flex flex-1 flex-col justify-between p-4">
                     <div>
-                      <h3 className="text-sm font-black uppercase tracking-tight text-[#15161d] group-hover:text-[#d10024] transition-colors">
+                      <h3 className="text-sm font-black uppercase tracking-tight text-[#15161d] group-hover:text-[#0077fe] transition-colors">
                         {tCategory(cat.name)}
                       </h3>
                       {cat.description && (
@@ -253,7 +253,7 @@ export const Home: React.FC = () => {
                       )}
                     </div>
 
-                    <div className="mt-4 flex items-center text-xs font-bold uppercase tracking-wider text-[#d10024] group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform">
+                    <div className="mt-4 flex items-center text-xs font-bold uppercase tracking-wider text-[#0077fe] group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform">
                       <span>{t("home.explore")}</span>
                       <ArrowRight className="ml-1 rtl:mr-1 rtl:ml-0 h-3.5 w-3.5 rtl:rotate-180" />
                     </div>
@@ -325,7 +325,7 @@ export const Home: React.FC = () => {
             </p>
             <Link
               to="/shop"
-              className="mt-4 inline-flex items-center gap-2 rounded bg-[#15161d] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#a7001d]"
+              className="mt-4 inline-flex items-center gap-2 rounded bg-[#15161d] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#005fc9]"
             >
               {t("home.viewAllProducts")}
             </Link>
@@ -362,7 +362,7 @@ export const Home: React.FC = () => {
           </div>
 
           <div className="space-y-6">
-            <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
+            <span className="text-xs font-bold text-[#0077fe] uppercase tracking-wider">
               {t("home.guaranteeBadge")}
             </span>
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
@@ -378,7 +378,7 @@ export const Home: React.FC = () => {
             </div>
             <Link
               to="/about"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#d10024] hover:bg-[#a7001d] text-white text-xs font-bold uppercase tracking-wider rounded transition"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#0077fe] hover:bg-[#005fc9] text-white text-xs font-bold uppercase tracking-wider rounded transition"
             >
               {t("home.guaranteeCta")}
             </Link>
@@ -391,7 +391,7 @@ export const Home: React.FC = () => {
         <div className="flex items-end justify-between mb-8 pb-4 border-b border-gray-200">
           <div>
             <h2 className="text-2xl font-black text-[#15161d] tracking-tight uppercase flex items-center gap-2">
-              <Award className="w-6 h-6 text-[#d10024]" /> {t("home.highestRated")}
+              <Award className="w-6 h-6 text-[#0077fe]" /> {t("home.highestRated")}
             </h2>
             <p className="text-xs text-gray-500 mt-1">
               {t("home.highestRatedDesc")}
@@ -399,7 +399,7 @@ export const Home: React.FC = () => {
           </div>
           <Link
             to="/shop"
-            className="hidden sm:inline-flex items-center gap-1 text-xs font-bold uppercase text-[#d10024] hover:underline"
+            className="hidden sm:inline-flex items-center gap-1 text-xs font-bold uppercase text-[#0077fe] hover:underline"
           >
             {t("home.browseAll")} <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
           </Link>
@@ -416,7 +416,7 @@ export const Home: React.FC = () => {
       <section className="bg-white border-y border-[#e4e7ed] py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <div className="space-y-3 p-4">
-            <div className="w-12 h-12 rounded-full bg-red-50 text-[#d10024] flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-full bg-blue-50 text-[#0077fe] flex items-center justify-center mx-auto">
               <Truck className="w-6 h-6" />
             </div>
             <h3 className="font-bold text-base text-[#15161d]">
@@ -428,7 +428,7 @@ export const Home: React.FC = () => {
           </div>
 
           <div className="space-y-3 p-4">
-            <div className="w-12 h-12 rounded-full bg-red-50 text-[#d10024] flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-full bg-blue-50 text-[#0077fe] flex items-center justify-center mx-auto">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <h3 className="font-bold text-base text-[#15161d]">{t("features.warrantyTitle")}</h3>
@@ -438,7 +438,7 @@ export const Home: React.FC = () => {
           </div>
 
           <div className="space-y-3 p-4">
-            <div className="w-12 h-12 rounded-full bg-red-50 text-[#d10024] flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-full bg-blue-50 text-[#0077fe] flex items-center justify-center mx-auto">
               <RefreshCw className="w-6 h-6" />
             </div>
             <h3 className="font-bold text-base text-[#15161d]">{t("features.paymentTitle")}</h3>

@@ -136,7 +136,7 @@ export const AdminLayout: React.FC = () => {
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded px-3 py-2.5 text-xs font-bold uppercase tracking-wider transition ${isActive
-                    ? "bg-[#d10024] text-white"
+                    ? "bg-[#0077fe] text-white"
                     : "text-gray-300 hover:bg-white/5 hover:text-white"
                   }`
                 }
@@ -154,7 +154,7 @@ export const AdminLayout: React.FC = () => {
             className="flex items-center gap-3 rounded bg-white/5 px-3 py-3 transition hover:bg-white/10"
             title="Admin settings & security"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d10024]/15 text-[#ff5c75]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0077fe]/15 text-[#ff5c75]">
               <ShieldCheck className="h-4 w-4" />
             </div>
             <div className="min-w-0">
@@ -198,7 +198,7 @@ export const AdminLayout: React.FC = () => {
 
             <Link
               to="/"
-              className="hidden items-center gap-2 rounded border border-gray-200 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-gray-600 transition hover:border-[#d10024] hover:text-[#d10024] sm:inline-flex"
+              className="hidden items-center gap-2 rounded border border-gray-200 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-gray-600 transition hover:border-[#0077fe] hover:text-[#0077fe] sm:inline-flex"
             >
               <Store className="h-4 w-4" /> View store
             </Link>

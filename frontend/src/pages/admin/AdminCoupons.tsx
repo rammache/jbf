@@ -201,7 +201,7 @@ export const AdminCoupons: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-wider text-[#d10024]">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-[#0077fe]">
             Promotions & Discounts
           </p>
           <h1 className="mt-1 text-2xl font-black tracking-tight text-[#15161d]">
@@ -222,7 +222,7 @@ export const AdminCoupons: React.FC = () => {
           </button>
           <button
             onClick={openCreateModal}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#d10024] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition shadow-sm"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0077fe] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition shadow-sm"
           >
             <Plus className="w-4 h-4" />
             Add Coupon
@@ -262,7 +262,7 @@ export const AdminCoupons: React.FC = () => {
             <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
               Total Coupons
             </span>
-            <div className="h-9 w-9 rounded-lg bg-red-50 text-[#d10024] flex items-center justify-center">
+            <div className="h-9 w-9 rounded-lg bg-blue-50 text-[#0077fe] flex items-center justify-center">
               <Tag className="w-4 h-4" />
             </div>
           </div>
@@ -333,7 +333,7 @@ export const AdminCoupons: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search coupon code..."
-            className="w-full pl-9 pr-4 py-2 text-xs rounded-lg border border-gray-200 focus:outline-none focus:border-[#d10024]"
+            className="w-full pl-9 pr-4 py-2 text-xs rounded-lg border border-gray-200 focus:outline-none focus:border-[#0077fe]"
           />
         </div>
       </div>
@@ -357,7 +357,7 @@ export const AdminCoupons: React.FC = () => {
               {loading && coupons.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-gray-500">
-                    <RefreshCw className="w-6 h-6 animate-spin mx-auto text-[#d10024] mb-2" />
+                    <RefreshCw className="w-6 h-6 animate-spin mx-auto text-[#0077fe] mb-2" />
                     Loading coupons...
                   </td>
                 </tr>
@@ -380,7 +380,7 @@ export const AdminCoupons: React.FC = () => {
                     <tr key={coupon.id} className="hover:bg-gray-50/80 transition">
                       <td className="py-3.5 px-5 font-mono">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-100 border border-gray-200 text-[#15161d] font-black text-xs">
-                          <Tag className="w-3 h-3 text-[#d10024]" />
+                          <Tag className="w-3 h-3 text-[#0077fe]" />
                           {coupon.code}
                         </span>
                       </td>
@@ -477,7 +477,7 @@ export const AdminCoupons: React.FC = () => {
           <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-gray-100 pb-4">
               <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-red-50 text-[#d10024] flex items-center justify-center font-bold">
+                <div className="h-8 w-8 rounded-lg bg-blue-50 text-[#0077fe] flex items-center justify-center font-bold">
                   <Tag className="w-4 h-4" />
                 </div>
                 <h3 className="text-base font-black text-[#15161d]">
@@ -509,7 +509,7 @@ export const AdminCoupons: React.FC = () => {
                   value={code}
                   onChange={(e) => setCode(e.target.value.toUpperCase())}
                   placeholder="e.g. JABOUR10, SUMMER50, WELCOME"
-                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 font-mono text-xs uppercase tracking-wider font-bold focus:border-[#d10024] focus:outline-none"
+                  className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 font-mono text-xs uppercase tracking-wider font-bold focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -523,7 +523,7 @@ export const AdminCoupons: React.FC = () => {
                     onChange={(e) =>
                       setDiscountType(e.target.value as "PERCENTAGE" | "FIXED")
                     }
-                    className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#d10024] focus:outline-none"
+                    className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs font-semibold focus:border-[#0077fe] focus:outline-none"
                   >
                     <option value="PERCENTAGE">Percentage (%)</option>
                     <option value="FIXED">Fixed Amount ($)</option>
@@ -543,7 +543,7 @@ export const AdminCoupons: React.FC = () => {
                       value={discountValue}
                       onChange={(e) => setDiscountValue(e.target.value)}
                       placeholder={discountType === "PERCENTAGE" ? "15" : "20.00"}
-                      className="w-full rounded-lg border border-gray-200 p-2.5 pr-8 text-xs font-bold focus:border-[#d10024] focus:outline-none"
+                      className="w-full rounded-lg border border-gray-200 p-2.5 pr-8 text-xs font-bold focus:border-[#0077fe] focus:outline-none"
                     />
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs pointer-events-none">
                       {discountType === "PERCENTAGE" ? "%" : "$"}
@@ -564,7 +564,7 @@ export const AdminCoupons: React.FC = () => {
                     value={minOrderAmount}
                     onChange={(e) => setMinOrderAmount(e.target.value)}
                     placeholder="Optional (e.g. 50)"
-                    className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none"
+                    className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -579,7 +579,7 @@ export const AdminCoupons: React.FC = () => {
                     value={maxDiscount}
                     onChange={(e) => setMaxDiscount(e.target.value)}
                     placeholder={discountType === "FIXED" ? "N/A" : "Optional (e.g. 30)"}
-                    className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none disabled:bg-gray-100 disabled:opacity-60"
+                    className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none disabled:bg-gray-100 disabled:opacity-60"
                   />
                 </div>
               </div>
@@ -595,7 +595,7 @@ export const AdminCoupons: React.FC = () => {
                     value={usageLimit}
                     onChange={(e) => setUsageLimit(e.target.value)}
                     placeholder="Unlimited if empty"
-                    className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#d10024] focus:outline-none"
+                    className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-xs focus:border-[#0077fe] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -606,7 +606,7 @@ export const AdminCoupons: React.FC = () => {
                     type="datetime-local"
                     value={expiresAt}
                     onChange={(e) => setExpiresAt(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-gray-200 p-2 text-xs focus:border-[#d10024] focus:outline-none"
+                    className="mt-1 w-full rounded-lg border border-gray-200 p-2 text-xs focus:border-[#0077fe] focus:outline-none"
                   />
                 </div>
               </div>
@@ -617,7 +617,7 @@ export const AdminCoupons: React.FC = () => {
                   id="isActive"
                   checked={isActive}
                   onChange={(e) => setIsActive(e.target.checked)}
-                  className="h-4 w-4 rounded text-[#d10024] focus:ring-[#d10024]"
+                  className="h-4 w-4 rounded text-[#0077fe] focus:ring-[#0077fe]"
                 />
                 <label htmlFor="isActive" className="text-xs font-bold text-gray-700 cursor-pointer">
                   Activate coupon immediately upon saving
@@ -635,7 +635,7 @@ export const AdminCoupons: React.FC = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="inline-flex items-center gap-2 rounded-lg bg-[#d10024] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-lg bg-[#0077fe] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-[#b0001e] transition disabled:opacity-50"
                 >
                   {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   {editingCoupon ? "Save Changes" : "Create Coupon"}

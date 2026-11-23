@@ -143,13 +143,13 @@ export const SearchModal: React.FC = () => {
                     className="w-12 h-12 object-cover rounded bg-gray-100 flex-shrink-0"
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-gray-900 group-hover:text-[#d10024] truncate">
+                    <p className="text-sm font-bold text-gray-900 group-hover:text-[#0077fe] truncate">
                       {product.title}
                     </p>
                     <p className="text-xs text-gray-500 truncate">{product.spec}</p>
                   </div>
                   <div className="text-right rtl:text-left">
-                    <span className="text-sm font-extrabold text-[#d10024]">
+                    <span className="text-sm font-extrabold text-[#0077fe]">
                       {formatPrice(product.price)}
                     </span>
                   </div>

@@ -114,7 +114,7 @@ export const FAQ: React.FC = () => {
       />
 
       <div className="text-center space-y-3">
-        <span className="text-xs font-bold text-[#d10024] uppercase tracking-wider">
+        <span className="text-xs font-bold text-[#0077fe] uppercase tracking-wider">
           {t("nav.faq")}
         </span>
         <h1 className="text-3xl sm:text-4xl font-black text-[#15161d] tracking-tight uppercase">
@@ -161,7 +161,7 @@ export const FAQ: React.FC = () => {
               >
                 <span className="text-sm font-bold text-[#15161d]">{question}</span>
                 <ChevronDown
-                  className={`w-4 h-4 text-gray-500 transition-transform duration-300 flex-shrink-0 ${isOpen ? "rotate-180 text-[#d10024]" : ""
+                  className={`w-4 h-4 text-gray-500 transition-transform duration-300 flex-shrink-0 ${isOpen ? "rotate-180 text-[#0077fe]" : ""
                     }`}
                 />
               </button>
@@ -178,7 +178,7 @@ export const FAQ: React.FC = () => {
 
       {/* Still need help callout */}
       <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center space-y-4">
-        <HelpCircle className="w-8 h-8 text-[#d10024] mx-auto" />
+        <HelpCircle className="w-8 h-8 text-[#0077fe] mx-auto" />
         <h3 className="text-base font-bold text-[#15161d]">{t("pages.faq.needMoreHelp")}</h3>
         <p className="text-xs text-gray-500 max-w-md mx-auto">
           {t("pages.contact.subtitle")}
@@ -186,7 +186,7 @@ export const FAQ: React.FC = () => {
         <div className="flex flex-wrap justify-center gap-3 pt-2">
           <Link
             to="/contact"
-            className="px-5 py-2.5 bg-[#15161d] hover:bg-[#a7001d] text-white text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center gap-2"
+            className="px-5 py-2.5 bg-[#15161d] hover:bg-[#005fc9] text-white text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center gap-2"
           >
             <Phone className="w-3.5 h-3.5" /> {t("nav.contact")}
           </Link>

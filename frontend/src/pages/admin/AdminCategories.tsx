@@ -336,7 +336,7 @@ export const AdminCategories: React.FC = () => {
           <button
             type="button"
             onClick={handleOpenCreate}
-            className="inline-flex items-center gap-2 rounded bg-[#d10024] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition hover:bg-[#a7001d]"
+            className="inline-flex items-center gap-2 rounded bg-[#0077fe] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition hover:bg-[#005fc9]"
           >
             <Plus className="h-4 w-4" />
             New Category
@@ -373,7 +373,7 @@ export const AdminCategories: React.FC = () => {
         <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
           <div className="flex items-center justify-between text-gray-400">
             <span className="text-[11px] font-bold uppercase tracking-wider">Categorized Products</span>
-            <Package className="h-4 w-4 text-[#d10024]" />
+            <Package className="h-4 w-4 text-[#0077fe]" />
           </div>
           <p className="mt-2 text-2xl font-black text-[#15161d]">{totalProducts}</p>
         </div>
@@ -388,7 +388,7 @@ export const AdminCategories: React.FC = () => {
             placeholder="Search categories by name, slug..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded border border-gray-300 py-1.5 pl-9 pr-3 text-xs focus:border-[#d10024] focus:outline-none"
+            className="w-full rounded border border-gray-300 py-1.5 pl-9 pr-3 text-xs focus:border-[#0077fe] focus:outline-none"
           />
         </div>
         <p className="text-xs font-semibold text-gray-500">
@@ -400,7 +400,7 @@ export const AdminCategories: React.FC = () => {
       <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
         {loading ? (
           <div className="flex h-64 flex-col items-center justify-center gap-3">
-            <Loader2 className="h-8 w-8 animate-spin text-[#d10024]" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#0077fe]" />
             <p className="text-xs font-semibold text-gray-500">Loading categories...</p>
           </div>
         ) : filteredCategories.length === 0 ? (
@@ -585,7 +585,7 @@ export const AdminCategories: React.FC = () => {
                   placeholder="e.g. Smartphones, Audio, Laptops..."
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
-                  className="w-full rounded border border-gray-300 p-2 text-xs focus:border-[#d10024] focus:outline-none"
+                  className="w-full rounded border border-gray-300 p-2 text-xs focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -599,7 +599,7 @@ export const AdminCategories: React.FC = () => {
                   placeholder="Leave empty to auto-generate from name"
                   value={formSlug}
                   onChange={(e) => setFormSlug(e.target.value)}
-                  className="w-full rounded border border-gray-300 p-2 font-mono text-xs focus:border-[#d10024] focus:outline-none"
+                  className="w-full rounded border border-gray-300 p-2 font-mono text-xs focus:border-[#0077fe] focus:outline-none"
                 />
                 <p className="mt-1 text-[10px] text-gray-400">
                   URL slug format: lowercase letters, numbers, and single hyphens.
@@ -614,7 +614,7 @@ export const AdminCategories: React.FC = () => {
                       type="checkbox"
                       checked={formRegenerateSlug}
                       onChange={(e) => setFormRegenerateSlug(e.target.checked)}
-                      className="mt-0.5 rounded border-gray-300 text-[#d10024] focus:ring-[#d10024]"
+                      className="mt-0.5 rounded border-gray-300 text-[#0077fe] focus:ring-[#0077fe]"
                     />
                     <div>
                       <span className="font-bold text-amber-900">
@@ -639,7 +639,7 @@ export const AdminCategories: React.FC = () => {
                   placeholder="Brief summary displayed on department banners..."
                   value={formDescription}
                   onChange={(e) => setFormDescription(e.target.value)}
-                  className="w-full rounded border border-gray-300 p-2 text-xs focus:border-[#d10024] focus:outline-none"
+                  className="w-full rounded border border-gray-300 p-2 text-xs focus:border-[#0077fe] focus:outline-none"
                 />
               </div>
 
@@ -654,7 +654,7 @@ export const AdminCategories: React.FC = () => {
                     placeholder="https://images.unsplash.com/... or /uploads/..."
                     value={formImage}
                     onChange={(e) => setFormImage(e.target.value)}
-                    className="flex-1 rounded border border-gray-300 p-2 text-xs focus:border-[#d10024] focus:outline-none"
+                    className="flex-1 rounded border border-gray-300 p-2 text-xs focus:border-[#0077fe] focus:outline-none"
                   />
                   {formImage && (
                     <button
@@ -696,7 +696,7 @@ export const AdminCategories: React.FC = () => {
                     min={0}
                     value={formSortOrder}
                     onChange={(e) => setFormSortOrder(Number(e.target.value))}
-                    className="w-full rounded border border-gray-300 p-2 text-xs focus:border-[#d10024] focus:outline-none"
+                    className="w-full rounded border border-gray-300 p-2 text-xs focus:border-[#0077fe] focus:outline-none"
                   />
                 </div>
 
@@ -706,7 +706,7 @@ export const AdminCategories: React.FC = () => {
                       type="checkbox"
                       checked={formIsActive}
                       onChange={(e) => setFormIsActive(e.target.checked)}
-                      className="h-4 w-4 rounded border-gray-300 text-[#d10024] focus:ring-[#d10024]"
+                      className="h-4 w-4 rounded border-gray-300 text-[#0077fe] focus:ring-[#0077fe]"
                     />
                     <span className="font-bold text-gray-700">Category is Active</span>
                   </label>
@@ -725,7 +725,7 @@ export const AdminCategories: React.FC = () => {
                 <button
                   type="submit"
                   disabled={submittingForm}
-                  className="inline-flex items-center gap-2 rounded bg-[#d10024] px-5 py-2 font-bold uppercase tracking-wider text-white hover:bg-[#a7001d] disabled:opacity-70"
+                  className="inline-flex items-center gap-2 rounded bg-[#0077fe] px-5 py-2 font-bold uppercase tracking-wider text-white hover:bg-[#005fc9] disabled:opacity-70"
                 >
                   {submittingForm && <Loader2 className="h-4 w-4 animate-spin" />}
                   {editingCategory ? "Save Changes" : "Create Category"}
@@ -776,7 +776,7 @@ export const AdminCategories: React.FC = () => {
                     <select
                       value={reassignTargetId}
                       onChange={(e) => setReassignTargetId(e.target.value ? Number(e.target.value) : "")}
-                      className="w-full rounded border border-gray-300 p-2 text-xs focus:border-[#d10024] focus:outline-none"
+                      className="w-full rounded border border-gray-300 p-2 text-xs focus:border-[#0077fe] focus:outline-none"
                     >
                       <option value="">-- Choose destination category --</option>
                       {otherCategories.map((c) => (

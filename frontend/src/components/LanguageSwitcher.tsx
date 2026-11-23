@@ -34,7 +34,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
       <button
         type="button"
         onClick={toggleLanguage}
-        className="p-1 text-[#d10024] hover:opacity-80 transition focus:outline-none"
+        className="p-1 text-[#0077fe] hover:opacity-80 transition focus:outline-none"
         aria-label={`Switch to ${nextLangLabel}`}
       >
         <Globe className="w-3.5 h-3.5" />
@@ -44,7 +44,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
         onClick={() => setLanguage("fr")}
         className={`px-2 py-0.5 text-xs font-bold rounded-full transition-all duration-200 focus:outline-none ${
           language === "fr"
-            ? "bg-[#d10024] text-white shadow-xs"
+            ? "bg-[#0077fe] text-white shadow-xs"
             : inactiveTextClass
         }`}
         aria-pressed={language === "fr"}
@@ -58,7 +58,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
         onClick={() => setLanguage("ar")}
         className={`px-2 py-0.5 text-xs font-arabic font-bold rounded-full transition-all duration-200 focus:outline-none ${
           language === "ar"
-            ? "bg-[#d10024] text-white shadow-xs"
+            ? "bg-[#0077fe] text-white shadow-xs"
             : inactiveTextClass
         }`}
         aria-pressed={language === "ar"}
