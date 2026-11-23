@@ -57,9 +57,8 @@ export const Navbar: React.FC = () => {
                   <Link
                     key={link.name}
                     to={link.path}
-                    className={`relative px-3 py-2 text-sm font-semibold transition-colors duration-200 ${
-                      isActive ? "text-[#0077fe] font-bold" : "text-gray-300 hover:text-[#0077fe]"
-                    }`}
+                    className={`relative px-3 py-2 text-sm font-semibold transition-colors duration-200 ${isActive ? "text-[#0077fe] font-bold" : "text-gray-300 hover:text-[#0077fe]"
+                      }`}
                   >
                     {link.name}
                     {isActive && (
@@ -71,75 +70,74 @@ export const Navbar: React.FC = () => {
             </nav>
 
             {/* Header Right Actions */}
-            <div className="flex items-center space-x-1.5 sm:space-x-3 rtl:space-x-reverse">
-              <div className="inline-flex">
-                <LanguageSwitcher variant="header" />
-              </div>
+              <div className="flex items-center space-x-1.5 sm:space-x-3 rtl:space-x-reverse">
+                <div className="inline-flex">
+                  <LanguageSwitcher variant="header" />
+                </div>
 
-              <button
-                type="button"
-                onClick={() => setIsSearchOpen(true)}
-                className="p-2 text-gray-300 hover:text-[#0077fe] hover:bg-gray-800/80 rounded-full transition"
-                aria-label={t("header.searchPlaceholder")}
-                title={t("header.searchPlaceholder")}
-              >
-                <Search className="h-5 w-5" />
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setIsSearchOpen(true)}
+                  className="p-2 text-gray-300 hover:text-[#0077fe] hover:bg-gray-800/80 rounded-full transition"
+                  aria-label={t("header.searchPlaceholder")}
+                  title={t("header.searchPlaceholder")}
+                >
+                  <Search className="h-5 w-5" />
+                </button>
 
-              <Link
-                to={admin ? "/admin" : "/admin/login"}
-                className="p-2 text-gray-300 hover:text-[#0077fe] hover:bg-gray-800/80 rounded-full transition hidden sm:inline-flex"
-                aria-label={admin ? `${t("nav.admin")} (${admin.name})` : t("nav.login")}
-                title={admin ? `${t("nav.admin")} (${admin.name})` : t("nav.login")}
-              >
-                <User className={`h-5 w-5 ${admin ? "text-[#0077fe]" : ""}`} />
-              </Link>
+                <Link
+                  to={admin ? "/admin" : "/admin/login"}
+                  className="p-2 text-gray-300 hover:text-[#0077fe] hover:bg-gray-800/80 rounded-full transition hidden sm:inline-flex"
+                  aria-label={admin ? `${t("nav.admin")} (${admin.name})` : t("nav.login")}
+                  title={admin ? `${t("nav.admin")} (${admin.name})` : t("nav.login")}
+                >
+                  <User className={`h-5 w-5 ${admin ? "text-[#0077fe]" : ""}`} />
+                </Link>
 
-              <button
-                type="button"
-                onClick={() => setIsCartOpen(true)}
-                className="relative p-2 text-gray-300 hover:text-[#0077fe] hover:bg-gray-800/80 rounded-full transition"
-                aria-label={t("header.cartTitle")}
-                title={t("header.cartTitle")}
-              >
-                <ShoppingBag className="h-5 w-5" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-[#0077fe] text-white text-[11px] font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-[0_0_8px_rgba(0,119,254,0.6)] animate-pulse">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 text-gray-300 hover:text-[#0077fe] hover:bg-gray-800/80 rounded-full transition"
+              aria-label={t("header.cartTitle")}
+              title={t("header.cartTitle")}
+            >
+              <ShoppingBag className="h-5 w-5" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#0077fe] text-white text-[11px] font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-[0_0_8px_rgba(0,119,254,0.6)] animate-pulse">
+                  {cartCount}
+                </span>
+              )}
+            </button>
           </div>
         </div>
+      </div>
 
-        {/* Mobile menu dropdown */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-[#1e1f29] border-b border-gray-800 px-4 pt-2 pb-6 space-y-2">
-            <div className="py-2 mb-2 border-b border-gray-800 flex justify-between items-center">
-              <span className="text-xs text-gray-400">Langue / اللغة:</span>
-              <LanguageSwitcher variant="dark" />
-            </div>
-            {navLinks.map((link) => {
-              const isActive = location.pathname + location.search === link.path;
-              return (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                    isActive
-                      ? "text-[#0077fe] bg-[#0077fe]/10 font-bold"
-                      : "text-gray-300 hover:text-[#0077fe] hover:bg-gray-800"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
+      {/* Mobile menu dropdown */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-[#1e1f29] border-b border-gray-800 px-4 pt-2 pb-6 space-y-2">
+          <div className="py-2 mb-2 border-b border-gray-800 flex justify-between items-center">
+            <span className="text-xs text-gray-400">Langue / اللغة:</span>
+            <LanguageSwitcher variant="dark" />
           </div>
-        )}
-          </header>
+          {navLinks.map((link) => {
+            const isActive = location.pathname + location.search === link.path;
+            return (
+              <Link
+                key={link.name}
+                to={link.path}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${isActive
+                    ? "text-[#0077fe] bg-[#0077fe]/10 font-bold"
+                    : "text-gray-300 hover:text-[#0077fe] hover:bg-gray-800"
+                  }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </header >
         </>
         );
 };

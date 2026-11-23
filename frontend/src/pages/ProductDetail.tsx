@@ -192,11 +192,11 @@ export const ProductDetail: React.FC = () => {
       <div className="flex items-center gap-2 text-xs text-gray-500">
         <Link to="/" className="text-gray-500 hover:text-[#0077fe] transition-colors">{t("nav.home")}</Link>
         <span>/</span>
-        <Link to={`/shop?category=${encodeURIComponent(categoryName)}`} className="text-gray-500 hover:text-[#0077fe] transition-colors">
-          {tCategory(categoryName)}
-        </Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium truncate">{product.title}</span>
+          <Link to={`/shop?category=${encodeURIComponent(categoryName)}`} className="text-gray-500 hover:text-[#0077fe] transition-colors">
+            {tCategory(categoryName)}
+          </Link>
+          <span>/</span>
+          <span className="text-gray-900 font-medium truncate">{product.title}</span>
       </div>
 
       {/* Main Grid: Gallery + Details */}
