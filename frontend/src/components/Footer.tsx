@@ -174,15 +174,15 @@ export const Footer: React.FC = () => {
             </p>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/privacy" className="hover:text-gray-300 transition">
+            <Link to="/privacy" className="text-gray-400 hover:text-[#0077fe] transition-colors">
               Privacy Policy
             </Link>
             <span>·</span>
-            <Link to="/terms" className="hover:text-gray-300 transition">
+            <Link to="/terms" className="text-gray-400 hover:text-[#0077fe] transition-colors">
               Terms of Service
             </Link>
             <span>·</span>
-            <Link to="/about" className="hover:text-gray-300 transition">
+            <Link to="/about" className="text-gray-400 hover:text-[#0077fe] transition-colors">
               About
             </Link>
           </div>

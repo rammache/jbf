@@ -151,7 +151,7 @@ export const Shop: React.FC = () => {
               </span>
               <button
                 onClick={clearFilters}
-                className="text-xs text-gray-600 hover:text-red-700 font-bold flex items-center gap-1"
+                className="text-xs text-gray-500 hover:text-[#0077fe] font-bold flex items-center gap-1 transition-colors"
               >
                 {t("shop.clearFilters")} <X className="w-3.5 h-3.5" />
               </button>

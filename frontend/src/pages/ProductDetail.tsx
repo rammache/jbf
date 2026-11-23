@@ -190,9 +190,9 @@ export const ProductDetail: React.FC = () => {
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs text-gray-500">
-        <Link to="/" className="hover:text-gray-900">{t("nav.home")}</Link>
+        <Link to="/" className="text-gray-500 hover:text-[#0077fe] transition-colors">{t("nav.home")}</Link>
         <span>/</span>
-        <Link to={`/shop?category=${encodeURIComponent(categoryName)}`} className="hover:text-gray-900">
+        <Link to={`/shop?category=${encodeURIComponent(categoryName)}`} className="text-gray-500 hover:text-[#0077fe] transition-colors">
           {tCategory(categoryName)}
         </Link>
         <span>/</span>

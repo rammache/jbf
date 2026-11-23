@@ -18,7 +18,7 @@ export const About: React.FC = () => {
       />
 
       <div className="text-center space-y-4 max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-blue-200 rounded-full text-xs font-bold text-[#0077fe] uppercase tracking-wider">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-xs font-bold text-[#0077fe] uppercase tracking-wider">
           <Smartphone className="w-4 h-4" /> {t("pages.about.promiseBadge")}
         </div>
         <h1 className="text-4xl sm:text-5xl font-black text-[#15161d] tracking-tight">
